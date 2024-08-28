@@ -3,9 +3,8 @@ FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:20-bullseye
 
 # Installeer Angular CLI, Electron, PrimeFlex, PrimeNG en NGXS
 RUN npm install -g @angular/cli \
-    && npm install -g electron \
-    && npm install --save @angular-builders/custom-webpack \
-    && npm install --save primeflex primeng @NGXS/store @NGXS/devtools-plugin @NGXS/router-plugin @NGXS/storage-plugin
+    && npm install -g --save electron \
+    && npm install -g --save primeflex primeng @ngxs/store @ngxs/devtools-plugin @ngxs/router-plugin @ngxs/storage-plugin @ngxs/cli
 
 # Installeer noVNC en andere vereisten
 RUN apt-get update && apt-get install -y \
