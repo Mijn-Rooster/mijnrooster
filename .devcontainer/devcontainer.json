@@ -3,13 +3,8 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "runArgs": ["--init"],
-  "forwardPorts": [5900, 6080],
   "postCreateCommand": "npm install",
   "remoteUser": "node",
-  "remoteEnv": {
-    "DISPLAY": ":0"
-  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -21,10 +16,16 @@
         "eamodio.gitlens",
         "bmewburn.vscode-intelephense-client",
         "github.vscode-pull-request-github"
-      ],
-      "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-      }
+      ]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "desktop"
     }
   }
 }
