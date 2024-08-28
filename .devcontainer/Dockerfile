@@ -7,6 +7,7 @@ RUN npm install -g @angular/cli \
     && npm install -g --save primeflex primeng @ngxs/store @ngxs/devtools-plugin @ngxs/router-plugin @ngxs/storage-plugin @ngxs/cli
 
 # Installeer noVNC en andere vereisten
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     supervisor \
     novnc \
