@@ -8,19 +8,20 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-vscode.vscode-typescript-next",
-        "ms-azuretools.vscode-docker",
-        "angular.ng-template",
         "dbaeumer.vscode-eslint",
         "github.copilot",
         "eamodio.gitlens",
+        "esbenp.prettier-vscode",
         "bmewburn.vscode-intelephense-client",
-        "github.vscode-pull-request-github"
+        "github.vscode-pull-request-github",
+        "svelte.svelte-vscode",
+        "yandeu.five-server"
       ]
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+    "ghcr.io/devcontainers/features/desktop-lite:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
   },
   "forwardPorts": [6080],
   "portsAttributes": {
