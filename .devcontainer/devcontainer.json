@@ -1,7 +1,27 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "name": "DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "github.copilot",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "bmewburn.vscode-intelephense-client",
+        "github.vscode-pull-request-github",
+        "svelte.svelte-vscode",
+        "yandeu.five-server"
+      ]
+    }
+  },
   "features": {
-    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+    "ghcr.io/devcontainers/features/desktop-lite:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
   },
   "forwardPorts": [6080],
   "portsAttributes": {

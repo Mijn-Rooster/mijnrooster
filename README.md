@@ -1,2 +1,2 @@
-# mijnrooster-client
-The client-software what is running on the kiosk devices
+# mijnrooster
+Monorepo for the frontend (kiosk application) and the backend (API and communication with Zermelo)
