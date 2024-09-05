@@ -1,15 +1,28 @@
+
 # Backend
 
-API with Zermelo communication
+The backend handles API communication between Zermelo and Mijn Rooster devices
 
-### Install
+## Start developing
 
-```bash
-$ npm install
-```
-
-### Development
+Open the backend folder
 
 ```bash
-$ npm start
+  cd backend
 ```
+
+### Installation
+This is not needed when running in codespaces.
+
+```bash
+  npm install
+```
+
+### Start
+
+```bash
+  npm start
+```
+
+The backend server will start on https://localhost:8000
+    

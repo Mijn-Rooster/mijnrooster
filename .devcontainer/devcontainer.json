@@ -3,7 +3,7 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "cd ./frontend && npm install && cd ../backend && npm install",
   "remoteUser": "node",
   "customizations": {
     "vscode": {
