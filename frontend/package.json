@@ -8,7 +8,7 @@
   "scripts": {
     "format": "prettier --plugin prettier-plugin-svelte --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
-    "start": "electron-vite preview",
+    "start": "electron-vite preview --noSandbox",
     "dev": "electron-vite dev --noSandbox",
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps",
