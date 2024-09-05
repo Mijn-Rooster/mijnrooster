@@ -1,0 +1,13 @@
+{
+  "name": "backendserver",
+  "version": "1.0.0",
+  "description": "Development server for the backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "php-server": "^2.0.0"
+  }
+}
