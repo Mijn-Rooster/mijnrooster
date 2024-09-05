@@ -6,3 +6,6 @@ RUN apt-get update && apt-get install -y
 
 # Install php
 RUN apt-get install -y php
+
+# Install firefox
+RUN apt-get install -y firefox-esr

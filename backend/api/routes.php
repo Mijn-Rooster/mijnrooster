@@ -9,8 +9,10 @@ header('Access-Control-Allow-Origin: *'); // TODO: CHANGE IN FUTURE TO ONLY ALLO
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
+any('/', 'index.php');
+
 get('/api/v1/user', 'controllers/userController.php');
 get('/api/v1/schedule', 'controllers/scheduleController.php');
 
 // Redirect all other request to page
-any('/404','index.php');
+any('/404','404.php');
