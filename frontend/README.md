@@ -25,7 +25,7 @@ This is not needed when running in codespaces.
 ### Start
 
 ```bash
-  npm start
+  npm run dev
 ```
 
 The application will now be opened in fullscreen. When you are using codespaces, you'll have to connect to the noVNC viewer. Go to _Ports_ > _desktop (6080)_ and open the _Forwarded Address_ in your browser.

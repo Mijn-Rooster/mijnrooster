@@ -1,4 +1,5 @@
 import './assets/main.css'
+import "./assets/tailwind.css";
 
 import App from './App.svelte'
 
