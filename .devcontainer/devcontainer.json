@@ -15,7 +15,8 @@
         "bmewburn.vscode-intelephense-client",
         "github.vscode-pull-request-github",
         "svelte.svelte-vscode",
-        "yandeu.five-server"
+        "yandeu.five-server",
+        "bradlc.vscode-tailwindcss"
       ]
     }
   },
