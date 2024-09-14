@@ -1,16 +1,11 @@
-<script>
-import { Link } from "svelte-routing";
-import { Tabs, TabItem } from "flowbite-svelte";
+<script lang="ts">
+  import { Tabs, TabItem } from "flowbite-svelte";
+  import { navigate } from "../stores/RouterStore";
+  import { Button } from "flowbite-svelte";
 </script>
 
 <h1>Test Page</h1>
 <p>It works!</p>
-<div class="actions">
-  <div class="action">
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-missing-attribute-->
-    <Link to="/">Back to home!</Link>
-  </div>
-</div>
 
 <br />
 
@@ -52,3 +47,5 @@ import { Tabs, TabItem } from "flowbite-svelte";
     </p>
   </TabItem>
 </Tabs>
+
+<Button on:click={() => navigate("/")} class="mt-4">Go to home page</Button>

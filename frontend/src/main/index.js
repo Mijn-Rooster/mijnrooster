@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import installExtension from 'electron-devtools-installer';
 
 function createWindow() {
   // Create the browser window.
@@ -47,6 +48,13 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
+
+  // Install Svelte DevTools in development mode
+  if (is.dev) {
+    installExtension("kfidecgcdjjfpeckbblhmfkhmlgecoff")
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
+  }
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
