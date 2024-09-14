@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: frontend
+appId: nl.mijnrooster.client
+productName: Mijn Rooster
 directories:
   buildResources: build
 files:
