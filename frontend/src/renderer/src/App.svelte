@@ -1,12 +1,5 @@
-<script>
-  import { Router, Route } from "svelte-routing";
-  import Home from "./routes/Home.svelte";
-  import Test from "./routes/Test.svelte";
-
-  export let url = "";
+<script lang="ts">
+  import Router from "./components/Router.svelte";
 </script>
 
-<Router {url}>
-    <Route path="/" component="{Home}" />
-    <Route path="/test" component="{Test}" />
-</Router>
+<Router />
