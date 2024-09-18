@@ -22,7 +22,8 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/desktop-lite:1": {},
-    "ghcr.io/devcontainers/features/common-utils:2": {}
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/php:1": {}
   },
   "forwardPorts": [6080],
   "portsAttributes": {

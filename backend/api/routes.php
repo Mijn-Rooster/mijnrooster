@@ -11,7 +11,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 any('/', 'index.php');
 
-get('/api/v1/user', 'controllers/userController.php');
+get('/api/v1/student', 'controllers/studentController.php');
 get('/api/v1/schedule', 'controllers/scheduleController.php');
 
 // Redirect all other request to page
