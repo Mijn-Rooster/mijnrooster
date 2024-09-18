@@ -5,6 +5,4 @@ define('TENANT_NAME', '');
 
 // Zermelo API
 define('PORTAL_URL', '');
-define('ZERMELO_API_TOKEN', '')
-
-?>
+define('ZERMELO_API_TOKEN', '');
