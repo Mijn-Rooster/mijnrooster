@@ -1,0 +1,187 @@
+/* Algemeen */
+* {
+    margin: auto;
+}
+
+#wrapper {
+    width: 900px;
+}
+
+/* Header */
+
+header {
+    width: 900px;
+    padding: 25px;
+}
+
+header h2 {
+    text-align: center;
+    font-size: 36px;
+    font-family: Calibri;
+    padding: 16px;
+}
+
+header h2 {
+    text-align: center;
+    font-size: 36px;
+    font-family: Calibri;
+    padding: 16px;
+}
+
+header h1 {
+    text-align: left;
+    padding-top: 15px;
+    font-family: calibri;
+    font-size: 44px;
+}
+
+#bovenbalk {
+    width: 900px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+}
+
+i {
+    float: right;
+    color: #291C5B;
+}
+
+#box {
+    width: 175px;
+    height: 40px;
+    padding: 1.1%;
+    background-color: #291C5B;
+    margin-left: 0;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#box p {
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    font-family: calibri;
+  }
+
+/* Navigatie */
+
+nav {
+    padding: 25px;
+    margin-left: 0;
+}
+
+#navbar {
+    display: flex;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+#navdag {
+    height: 40px;
+    width: 424px;
+    background-color: #D9D9D9;
+    padding: 1.1%;
+    margin-right: 2px;
+    border-radius: 20px;
+}
+
+#navweek {
+    height: 40px;
+    width: 424px;
+    background-color: #291C5B;
+    padding: 1.1%;
+    border-radius: 20px;
+}
+
+#navdag:hover {
+    background-color: #291C5B;
+}
+
+#navbar a {
+    color: white;
+    text-decoration: none;
+    font-family: calibri;
+    font-size: 30px;
+}
+
+#dagen {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+    margin-bottom: 500px;
+}
+
+#dagen h2 {
+    font-family: calibri;
+    font-size: 36px;
+}
+
+#vorige {
+    width: 45px;
+    height: 40px;
+    padding: 1.1%;
+    background-color: #291C5B;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    margin-left: 0;
+}
+
+#vorige p {
+    font-size: 36px;
+}
+
+#vorige:hover {
+    background-color: #D9D9D9;
+}
+
+#volgende {
+    width: 45px;
+    height: 40px;
+    padding: 1.1%;
+    background-color: #291C5B;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+    margin-right: 0;
+}
+
+#volgende p {
+    font-size: 36px;
+}
+
+#volgende:hover {
+    background-color: #D9D9D9;
+}
+
+/* footer */
+
+#uitloggen {
+    width: 300px;
+    height: 100px;
+    background-color: #291C5B;
+    text-align: center;
+    color: white;
+    font-family: calibri;
+    border-radius: 20px;
+    margin: 25px;
+    margin-top: 100px;
+    font-size: 34px;
+    float: left;
+}
+
+#uitloggen p {
+    margin: 25px;
+}
+
+#uitloggen i {
+    color: white;
+    float: left;
+    font-size: 48px;
+    margin-right: 50px;
+}
+
+#uitloggen:hover {
+    background-color: #D9D9D9;
+}
