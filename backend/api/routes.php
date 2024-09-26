@@ -3,6 +3,10 @@
 require_once __DIR__.'/router.php';
 require_once __DIR__.'/config/config.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Set headers for all requests
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); // TODO: CHANGE IN FUTURE TO ONLY ALLOW KNOWN ORIGINS

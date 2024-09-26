@@ -1,7 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
+// Require networkLogger.php for networkRequestDebugInfo function
+require_once __DIR__ . '/../utils/debug.php';
+require_once __DIR__ . '/../utils/curlHelper.php';
 
 $schoolInSchoolYear = 1001702;
 $filterFields = 'student,firstName,prefix,lastName,mainGroupName,mainGroup,mentorGroup,departmentOfBranch';
@@ -16,7 +17,7 @@ $params = http_build_query([
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://partner-7206.zportdddddal.nl/api/v3/studentsindepartments?' . $params,
+  CURLOPT_URL => 'https://partner-7206.zportal.nl/api/v3/studentsindepartments?' . $params,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -32,4 +33,7 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 curl_close($curl);
 
+checkResponse($curl, $response);
+
+//echo networkRequestDebugInfo($curl);
 echo $response;
