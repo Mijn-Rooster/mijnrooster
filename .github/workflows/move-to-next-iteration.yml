@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: blombard/move-to-next-iteration@master
       with:
-        owner: mijnrooster
+        owner: Mijn-Rooster
         number: 1
         token: ${{ secrets.PROJECT_PAT }}
         iteration-field: Iteration
