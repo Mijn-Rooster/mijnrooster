@@ -1,9 +1,26 @@
 <?php
 
-$curl = curl_init();
+require_once __DIR__ . '/../utils/curlHelper.php';
 
+$user = 'vis';
+$start = 1725832800;
+$end = 1730304470;
+$type = 'lesson,exam,oralExam,activity,talk,mixed,meeting,interlude';
+$fields = 'id,appointmentInstance,start,end,startTimeSlotName,endTimeSlotName,locations,teachers,subjects';
+
+$params = http_build_query([
+  'valid' => true,
+  'cancelled' => false,
+  'user' => $user,
+  'start' => $start,
+  'end' => $end,
+  'type' => $type,
+  'fields' => $fields
+]);
+
+$curl = curl_init();
 curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://partner-7206.zportal.nl/api/v3/appointments?valid=true&cancelled=false&user=vis&start=1725832800&end=1726264799&type=lesson%2Cexam%2CoralExam%2Cactivity%2Ctalk%2Cmixed%2Cmeeting%2Cinterlude&fields=id%2CappointmentInstance%2Cstart%2Cend%2CstartTimeSlotName%2CendTimeSlotName%2Clocations%2Cteachers%2Csubjects',
+  CURLOPT_URL => 'https://partner-7206.zportal.nl/api/v3/appointments?' . $params,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -17,6 +34,7 @@ curl_setopt_array($curl, array(
 ));
 
 $response = curl_exec($curl);
-
 curl_close($curl);
+
+checkResponse($curl, $response);
 echo $response;

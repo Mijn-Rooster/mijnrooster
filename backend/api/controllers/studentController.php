@@ -1,39 +1,38 @@
 <?php
 
-// Require networkLogger.php for networkRequestDebugInfo function
-require_once __DIR__ . '/../utils/debug.php';
-require_once __DIR__ . '/../utils/curlHelper.php';
+require_once __DIR__ . '/../services/auth.php';
+require_once __DIR__ . '/../services/zermeloAPI.php';
+require_once __DIR__ . '/../services/errorHandler.php';
 
-$schoolInSchoolYear = 1001702;
-$filterFields = 'student,firstName,prefix,lastName,mainGroupName,mainGroup,mentorGroup,departmentOfBranch';
-$studentId = 138563;
+use api\Services\Auth;
+use api\Services\ZermeloAPI;
+use api\Services\ErrorHandler;
 
-$params = http_build_query([
-    'schoolInSchoolYear' => $schoolInSchoolYear,
-    'fields' => $filterFields,
-    'student' => $studentId
-]);
+try {
+    $auth = new Auth();
+    $zermeloApi = new ZermeloAPI();
 
-$curl = curl_init();
+    // Token validatie
+    $headers = getallheaders();
+    if (!isset($headers['Authorization'])) {
+        //throw new \Exception("Authorization header ontbreekt");
+        $headers['Authorization'] = 'Bearer YOUR_STATIC_TOKEN';
+    }
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://partner-7206.zportal.nl/api/v3/studentsindepartments?' . $params,
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: Bearer ' . ZERMELO_API_TOKEN,
-  ),
-));
+    $token = str_replace('Bearer ', '', $headers['Authorization']);
+    $auth->validateToken($token);
 
-$response = curl_exec($curl);
-curl_close($curl);
+    // Rooster data ophalen
+    $studentId = 138563;
+    $schoolInSchoolYear = 1001702;
+    $roosterData = $zermeloApi->getUserData($studentId, $schoolInSchoolYear);
 
-checkResponse($curl, $response);
-
-//echo networkRequestDebugInfo($curl);
-echo $response;
+    // Succesvolle response
+    http_response_code(200);
+    echo json_encode([
+        'success' => true,
+        'data' => $roosterData
+    ]);
+} catch (\Exception $e) {
+    ErrorHandler::handle(400, $e->getMessage());
+}
