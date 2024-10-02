@@ -90,4 +90,9 @@ class ZermeloAPI {
             ErrorHandler::handle("ZERMELO_API_ERROR", $errorDetails);
         }
     }
+
+    // To be implemented
+    public function getTeacherData($teacherId, $schoolInSchoolYear, $fields = 'teacher,firstName,prefix,lastName,departmentOfBranch') {
+        
+    }
 }

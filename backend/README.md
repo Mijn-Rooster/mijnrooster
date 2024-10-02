@@ -18,6 +18,9 @@ This is not needed when running in codespaces.
   npm install
 ```
 
+You also need to rename `Config/config.default.php` to `Config/config.php` and fill in the needed ENV variables. 
+For developing, you can ask @DVDdisk7 for the config details.
+
 ### Start
 
 ```bash

@@ -26,7 +26,7 @@ try {
     $auth->authenticate();
 
     // Get user data from Zermelo API
-    $zermeloData = $zermeloApi->getStudentData($studentId, $schoolInSchoolYear);
+    $zermeloData = $zermeloApi->getTeacherData($studentId, $schoolInSchoolYear);
 
     // Return the data
     echo json_encode($zermeloData);
