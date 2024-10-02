@@ -15,8 +15,8 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 any('/', 'index.php');
 
-get('/api/v1/student', 'Controllers/StudentController.php');
-get('/api/v1/schedule', 'Controllers/ScheduleController.php');
+get('/api/v1/school/$schoolInSchoolYear/student/$studentId', 'Controllers/StudentController.php');
+get('/api/v1/schedule/$studentId', 'Controllers/ScheduleController.php');
 
 // Redirect all other request to page
 any('/404','404.php');
