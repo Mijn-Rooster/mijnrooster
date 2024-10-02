@@ -15,7 +15,10 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 any('/', 'index.php');
 
+get('/api/v1/school', 'Controllers/SchoolController.php');
+get('/api/v1/school/$schoolInSchoolYear', 'Controllers/SchoolController.php');
 get('/api/v1/school/$schoolInSchoolYear/student/$studentId', 'Controllers/StudentController.php');
+get('/api/v1/school/$schoolInSchoolYear/teacher/$teacherId', 'Controllers/TeacherController.php');
 get('/api/v1/schedule/$studentId', 'Controllers/ScheduleController.php');
 
 // Redirect all other request to page

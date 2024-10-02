@@ -33,5 +33,5 @@ Thumbs.db
 *.log*
 
 # Config files
-backend/api/config/config.php
+backend/src/config/config.php
 
