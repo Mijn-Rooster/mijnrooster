@@ -27,10 +27,11 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
-config.php
-
 # System files
 .DS_Store
 Thumbs.db
 *.log*
+
+# Config files
+backend/src/config/config.php
+
