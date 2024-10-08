@@ -9,9 +9,9 @@
  */
 
 // Require the necessary files and classes
-require_once __DIR__ . '/../services/auth.php';
-require_once __DIR__ . '/../services/zermeloAPI.php';
-require_once __DIR__ . '/../services/errorHandler.php';
+require_once __DIR__ . '/../Services/Auth.php';
+require_once __DIR__ . '/../Services/ZermeloAPI.php';
+require_once __DIR__ . '/../Services/ErrorHandler.php';
 
 use api\Services\Auth;
 use api\Services\ZermeloAPI;
@@ -26,10 +26,10 @@ try {
     $auth->authenticate();
 
     // Get user data from Zermelo API
-    $zermeloData = $zermeloApi->getTeacherData($studentId, $schoolInSchoolYear);
+    //$zermeloData = $zermeloApi->getTeacherData($studentId, $schoolInSchoolYear);
 
     // Return the data
-    echo json_encode($zermeloData);
+    //echo json_encode($zermeloData);
 } catch (\Exception $e) {
     ErrorHandler::handle("ERROR", $e->getMessage());
 }

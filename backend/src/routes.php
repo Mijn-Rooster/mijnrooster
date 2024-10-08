@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__.'/router.php';
-require_once __DIR__.'/config/config.php';
+require_once __DIR__.'/Config/config.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

@@ -10,7 +10,7 @@ class ErrorHandler {
      * @param string $message The error message. If not set, the default message for the error code will be used.
      * @param string $details The error details. Optional.
      * @param int $responseCode The HTTP response code. Default is 500.
-     * @return A JSON response with the error message.
+     * @return string A JSON response with the error message.
      */
     public static function handle($errorCode, $details = "") {
 
@@ -66,7 +66,7 @@ class ErrorHandler {
                 ];
             default:
                 return [
-                    'responseCode' => 500,
+                    'responseCode' => 200,
                     'message' => "Er is een onbekende fout opgetreden",
                 ];
         }
