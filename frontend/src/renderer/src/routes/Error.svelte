@@ -2,6 +2,6 @@
   import MenuBar from "../components/MenuBar.svelte";
 </script>
 
-<h1>Home</h1>
+<h1>Error</h1>
 
 <MenuBar />
