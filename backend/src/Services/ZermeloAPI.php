@@ -49,6 +49,7 @@ class ZermeloAPI {
         } else {
             $errorDetails = ErrorHandler::getZermeloErrorDetails($response);
             ErrorHandler::handle("ZERMELO_API_ERROR", $errorDetails);
+            exit;
         }
     }
 
@@ -85,9 +86,10 @@ class ZermeloAPI {
 
         if ($httpCode === 200) {
             return json_decode($response, true)['response']['data'];
-        } else {
+        } else {;
             $errorDetails = ErrorHandler::getZermeloErrorDetails($response);
             ErrorHandler::handle("ZERMELO_API_ERROR", $errorDetails);
+            exit;
         }
     }
 

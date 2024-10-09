@@ -20,7 +20,7 @@ class Auth {
         if ($token === $this->validToken) {
             return true;
         } else {
-            ErrorHandler::handle("AUTH_INVALID_TOKEN");
+            return false;
         }
     }
 
@@ -34,6 +34,8 @@ class Auth {
         }
 
         $token = str_replace('Bearer ', '', $headers['Authorization']);
-        $this->validateToken($token);
+        if (!$this->validateToken($token)) {
+            ErrorHandler::handle("AUTH_INVALID_TOKEN");
+        }
     }
 }
