@@ -1,12 +1,13 @@
 <script lang="ts">
     import MenuBar from "../components/MenuBar.svelte";
     import { navigate } from "../stores/RouterStore";
+    import Schedule  from "../components/Schedule/Schedule.svelte";
+    import { Button } from 'flowbite-svelte';
 </script>
-
-<h1>Schedule</h1>
 
 <MenuBar />
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-missing-attribute-->
-<button on:click={() => navigate("/")}
-    >[] Go to Home</button>
+<Schedule />
+
+<Button on:click={() => navigate("/")}
+    >Go to Home</Button>

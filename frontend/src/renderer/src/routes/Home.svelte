@@ -1,16 +1,37 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/RouterStore";
+  import { onMount } from "svelte";
+  import { getCurrentTime } from "../services/TimeService";
+  import { ButtonGroup, Button } from 'flowbite-svelte';
+  import { CalendarMonthOutline, CloseCircleOutline, CogOutline} from 'flowbite-svelte-icons';
+
+  let currentTime: string;
+
+  onMount(() => {
+    currentTime = getCurrentTime();
+    const interval = setInterval(() => {
+      currentTime = getCurrentTime();
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 </script>
 
-<h1>Home</h1>
+<MenuBar timeVisible={false} />
 
-<MenuBar />
+<h1 class="text-4xl font-extrabold text-center w-full">{currentTime}</h1>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-missing-attribute-->
-<button on:click={() => navigate("/schedule")}
-  >[] Go to schedule page</button>
-<button on:click={() => navigate("/error")}
-  >[] Go to error page</button>
-<button on:click={() => navigate("/setup")}
-    >[] Go to setup page</button>
+<ButtonGroup class="*:!ring-primary-700">
+  <Button on:click={() => navigate("/schedule")}>
+    <CalendarMonthOutline class="w-4 h-4 me-2" />
+    Schedule
+  </Button>
+  <Button on:click={() => navigate("/error")}>
+    <CloseCircleOutline class="w-4 h-4 me-2" />
+    Error
+  </Button>
+  <Button on:click={() => navigate("/setup")}>
+    <CogOutline class="w-4 h-4 me-2" />
+    Setup
+  </Button>
+</ButtonGroup>
