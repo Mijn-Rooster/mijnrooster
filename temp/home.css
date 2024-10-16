@@ -1,0 +1,78 @@
+/* Algemeen */
+
+* {
+    margin: auto;
+}
+
+#wrapper {
+    width: 900px;
+}
+
+/* Header */
+
+header {
+    width: 900px;
+    padding: 25px;
+}
+
+#bovenbalk {
+    width: 900px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    display: flex;
+}
+
+#connection {
+    float: right;
+    color: #291C5B;
+    margin-right: 0;
+}
+
+#box {
+    width: 175px;
+    height: 40px;
+    padding: 1.1%;
+    background-color: #291C5B;
+    margin-left: 0;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#box p {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  font-family: calibri;
+}
+
+/* main */
+
+h1 {
+    text-align: center;
+    font-family: calibri;
+    font-size: 68px;
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+
+h3 {
+    text-align: center;
+    font-family: calibri;
+    font-size: 28px;
+    margin-bottom: 100px;
+}
+
+#card {
+    text-align: center;
+    margin-left: 275px;
+    margin-right: 275px;
+    margin-bottom: 100px;
+    color: #291C5B;
+}
+
+p {
+    font-family: calibri;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 300px;
+}
