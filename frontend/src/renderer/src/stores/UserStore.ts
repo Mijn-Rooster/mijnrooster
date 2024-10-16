@@ -5,7 +5,7 @@ import { writable } from 'svelte/store';
 /**
  * A writable store that holds the current login information.
  */
-export const isLoggedIn = writable(false);
+export const isLoggedIn = writable(true);
 
 /**
  * Logs the user in by setting the `isLoggedIn` state to `true`.

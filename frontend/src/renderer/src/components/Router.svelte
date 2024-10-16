@@ -1,8 +1,9 @@
 <script lang="ts">
     import { route } from '../stores/RouterStore';
     import Home from '../routes/Home.svelte';
-    import Test from '../routes/Test.svelte';
-    import Login from '../routes/Login.svelte';
+    import Error from '../routes/Error.svelte';
+    import Schedule from '../routes/Schedule.svelte';
+    import Setup from '../routes/Setup.svelte';
 
     let currentRoute;
 
@@ -10,16 +11,16 @@
 
     const routes = {
         '/': Home,
-        '/login': Login,
-        '/test': Test,
+        '/error': Error,
+        '/schedule': Schedule,
+        '/setup': Setup,
     };
 
     let CurrentComponent;
 
     // Listen for changes in route and update CurrentComponent
     $: CurrentComponent = routes[currentRoute] || Home;
-
-    console.log('Current route:', currentRoute);
+    $: console.log('Current route:', currentRoute, '| Params:', $route.params);
 </script>
 
 <svelte:component this={CurrentComponent} />
