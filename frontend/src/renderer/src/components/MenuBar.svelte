@@ -16,7 +16,7 @@
 
 <div class="flex flex-row justify-between items-center">
   <!-- App Title -->
-  <div class="px-3 py-2 bg-purple-900 rounded-lg text-white">
+  <div class="px-3 py-2 bg-primary-700 rounded-lg text-white">
     <p>Mijn Rooster</p>
   </div>
   <!-- Time -->
