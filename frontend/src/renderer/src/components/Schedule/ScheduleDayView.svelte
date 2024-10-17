@@ -2,7 +2,9 @@
   import ScheduleItem from "./ScheduleItem.svelte";
   import { Button } from "flowbite-svelte";
   import { ArrowLeftOutline, ArrowRightOutline } from 'flowbite-svelte-icons';
+  import { getCurrentDate } from "../../services/TimeService";
 
+  $: currentDate = getCurrentDate();
 </script>
 
 <!-- Date navigation -->
@@ -12,7 +14,7 @@
     <ArrowLeftOutline />
   </Button>
   <!-- Current date -->
-  <p>Maandag 12 oktober 2021</p>
+  <p>{currentDate}</p>
   <!-- Next -->
   <Button class="p-2 w-10">
     <ArrowRightOutline />
