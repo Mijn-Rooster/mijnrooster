@@ -8,13 +8,13 @@
 <!-- Date navigation -->
 <div class="flex justify-between">
   <!-- Previous -->
-  <Button class="p-2">
+  <Button class="p-2 w-10">
     <ArrowLeftOutline />
   </Button>
   <!-- Current date -->
   <p>Maandag 12 oktober 2021</p>
   <!-- Next -->
-  <Button class="p-2">
+  <Button class="p-2 w-10">
     <ArrowRightOutline />
   </Button>
 </div>

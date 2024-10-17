@@ -14,19 +14,19 @@
   });
 </script>
 
-<div class="flex flex-row justify-between items-center">
+<div class="grid grid-cols-3 grid-flow justify-between items-center">
   <!-- App Title -->
-  <div class="px-3 py-2 bg-primary-700 rounded-lg text-white">
+  <div class="justify-self-start px-3 py-2 bg-primary-700 rounded-lg text-white">
     <p>Mijn Rooster</p>
   </div>
   <!-- Time -->
-  <div>
+  <div class="justify-self-center ">
     {#if timeVisible}
       <p>{currentTime}</p>
     {/if}
   </div>
   <!-- Status -->
-  <div>
+  <div class="justify-self-end">
     <p>Online</p>
   </div>
 </div>
