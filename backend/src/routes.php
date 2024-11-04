@@ -15,11 +15,11 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 any('/', 'index.php');
 
-get('/api/v1/school', 'Controllers/SchoolController.php'); // To be implemented
-get('/api/v1/school/$schoolInSchoolYear', 'Controllers/SchoolController.php'); // To be implemented
-get('/api/v1/school/$schoolInSchoolYear/student/$studentId', 'Controllers/StudentController.php');
-get('/api/v1/school/$schoolInSchoolYear/teacher/$teacherId', 'Controllers/TeacherController.php'); // To be implemented
-get('/api/v1/schedule/$studentId', 'Controllers/ScheduleController.php');
+get('/v1/school', 'Controllers/SchoolsController.php'); // To be implemented
+get('/v1/school/$schoolInSchoolYear', 'Controllers/SchoolController.php'); // To be implemented
+get('/v1/school/$schoolInSchoolYear/student/$studentId', 'Controllers/StudentController.php');
+get('/v1/school/$schoolInSchoolYear/teacher/$teacherId', 'Controllers/TeacherController.php');
+get('/v1/schedule/$studentId', 'Controllers/ScheduleController.php');
 
 // Redirect all other request to page
 any('/404','404.php');
