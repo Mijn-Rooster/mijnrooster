@@ -20,7 +20,7 @@ class ErrorHandler {
      */
     public static function handle($errorCode, $details = "") {
         // Create new error object
-        $error = new Error($errorCode, $details);
+        $error = new Error($errorCode);
 
         // Create response
         $response = new Response(
