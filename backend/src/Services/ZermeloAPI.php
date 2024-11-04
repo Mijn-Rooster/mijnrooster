@@ -2,7 +2,13 @@
 
 namespace api\Services;
 
+// Require the necessary services
 use api\Services\ErrorHandler;
+
+/**
+ * Zermelo API Service
+ * This class is responsible for handling all requests to the Zermelo API.
+ */
 
 class ZermeloAPI {
 
@@ -80,8 +86,14 @@ class ZermeloAPI {
         return json_decode($response, true)['response'];
     }
 
-    // To be implemented
-    public function getTeacherDetails($teacherId, $schoolInSchoolYear, $fields = 'employee,firstName,prefix,lastName') {
+    /**
+     * Get teacher data from Zermelo API
+     * @param string|int $teacherId Id of the teacher to get the data for
+     * @param int $schoolInSchoolYear Id of the school in the school year
+     * @param string $fields Fields to get from the teacher data. Check Zermelo API documentation for possible values
+     * @return array Teacher data
+     */
+    public function getTeacherDetails($teacherId, $schoolInSchoolYear, $fields = 'employee,firstName,prefix,lastName'): array {
         // Check if all required parameters are set
         if (!isset($teacherId, $schoolInSchoolYear)) {
             ErrorHandler::handle("MISSING_PARAMETERS");

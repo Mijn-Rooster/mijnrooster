@@ -2,6 +2,11 @@
 
 namespace api\Services;
 
+/**
+ * Auth Service
+ * The Auth service is responsible for authenticating the user via a bearer token.
+ * To be implemented further in the future.
+ */
 class Auth {
     /**
      * The valid token. See config.php for the API_TOKEN constant.
@@ -27,7 +32,7 @@ class Auth {
     /** 
      * Authenticate via bearer token
     */
-    public function authenticate() {
+    public function authenticate(): void {
         $headers = getallheaders();
         if (!isset($headers['Authorization'])) {
             ErrorHandler::handle("AUTH_MISSING_TOKEN");

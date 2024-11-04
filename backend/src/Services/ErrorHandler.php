@@ -2,39 +2,52 @@
 
 namespace api\Services;
 
+// Require the necessary models
 require_once __DIR__ . '/../Models/ResponseModel.php';
 require_once __DIR__ . '/../Models/ErrorModel.php';
 
 use api\Models\Error;
 use api\Models\Response;
 
+/**
+ * Error Handler
+ * This class handles errors and sends a JSON response with the error message.
+ */
+
 class ErrorHandler {
+
     /**
      * This function handles the error and sends a JSON response with the error message.
      *
      * @param string $errorCode The error code.
-     * @param string $message The error message. If not set, the default message for the error code will be used.
-     * @param string $details The error details. Optional.
-     * @param int $responseCode The HTTP response code. Default is 500.
-     * @return string A JSON response with the error message.
+     * @param string $details The error details.
+     * @return never send a JSON response with the error message.
      */
-    public static function handle($errorCode, $details = "") {
+    public static function handle($errorCode, $details = ""): never {
         // Create new error object
-        $error = new Error($errorCode);
+        if ($details === "") {
+            $error = new Error($errorCode);
+        } else {
+            $error = new Error($errorCode, $details);
+        }
 
         // Create response
         $response = new Response(
-            [],
-            $error->getStatusCode(),
-            $error->getMessage(),
-            $error->getDetails()
+            data: [],
+            statusCode: $error->getStatusCode(),
+            message: $error->getMessage(),
+            details: $error->getDetails()
         );
         $response->send();
-
-        exit;
     }
 
-    public static function handleZermeloError($zermeloData) {
+    /**
+     * This function handles the error and sends a JSON response with the error message.
+     *
+     * @param array $zermeloData The response from the Zermelo API.
+     * @return never send a JSON response with the error message.
+     */
+    public static function handleZermeloError($zermeloData): never {
         // Create a new error model
         $error = new Error(
             "ZERMELO_API_ERROR",
@@ -46,10 +59,10 @@ class ErrorHandler {
 
         // Send the error response
         $response = new Response(
-            [],
-            $error->getStatusCode(),
-            $error->getMessage(),
-            $error->getDetails()
+            data: [],
+            statusCode: $error->getStatusCode(),
+            message: $error->getMessage(),
+            details: $error->getDetails()
         );
         $response->send();
     }

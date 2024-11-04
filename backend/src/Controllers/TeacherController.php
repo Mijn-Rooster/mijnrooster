@@ -3,9 +3,7 @@
 /**
  * Teacher Controller
  * 
- * This file contains the logic to retrieve data of teacher.
- * What does this controller do? It gets the teachers data from the Zermelo API and returns it.
- * 
+ * This file contains the logic for the teacher endpoint.
  */
 
 // Require the necessary files and classes
@@ -45,10 +43,10 @@ try {
 
     // Create teacher
     $teacher = new Teacher(
-        $zermeloData['data'][0]['employee'],
-        $zermeloData['data'][0]['firstName'],
-        $zermeloData['data'][0]['prefix'],
-        $zermeloData['data'][0]['lastName'],
+        code: $zermeloData['data'][0]['employee'],
+        firstName: $zermeloData['data'][0]['firstName'],
+        prefix: $zermeloData['data'][0]['prefix'] ?? "",
+        lastName: $zermeloData['data'][0]['lastName'],
     );
 
     // Create response

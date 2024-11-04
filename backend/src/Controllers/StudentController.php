@@ -3,9 +3,7 @@
 /**
  * Student Controller
  * 
- * This file contains the logic for the student controller.
- * What does this controller do? It gets the student data from the Zermelo API and returns it.
- * 
+ * This file contains the logic for the student endpoint.
  */
 
 // Require the necessary files and classes
@@ -45,14 +43,14 @@ try {
 
     // Create student
     $student = new Student(
-        $zermeloData['data'][0]['student'],
-        $zermeloData['data'][0]['firstName'],
-        $zermeloData['data'][0]['prefix'],
-        $zermeloData['data'][0]['lastName'],
-        $zermeloData['data'][0]['mainGroupName'],
-        $zermeloData['data'][0]['mainGroup'],
-        $zermeloData['data'][0]['mentorGroup'],
-        $zermeloData['data'][0]['departmentOfBranch']
+        code: $zermeloData['data'][0]['student'],
+        firstName: $zermeloData['data'][0]['firstName'],
+        prefix: $zermeloData['data'][0]['prefix'] ?? "",
+        lastName: $zermeloData['data'][0]['lastName'],
+        mainGroupName: $zermeloData['data'][0]['mainGroupName'],
+        mainGroup: $zermeloData['data'][0]['mainGroup'],
+        mentorGroup: $zermeloData['data'][0]['mentorGroup'],
+        departmentOfBranch: $zermeloData['data'][0]['departmentOfBranch']
     );
 
     // Create response

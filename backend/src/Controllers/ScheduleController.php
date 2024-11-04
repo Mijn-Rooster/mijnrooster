@@ -3,9 +3,7 @@
 /**
  * Schedule Controller
  * 
- * This file contains the logic for the schedule controller.
- * What does this controller do? It gets the schedule data from the Zermelo API and returns it.
- * 
+ * This file contains the logic for the schedule endpoint.
  */
 
 // Require the necessary files and classes
@@ -31,8 +29,8 @@ try {
     // Authenticate via bearer token
     $auth->authenticate();
 
-    // Get user data from Zermelo API
-    $startDate = isset($_GET['start']) ? $_GET['start'] : strtotime('-1 week monday 00:00:00');
+    // Get schedule appointments from Zermelo API. Default to this week.
+    $startDate = isset($_GET['start']) ? $_GET['start'] : strtotime('monday 00:00:00');
     $endDate = isset($_GET['end']) ? $_GET['end'] : strtotime('sunday 23:59:59');
     $zermeloData = $zermeloApi->getScheduleAppointments($studentId, $startDate, $endDate);
 
@@ -41,27 +39,32 @@ try {
         ErrorHandler::handleZermeloError($zermeloData);
     }
 
-    // Create schedule model
-    $schedule = new Schedule([]);
+    // Check if the Zermelo API returned no data
+    if (count($zermeloData['data']) === 0) {
+        $response = new Response([]);
+        $response->send();
+    }
+
+    // Create new schedule
+    $schedule = new Schedule();
 
     // Loop through the appointments and add them to the schedule model
     foreach ($zermeloData['data'] as $appointmentData) {
         $appointment = new Appointment(
-            $appointmentData['id'],
-            $appointmentData['appointmentInstance'],
-            $appointmentData['start'],
-            $appointmentData['end'],
-            $appointmentData['locations'],
-            $appointmentData['subjects'],
-            $appointmentData['teachers']
+            id: $appointmentData['id'],
+            appointmentInstance: $appointmentData['appointmentInstance'],
+            start: $appointmentData['start'],
+            end: $appointmentData['end'],
+            locations: $appointmentData['locations'],
+            subjects: $appointmentData['subjects'],
+            teachers: $appointmentData['teachers']
         );
         $schedule->addAppointment($appointment);
     }
 
-    // Create a new response
+    // Create response
     $response = new Response($schedule->getAppointments(),);
     $response->send();
-
 } catch (\Exception $e) {
     ErrorHandler::handle("ERROR", $e->getMessage());
 }
