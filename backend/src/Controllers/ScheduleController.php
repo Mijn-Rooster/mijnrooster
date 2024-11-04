@@ -15,7 +15,6 @@ require_once __DIR__ . '/../Services/ErrorHandler.php';
 require_once __DIR__ . '/../Models/AppointmentModel.php';
 require_once __DIR__ . '/../Models/ScheduleModel.php';
 require_once __DIR__ . '/../Models/ResponseModel.php';
-require_once __DIR__ . '/../Models/ErrorModel.php';
 
 use api\Services\Auth;
 use api\Services\ZermeloAPI;
@@ -23,7 +22,6 @@ use api\Services\ErrorHandler;
 use api\Models\Appointment;
 use api\Models\Schedule;
 use api\Models\Response;
-use api\Models\Error;
 
 try {
     // Generate a new instance of the Auth and ZermeloAPI class
@@ -40,22 +38,7 @@ try {
 
     // Check if the Zermelo API returned an error
     if ($zermeloData['status'] !== 200) {
-        // Create a new error model
-        $error = new Error(
-            "ZERMELO_API_ERROR",
-        );
-
-        // Set the error details from the Zermelo API response
-        $error->setStatusCode($zermeloData['status']);
-        $error->setDetailsFromZermeloResponse($zermeloData);
-
-        // Send the error response
-        $response = new Response(
-            $error->getStatusCode(),
-            $error->getMessage(),
-            $error->getDetails()
-        );
-        $response->send();
+        ErrorHandler::handleZermeloError($zermeloData);
     }
 
     // Create schedule model
@@ -76,13 +59,7 @@ try {
     }
 
     // Create a new response
-    $response = new Response(
-        200,
-        "",
-        "",
-        $schedule->countAppointments(),
-        $schedule->getAppointments()
-    );
+    $response = new Response($schedule->getAppointments(),);
     $response->send();
 
 } catch (\Exception $e) {

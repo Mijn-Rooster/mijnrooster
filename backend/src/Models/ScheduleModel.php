@@ -2,6 +2,8 @@
 
 namespace api\Models;
 
+use api\Models\Appointment;
+
 class Schedule
 {
     private array $appointments = [];
@@ -19,7 +21,7 @@ class Schedule
 
     public function addAppointment(Appointment $appointment): void
     {
-        $this->appointments[] = $appointment;
+        $this->appointments[] = $appointment->getAppointment();
     }
 
     public function countAppointments(): int

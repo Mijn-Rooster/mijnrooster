@@ -24,6 +24,7 @@ class ErrorHandler {
 
         // Create response
         $response = new Response(
+            [],
             $error->getStatusCode(),
             $error->getMessage(),
             $error->getDetails()
@@ -33,4 +34,23 @@ class ErrorHandler {
         exit;
     }
 
+    public static function handleZermeloError($zermeloData) {
+        // Create a new error model
+        $error = new Error(
+            "ZERMELO_API_ERROR",
+        );
+
+        // Set the error details from the Zermelo API response
+        $error->setStatusCode($zermeloData['status']);
+        $error->setDetailsFromZermeloResponse($zermeloData);
+
+        // Send the error response
+        $response = new Response(
+            [],
+            $error->getStatusCode(),
+            $error->getMessage(),
+            $error->getDetails()
+        );
+        $response->send();
+    }
 }

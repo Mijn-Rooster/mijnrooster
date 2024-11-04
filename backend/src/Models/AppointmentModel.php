@@ -3,13 +3,13 @@
 namespace api\Models;
 class Appointment
 {
-    public int $id;
-    public string $appointmentInstance;
-    public string $start;
-    public string $end;
-    public array $locations;
-    public array $subjects;
-    public array $teachers;
+    private int $id;
+    private string $appointmentInstance;
+    private string $start;
+    private string $end;
+    private array $locations;
+    private array $subjects;
+    private array $teachers;
 
     public function __construct(
         int $id,
@@ -27,6 +27,19 @@ class Appointment
         $this->locations = $locations;
         $this->subjects = $subjects;
         $this->teachers = $teachers;
+    }
+
+    public function getAppointment(): array
+    {
+        return [
+            'id' => $this->id,
+            'appointmentInstance' => $this->appointmentInstance,
+            'start' => $this->start,
+            'end' => $this->end,
+            'locations' => $this->locations,
+            'subjects' => $this->subjects,
+            'teachers' => $this->teachers
+        ];
     }
 
 }

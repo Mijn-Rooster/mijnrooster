@@ -77,13 +77,7 @@ class ZermeloAPI {
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        /*if ($httpCode === 200) {
-            return json_decode($response, true)['response']['data'];
-        } else {;
-            $errorDetails = ErrorHandler::getZermeloErrorDetails($response);
-            ErrorHandler::handle("ZERMELO_API_ERROR", $errorDetails);
-            exit;
-        }*/
+        return json_decode($response, true)['response'];
     }
 
     // To be implemented
@@ -111,12 +105,6 @@ class ZermeloAPI {
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        /*if ($httpCode === 200) {
-            return json_decode($response, true)['response']['data'];
-        } else {;
-            $errorDetails = ErrorHandler::getZermeloErrorDetails($response);
-            ErrorHandler::handle("ZERMELO_API_ERROR", $errorDetails);
-            exit;
-        }*/
+        return json_decode($response, true)['response'];
     }
 }
