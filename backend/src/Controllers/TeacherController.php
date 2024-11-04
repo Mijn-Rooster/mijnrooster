@@ -3,7 +3,7 @@
 /**
  * Teacher Controller
  * 
- * This file contains the logic for the teacher controller.
+ * This file contains the logic to retrieve data of teacher.
  * What does this controller do? It gets the teachers data from the Zermelo API and returns it.
  * 
  */
@@ -26,10 +26,10 @@ try {
     $auth->authenticate();
 
     // Get user data from Zermelo API
-    //$zermeloData = $zermeloApi->getTeacherData($studentId, $schoolInSchoolYear);
+    $zermeloData = $zermeloApi->getTeacherDetails($teacherId, $schoolInSchoolYear);
 
     // Return the data
-    //echo json_encode($zermeloData);
+    echo json_encode($zermeloData);
 } catch (\Exception $e) {
     ErrorHandler::handle("ERROR", $e->getMessage());
 }

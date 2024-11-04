@@ -16,7 +16,7 @@ class Auth {
      * @param string $token
      * @return bool
      */
-    public function validateToken($token) {
+    private function validateToken($token) {
         if ($token === $this->validToken) {
             return true;
         } else {
