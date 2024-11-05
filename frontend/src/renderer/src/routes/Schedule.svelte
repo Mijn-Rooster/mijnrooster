@@ -2,8 +2,9 @@
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/RouterStore";
   import Schedule from "../components/Schedule/Schedule.svelte";
-  import { Button, Footer } from "flowbite-svelte";
+  import { ButtonGroup, Button, Footer } from "flowbite-svelte";
   import { ArrowLeftToBracketOutline } from 'flowbite-svelte-icons';
+  
 </script>
 
 <MenuBar />

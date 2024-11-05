@@ -17,9 +17,9 @@
 
 <div class="grid grid-cols-3 grid-flow justify-between items-center">
   <!-- App Title -->
-  <button on:click={() => navigate("/home")} class="justify-self-start px-3 py-2 bg-primary-700 rounded-lg text-white">
+  <div class="justify-self-start px-3 py-2 bg-primary-700 rounded-lg text-white">
     <p>Mijn Rooster</p>
-  </button>
+  </div>
 
   <!-- Time -->
   <div class="justify-self-center ">

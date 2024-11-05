@@ -3,9 +3,26 @@
     import { navigate } from "../stores/RouterStore";
     import { Button, Footer } from 'flowbite-svelte';
     import { ArrowLeftOutline } from 'flowbite-svelte-icons';
+    import { onMount } from "svelte";
+    import { getCurrentTime, getCurrentDate } from "../services/TimeService";
+
+    $: currentDate = getCurrentDate()
+
+let currentTime: string;
+
+onMount(() => {
+  currentTime = getCurrentTime();
+  const interval = setInterval(() => {
+    currentTime = getCurrentTime();
+  }, 1000);
+  return () => clearInterval(interval);
+});
 </script>
 
-<MenuBar />
+<MenuBar timeVisible={false} />
+
+<h1 class="text-4xl font-extrabold text-center w-full">{currentTime}</h1>
+<h2 class="text-xl font-bold text-center w-full">{currentDate}</h2>
 
 <h1>Setup</h1>
 
