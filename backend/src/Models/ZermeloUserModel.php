@@ -3,34 +3,34 @@
 namespace api\Models;
 
 /**
- * Teacher Model
+ * Zermelo user Model
  */
 
-class Teacher
+class ZermeloUser
 {
     /**
-     * The codes/abbreviations of the teacher (e.g. "GIJS")
+     * The codes/abbreviations of the user (e.g. GIJS or 545959)
      * @var string|int
      */
     private string|int $code;
     /**
-     * The first name of the teacher (e.g. "Jan")
+     * The first name of the user (e.g. "Jan")
      * @var string $firstName
      */
     private string $firstName;
     /**
-     * The prefix of the teacher's last name (e.g. "van der")
+     * The prefix of the user's last name (e.g. "van der")
      * @var string $prefix
      */
     private string $prefix;
     /**
-     * The last name of the teacher (e.g. "Dool")
+     * The last name of the user (e.g. "Dool")
      * @var string $lastName
      */
     private string $lastName;
 
     /**
-     * Create a new teacher instance.
+     * Create a new user instance.
      * @param string|int $code
      * @param string $firstName
      * @param string $prefix
@@ -45,10 +45,10 @@ class Teacher
     }
 
     /**
-     * return the teacher as an array
+     * return the user details as an array
      * @return array
      */
-    public function getTeacher(): array {
+    public function getUserDetails(): array {
         return [
             'code' => $this->code,
             'firstName' => $this->firstName,

@@ -30,8 +30,8 @@ try {
     $auth->authenticate();
 
     // Get schedule appointments from Zermelo API. Default to this week.
-    $startDate = isset($_GET['start']) ? $_GET['start'] : strtotime('monday 00:00:00');
-    $endDate = isset($_GET['end']) ? $_GET['end'] : strtotime('sunday 23:59:59');
+    $startDate = isset($_GET['start']) ? $_GET['start'] : strtotime('this week monday 00:00:00');
+    $endDate = isset($_GET['end']) ? $_GET['end'] : strtotime('this week sunday 23:59:59');
     $zermeloData = $zermeloApi->getScheduleAppointments($studentId, $startDate, $endDate);
 
     // Check if the Zermelo API returned an error

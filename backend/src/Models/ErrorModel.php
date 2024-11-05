@@ -52,10 +52,20 @@ class Error
             'message' => 'An error occurred while fetching data from Zermelo',
             'details' => 'The Zermelo API returned an error',
         ],
+        'ZERMELO_USER_NOT_FOUND' => [
+            'statusCode' => 404,
+            'message' => 'User not found',
+            'details' => 'The user could not be found in the Zermelo API',
+        ],
         'MISSING_PARAMETERS' => [
             'statusCode' => 400,
             'message' => 'Missing parameters',
             'details' => 'Not all required parameters have been provided',
+        ],
+        'PARAMETER_INVALID' => [
+            'statusCode' => 400,
+            'message' => 'Invalid parameter',
+            'details' => 'The parameter is invalid',
         ],
         'ENDPOINT_NOT_FOUND' => [
             'statusCode' => 404,
@@ -99,10 +109,9 @@ class Error
         $zermeloMessage = $response['message'];
         $zermeloDetails = isset($response['details']) ? $response['details'] : "";
 
-        if(DEBUG_MODE) {
-            $this->details = $zermeloMessage . " - " . $zermeloDetails;
-        } else {
-            $this->details = $zermeloMessage;
+        $this->details = $zermeloMessage;
+        if(DEBUG_MODE && !empty($zermeloDetails)) {
+            $this->details .= ". Details: " . $zermeloDetails;
         }
     }
 
