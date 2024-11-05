@@ -20,8 +20,7 @@
 
     // Listen for changes in route and update CurrentComponent
     $: CurrentComponent = routes[currentRoute] || Home;
-
-    console.log('Current route:', currentRoute);
+    $: console.log('Current route:', currentRoute, '| Params:', $route.params);
 </script>
 
 <svelte:component this={CurrentComponent} />
