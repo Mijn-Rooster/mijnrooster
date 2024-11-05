@@ -9,7 +9,7 @@
 </script>
 
 <!-- Date navigation -->
-<div class="flex justify-center my-5 w-full">
+<div class="flex justify-between my-5 align-content-center">
 
 
   <!-- Previous -->
@@ -18,7 +18,7 @@
   </Button>
 
   <!-- Current date -->
-  <h2 class="text-xl font-bold text-center w-full">{currentDate}</h2>
+  <h2 class="text-xl font-bold text-center">{currentDate}</h2>
   
   <!-- Next -->
   <Button class="p-2 w-10">
