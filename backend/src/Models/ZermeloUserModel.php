@@ -10,9 +10,9 @@ class ZermeloUser
 {
     /**
      * The codes/abbreviations of the user (e.g. GIJS or 545959)
-     * @var string|int
+     * @var mixed $code
      */
-    private string|int $code;
+    private mixed $code;
     /**
      * The first name of the user (e.g. "Jan")
      * @var string $firstName
