@@ -51,13 +51,13 @@ try {
     // Loop through the appointments and add them to the schedule model
     foreach ($zermeloData['data'] as $appointmentData) {
         $appointment = new Appointment(
-            id: $appointmentData['id'],
-            appointmentInstance: $appointmentData['appointmentInstance'],
-            start: $appointmentData['start'],
-            end: $appointmentData['end'],
-            locations: $appointmentData['locations'],
-            subjects: $appointmentData['subjects'],
-            teachers: $appointmentData['teachers']
+            $appointmentData['id'],
+            $appointmentData['appointmentInstance'],
+            $appointmentData['start'],
+            $appointmentData['end'],
+            $appointmentData['locations'],
+            $appointmentData['subjects'],
+            $appointmentData['teachers']
         );
         $schedule->addAppointment($appointment);
     }

@@ -33,10 +33,10 @@ class ErrorHandler {
 
         // Create response
         $response = new Response(
-            data: [],
-            statusCode: $error->getStatusCode(),
-            message: $error->getMessage(),
-            details: $error->getDetails()
+            [],
+            $error->getStatusCode(),
+            $error->getMessage(),
+            $error->getDetails()
         );
         $response->send();
     }
@@ -59,10 +59,10 @@ class ErrorHandler {
 
         // Send the error response
         $response = new Response(
-            data: [],
-            statusCode: $error->getStatusCode(),
-            message: $error->getMessage(),
-            details: $error->getDetails()
+            [],
+            $error->getStatusCode(),
+            $error->getMessage(),
+            $error->getDetails()
         );
         $response->send();
     }

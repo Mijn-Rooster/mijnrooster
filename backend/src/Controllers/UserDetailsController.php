@@ -77,10 +77,10 @@ function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
 
     // Create user object for teacher
     $user = new ZermeloUser(
-        code: $studentData['data'][0]['student'],
-        firstName: $studentData['data'][0]['firstName'],
-        prefix: $studentData['data'][0]['prefix'] ?? "",
-        lastName: $studentData['data'][0]['lastName'],
+        $studentData['data'][0]['student'],
+        $studentData['data'][0]['firstName'],
+        $studentData['data'][0]['prefix'] ?? "",
+        $studentData['data'][0]['lastName'],
     );
 
     return $user;
@@ -108,10 +108,10 @@ function getTeacherDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
 
     // Create user object for teacher
     $user = new ZermeloUser(
-        code: $teacherData['data'][0]['employee'],
-        firstName: $teacherData['data'][0]['firstName'],
-        prefix: $teacherData['data'][0]['prefix'] ?? "",
-        lastName: $teacherData['data'][0]['lastName'],
+        $teacherData['data'][0]['employee'],
+        $teacherData['data'][0]['firstName'],
+        $teacherData['data'][0]['prefix'] ?? "",
+        $teacherData['data'][0]['lastName'],
     );
 
     return $user;

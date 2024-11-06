@@ -10,7 +10,6 @@ namespace api\Models;
 class Appointment
 {
     /**
-     * 	
      * The internal id of this version of the appointment
      * @var int $id
      */
