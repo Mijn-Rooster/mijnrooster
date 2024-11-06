@@ -76,6 +76,9 @@ class ZermeloAPI {
             ErrorHandler::handle("MISSING_PARAMETERS");
         }
 
+        // Filter out invalid characters
+        $schoolInSchoolYear = (int)$schoolInSchoolYear;
+
         // Create query parameters
         $params = http_build_query([
             'schoolInSchoolYear' => $schoolInSchoolYear,
@@ -109,6 +112,9 @@ class ZermeloAPI {
         if (!isset($teacherId, $schoolInSchoolYear)) {
             ErrorHandler::handle("MISSING_PARAMETERS");
         }
+
+        // Filter out invalid characters
+        $schoolInSchoolYear = (int)$schoolInSchoolYear;
 
         // Create query parameters
         $params = http_build_query([
