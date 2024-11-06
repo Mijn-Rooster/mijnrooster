@@ -57,7 +57,7 @@ try {
 
 /**
  * Get the details of a student
- * @param string|int $userId
+ * @param mixed $userId
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */
@@ -88,7 +88,7 @@ function getStudentDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
 
 /**
  * Get the details of a teacher
- * @param string|int $userId
+ * @param mixed $userId
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */

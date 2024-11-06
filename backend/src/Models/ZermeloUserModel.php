@@ -31,7 +31,7 @@ class ZermeloUser
 
     /**
      * Create a new user instance.
-     * @param string|int $code
+     * @param mixed $code
      * @param string $firstName
      * @param string $prefix
      * @param string $lastName
