@@ -14,7 +14,7 @@ class ZermeloAPI {
 
     /**
      * Get schedule data from Zermelo API
-     * @param string $user Id of the user to get the schedule for
+     * @param string $user Id of the user to get the schedule for (e.g. 545959 or "GIJS")
      * @param int $start Start date of the schedule in UNIX timestamp
      * @param int $end End date of the schedule in UNIX timestamp
      * @param string $type Type of appointments to get. Check Zermelo API documentation for possible values
@@ -25,6 +25,17 @@ class ZermeloAPI {
         // Check if all required parameters are set
         if (!isset($user, $start, $end)) {
             ErrorHandler::handle("MISSING_PARAMETERS");
+        }
+
+        // Filter out invalid characters
+        $start = (int)$start;
+        $end = (int)$end;
+
+        // Check if the start and end date are valid
+        // If the start date is in the future, it is invalid
+        // The maximum difference between the start and end date is 62 days (5356800 seconds)
+        if ($start > $end || (($end - $start) > 5356800)) {
+            ErrorHandler::handle("SCHEDULE_INVALID_DATE");
         }
 
         // Create query parameters
@@ -54,7 +65,7 @@ class ZermeloAPI {
 
     /**
      * Get user data from Zermelo API
-     * @param string $studentId Id of the student to get the data for
+     * @param string $studentId Id of the student to get the data for (e.g.545959)
      * @param string $schoolInSchoolYear Id of the school in the school year
      * @param string $fields Fields to get from the user data. Check Zermelo API documentation for possible values
      * @return array User data
@@ -64,6 +75,9 @@ class ZermeloAPI {
         if (!isset($studentId, $schoolInSchoolYear)) {
             ErrorHandler::handle("MISSING_PARAMETERS");
         }
+
+        // Filter out invalid characters
+        $schoolInSchoolYear = (int)$schoolInSchoolYear;
 
         // Create query parameters
         $params = http_build_query([
@@ -88,7 +102,7 @@ class ZermeloAPI {
 
     /**
      * Get teacher data from Zermelo API
-     * @param string|int $teacherId Id of the teacher to get the data for
+     * @param string $teacherId Id of the teacher to get the data for (e.g. "GIJS")
      * @param int $schoolInSchoolYear Id of the school in the school year
      * @param string $fields Fields to get from the teacher data. Check Zermelo API documentation for possible values
      * @return array Teacher data
@@ -98,6 +112,9 @@ class ZermeloAPI {
         if (!isset($teacherId, $schoolInSchoolYear)) {
             ErrorHandler::handle("MISSING_PARAMETERS");
         }
+
+        // Filter out invalid characters
+        $schoolInSchoolYear = (int)$schoolInSchoolYear;
 
         // Create query parameters
         $params = http_build_query([

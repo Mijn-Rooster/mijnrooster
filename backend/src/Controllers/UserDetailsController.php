@@ -57,11 +57,11 @@ try {
 
 /**
  * Get the details of a student
- * @param string|int $userId
+ * @param string $userId
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */
-function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
+function getStudentDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $zermeloApi = new ZermeloAPI();
     $studentData = $zermeloApi->getStudentDetails($userId, $schoolInSchoolYear);
 
@@ -77,10 +77,10 @@ function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
 
     // Create user object for teacher
     $user = new ZermeloUser(
-        code: $studentData['data'][0]['student'],
-        firstName: $studentData['data'][0]['firstName'],
-        prefix: $studentData['data'][0]['prefix'] ?? "",
-        lastName: $studentData['data'][0]['lastName'],
+        $studentData['data'][0]['student'],
+        $studentData['data'][0]['firstName'],
+        $studentData['data'][0]['prefix'] ?? "",
+        $studentData['data'][0]['lastName'],
     );
 
     return $user;
@@ -88,11 +88,11 @@ function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
 
 /**
  * Get the details of a teacher
- * @param string|int $userId
+ * @param string $userId
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */
-function getTeacherDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
+function getTeacherDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $zermeloApi = new ZermeloAPI();
     $teacherData = $zermeloApi->getTeacherDetails($userId, $schoolInSchoolYear);
 
@@ -108,10 +108,10 @@ function getTeacherDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
 
     // Create user object for teacher
     $user = new ZermeloUser(
-        code: $teacherData['data'][0]['employee'],
-        firstName: $teacherData['data'][0]['firstName'],
-        prefix: $teacherData['data'][0]['prefix'] ?? "",
-        lastName: $teacherData['data'][0]['lastName'],
+        $teacherData['data'][0]['employee'],
+        $teacherData['data'][0]['firstName'],
+        $teacherData['data'][0]['prefix'] ?? "",
+        $teacherData['data'][0]['lastName'],
     );
 
     return $user;

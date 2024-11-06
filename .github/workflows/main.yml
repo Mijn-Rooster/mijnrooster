@@ -1,10 +1,13 @@
-on: push
+on:
+  push:
+    branches:
+      - main
+      - master
 name: 🚀 Deploy API to 545959.leerlingsites.nl/pws/api
 jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4

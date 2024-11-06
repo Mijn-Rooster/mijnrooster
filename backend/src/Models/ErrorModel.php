@@ -57,6 +57,11 @@ class Error
             'message' => 'User not found',
             'details' => 'The user could not be found in the Zermelo API',
         ],
+        'SCHEDULE_INVALID_DATE' => [
+            'statusCode' => 400,
+            'message' => 'Invalid date',
+            'details' => 'The start date is after the end date or the difference between the start and end date is too large',
+        ],
         'MISSING_PARAMETERS' => [
             'statusCode' => 400,
             'message' => 'Missing parameters',

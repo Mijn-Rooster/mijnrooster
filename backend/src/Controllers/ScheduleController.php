@@ -30,8 +30,8 @@ try {
     $auth->authenticate();
 
     // Get schedule appointments from Zermelo API. Default to this week.
-    $startDate = isset($_GET['start']) ? $_GET['start'] : strtotime('this week monday 00:00:00');
-    $endDate = isset($_GET['end']) ? $_GET['end'] : strtotime('this week sunday 23:59:59');
+    $startDate = isset($_GET['start']) && !empty($_GET['start']) ? $_GET['start'] : strtotime('this week monday 00:00:00');
+    $endDate = isset($_GET['end']) && !empty($_GET['end']) ? $_GET['end'] : strtotime('this week sunday 23:59:59');
     $zermeloData = $zermeloApi->getScheduleAppointments($studentId, $startDate, $endDate);
 
     // Check if the Zermelo API returned an error
@@ -51,13 +51,13 @@ try {
     // Loop through the appointments and add them to the schedule model
     foreach ($zermeloData['data'] as $appointmentData) {
         $appointment = new Appointment(
-            id: $appointmentData['id'],
-            appointmentInstance: $appointmentData['appointmentInstance'],
-            start: $appointmentData['start'],
-            end: $appointmentData['end'],
-            locations: $appointmentData['locations'],
-            subjects: $appointmentData['subjects'],
-            teachers: $appointmentData['teachers']
+            $appointmentData['id'],
+            $appointmentData['appointmentInstance'],
+            $appointmentData['start'],
+            $appointmentData['end'],
+            $appointmentData['locations'],
+            $appointmentData['subjects'],
+            $appointmentData['teachers']
         );
         $schedule->addAppointment($appointment);
     }
