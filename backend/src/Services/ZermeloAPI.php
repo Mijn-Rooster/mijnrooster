@@ -27,6 +27,17 @@ class ZermeloAPI {
             ErrorHandler::handle("MISSING_PARAMETERS");
         }
 
+        // Filter out invalid characters
+        $start = (int)$start;
+        $end = (int)$end;
+
+        // Check if the start and end date are valid
+        // If the start date is in the future, it is invalid
+        // The maximum difference between the start and end date is 62 days (5356800 seconds)
+        if ($start > $end || (($end - $start) > 5356800)) {
+            ErrorHandler::handle("SCHEDULE_INVALID_DATE");
+        }
+
         // Create query parameters
         $params = http_build_query([
             'valid' => "true",
