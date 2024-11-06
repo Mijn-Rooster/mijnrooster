@@ -61,7 +61,7 @@ try {
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */
-function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
+function getStudentDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $zermeloApi = new ZermeloAPI();
     $studentData = $zermeloApi->getStudentDetails($userId, $schoolInSchoolYear);
 
@@ -92,7 +92,7 @@ function getStudentDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
  * @param int $schoolInSchoolYear
  * @return ZermeloUser|null Returns the user object if the user is found, otherwise null
  */
-function getTeacherDetails($userId, $schoolInSchoolYear): ZermeloUser|null {
+function getTeacherDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $zermeloApi = new ZermeloAPI();
     $teacherData = $zermeloApi->getTeacherDetails($userId, $schoolInSchoolYear);
 
