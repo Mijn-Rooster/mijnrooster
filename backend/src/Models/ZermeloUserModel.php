@@ -10,9 +10,9 @@ class ZermeloUser
 {
     /**
      * The codes/abbreviations of the user (e.g. GIJS or 545959)
-     * @var mixed $code
+     * @var string $code
      */
-    private mixed $code;
+    private string $code;
     /**
      * The first name of the user (e.g. "Jan")
      * @var string $firstName
@@ -31,7 +31,7 @@ class ZermeloUser
 
     /**
      * Create a new user instance.
-     * @param mixed $code
+     * @param string $code
      * @param string $firstName
      * @param string $prefix
      * @param string $lastName

@@ -14,7 +14,7 @@ class ZermeloAPI {
 
     /**
      * Get schedule data from Zermelo API
-     * @param mixed $user Id of the user to get the schedule for (e.g. 545959 or "GIJS")
+     * @param string $user Id of the user to get the schedule for (e.g. 545959 or "GIJS")
      * @param int $start Start date of the schedule in UNIX timestamp
      * @param int $end End date of the schedule in UNIX timestamp
      * @param string $type Type of appointments to get. Check Zermelo API documentation for possible values
@@ -54,7 +54,7 @@ class ZermeloAPI {
 
     /**
      * Get user data from Zermelo API
-     * @param mixed $studentId Id of the student to get the data for (e.g.545959)
+     * @param string $studentId Id of the student to get the data for (e.g.545959)
      * @param string $schoolInSchoolYear Id of the school in the school year
      * @param string $fields Fields to get from the user data. Check Zermelo API documentation for possible values
      * @return array User data
@@ -88,7 +88,7 @@ class ZermeloAPI {
 
     /**
      * Get teacher data from Zermelo API
-     * @param mixed $teacherId Id of the teacher to get the data for (e.g. "GIJS")
+     * @param string $teacherId Id of the teacher to get the data for (e.g. "GIJS")
      * @param int $schoolInSchoolYear Id of the school in the school year
      * @param string $fields Fields to get from the teacher data. Check Zermelo API documentation for possible values
      * @return array Teacher data
