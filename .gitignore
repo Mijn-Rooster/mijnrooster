@@ -35,3 +35,6 @@ Thumbs.db
 # Config files
 backend/src/Config/config.php
 
+# Other
+.42c
+
