@@ -12,7 +12,7 @@
     "url" : "http://localhost:8000"
   } ],
   "security" : [ {
-    "bearerAuth" : [ ]
+    "bearerAuth" : []
   } ],
   "paths" : {
     "/v1/school/{schoolInSchoolYear}/user/{userId}" : {
@@ -1066,6 +1066,429 @@
                 }
               }
             }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "inline_response_200_1_data" : {
+        "type" : "object",
+        "properties" : {
+          "appointmentInstance" : {
+            "type" : "number",
+            "example" : 3276941
+          },
+          "end" : {
+            "type" : "string",
+            "example" : "1730724300"
+          },
+          "id" : {
+            "type" : "number",
+            "example" : 3435022
+          },
+          "locations" : {
+            "type" : "array",
+            "example" : [ "a128" ],
+            "items" : {
+              "type" : "string",
+              "example" : "a128"
+            }
+          },
+          "start" : {
+            "type" : "string",
+            "example" : "1730721300"
+          },
+          "subjects" : {
+            "type" : "array",
+            "example" : [ "wi" ],
+            "items" : {
+              "type" : "string",
+              "example" : "wi"
+            }
+          },
+          "teachers" : {
+            "type" : "array",
+            "example" : [ "wro" ],
+            "items" : {
+              "type" : "string",
+              "example" : "wro"
+            }
+          }
+        }
+      },
+      "inline_response_404" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "example" : [ ],
+            "items" : { }
+          },
+          "details" : {
+            "type" : "string",
+            "example" : "The user could not be found in the Zermelo API"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "User not found"
+          },
+          "rowCount" : {
+            "type" : "number",
+            "example" : 0
+          },
+          "statusCode" : {
+            "type" : "number",
+            "example" : 404
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "example" : [ {
+              "appointmentInstance" : 3276941,
+              "end" : "1730724300",
+              "id" : 3435022,
+              "locations" : [ "a128" ],
+              "start" : "1730721300",
+              "subjects" : [ "wi" ],
+              "teachers" : [ "wro" ]
+            }, {
+              "appointmentInstance" : 3278070,
+              "end" : "1730965800",
+              "id" : 3436163,
+              "locations" : [ "a268" ],
+              "start" : "1730962800",
+              "subjects" : [ "ne" ],
+              "teachers" : [ "ned" ]
+            }, {
+              "appointmentInstance" : 3276789,
+              "end" : "1730709600",
+              "id" : 3434727,
+              "locations" : [ "a118" ],
+              "start" : "1730706600",
+              "subjects" : [ "gs" ],
+              "teachers" : [ "wes" ]
+            }, {
+              "appointmentInstance" : 3277464,
+              "end" : "1730792400",
+              "id" : 3435223,
+              "locations" : [ "a270" ],
+              "start" : "1730790000",
+              "subjects" : [ "du" ],
+              "teachers" : [ "gnt" ]
+            }, {
+              "appointmentInstance" : 3277423,
+              "end" : "1730879400",
+              "id" : 3435716,
+              "locations" : [ "a252" ],
+              "start" : "1730876400",
+              "subjects" : [ "gd" ],
+              "teachers" : [ "too" ]
+            }, {
+              "appointmentInstance" : 3277073,
+              "end" : "1730712600",
+              "id" : 3434772,
+              "locations" : [ "a138" ],
+              "start" : "1730709600",
+              "subjects" : [ "du" ],
+              "teachers" : [ "gnt" ]
+            }, {
+              "appointmentInstance" : 3277065,
+              "end" : "1730716800",
+              "id" : 3434858,
+              "locations" : [ "b129" ],
+              "start" : "1730713800",
+              "subjects" : [ "en" ],
+              "teachers" : [ "sld14" ]
+            }, {
+              "appointmentInstance" : 3278009,
+              "end" : "1730897100",
+              "id" : 3436029,
+              "locations" : [ "b119" ],
+              "start" : "1730894100",
+              "subjects" : [ "fa" ],
+              "teachers" : [ "mno" ]
+            }, {
+              "appointmentInstance" : 3277284,
+              "end" : "1730797200",
+              "id" : 3435340,
+              "locations" : [ "a216" ],
+              "start" : "1730794800",
+              "subjects" : [ "bg" ],
+              "teachers" : [ "men20" ]
+            }, {
+              "appointmentInstance" : 3277212,
+              "end" : "1730800800",
+              "id" : 3435425,
+              "locations" : [ "b001" ],
+              "start" : "1730798400",
+              "subjects" : [ "en" ],
+              "teachers" : [ "sld14" ]
+            }, {
+              "appointmentInstance" : 3277993,
+              "end" : "1730885400",
+              "id" : 3435856,
+              "locations" : [ "a030" ],
+              "start" : "1730882400",
+              "subjects" : [ "wi" ],
+              "teachers" : [ "wro" ]
+            }, {
+              "appointmentInstance" : 3278204,
+              "end" : "1730983500",
+              "id" : 3436360,
+              "locations" : [ "a120" ],
+              "start" : "1730980500",
+              "subjects" : [ "fa" ],
+              "teachers" : [ "mno" ]
+            }, {
+              "appointmentInstance" : 3277986,
+              "end" : "1730882400",
+              "id" : 3435745,
+              "locations" : [ "a030" ],
+              "start" : "1730879400",
+              "subjects" : [ "ak" ],
+              "teachers" : [ "gra" ]
+            }, {
+              "appointmentInstance" : 3277614,
+              "end" : "1730803200",
+              "id" : 3435501,
+              "locations" : [ "a118" ],
+              "start" : "1730800800",
+              "subjects" : [ "gs" ],
+              "teachers" : [ "wes" ]
+            }, {
+              "appointmentInstance" : 3278485,
+              "end" : "1730976000",
+              "id" : 3436268,
+              "locations" : [ "b149" ],
+              "start" : "1730973000",
+              "subjects" : [ "wi" ],
+              "teachers" : [ "wro" ]
+            }, {
+              "appointmentInstance" : 3278832,
+              "end" : "1731065400",
+              "id" : 3436675,
+              "locations" : [ "bv1" ],
+              "start" : "1731059400",
+              "subjects" : [ "bv" ],
+              "teachers" : [ "khl" ]
+            }, {
+              "appointmentInstance" : 3277797,
+              "end" : "1730968800",
+              "id" : 3435099,
+              "locations" : [ "binask2" ],
+              "start" : "1730965800",
+              "subjects" : [ "na" ],
+              "teachers" : [ "hkp" ]
+            }, {
+              "appointmentInstance" : 3278747,
+              "end" : "1731069900",
+              "id" : 3436806,
+              "locations" : [ "b151" ],
+              "start" : "1731066900",
+              "subjects" : [ "du" ],
+              "teachers" : [ "gnt" ]
+            }, {
+              "appointmentInstance" : 3278175,
+              "end" : "1730892600",
+              "id" : 3435970,
+              "locations" : [ "a132" ],
+              "start" : "1730889600",
+              "subjects" : [ "ne" ],
+              "teachers" : [ "ned" ]
+            }, {
+              "appointmentInstance" : 3277989,
+              "end" : "1730889600",
+              "id" : 3435914,
+              "locations" : [ "binask6" ],
+              "start" : "1730886600",
+              "subjects" : [ "na" ],
+              "teachers" : [ "hkp" ]
+            }, {
+              "appointmentInstance" : 3278699,
+              "end" : "1731052200",
+              "id" : 3436536,
+              "locations" : [ "a028" ],
+              "start" : "1731049200",
+              "subjects" : [ "wi" ],
+              "teachers" : [ "wro" ]
+            }, {
+              "appointmentInstance" : 3278507,
+              "end" : "1731058200",
+              "id" : 3436575,
+              "locations" : [ "gym6" ],
+              "start" : "1731052200",
+              "subjects" : [ "lo" ],
+              "teachers" : [ "sld09" ]
+            }, {
+              "appointmentInstance" : 3276826,
+              "end" : "1730719800",
+              "id" : 3434913,
+              "locations" : [ "b129" ],
+              "start" : "1730716800",
+              "subjects" : [ "fa" ],
+              "teachers" : [ "mno" ]
+            }, {
+              "appointmentInstance" : 3278979,
+              "end" : "1731072900",
+              "id" : 3436874,
+              "locations" : [ "binask10" ],
+              "start" : "1731069900",
+              "subjects" : [ "na" ],
+              "teachers" : [ "hkp" ]
+            }, {
+              "appointmentInstance" : 3278630,
+              "end" : "1730971800",
+              "id" : 3435143,
+              "locations" : [ "a152" ],
+              "start" : "1730968800",
+              "subjects" : [ "en" ],
+              "teachers" : [ "sld14" ]
+            }, {
+              "appointmentInstance" : 3277578,
+              "end" : "1730807100",
+              "id" : 3435563,
+              "locations" : [ "a212" ],
+              "start" : "1730804700",
+              "subjects" : [ "gd" ],
+              "teachers" : [ "too" ]
+            }, {
+              "appointmentInstance" : 3278256,
+              "end" : "1730979000",
+              "id" : 3436273,
+              "locations" : [ "a028" ],
+              "start" : "1730976000",
+              "subjects" : [ "ak" ],
+              "teachers" : [ "gra" ]
+            }, {
+              "appointmentInstance" : 3277655,
+              "end" : "1730794800",
+              "id" : 3435306,
+              "locations" : [ "a266" ],
+              "start" : "1730792400",
+              "subjects" : [ "ne" ],
+              "teachers" : [ "ned" ]
+            }, {
+              "appointmentInstance" : 3276760,
+              "end" : "1730706600",
+              "id" : 3434682,
+              "locations" : [ "a028" ],
+              "start" : "1730703600",
+              "subjects" : [ "rek" ],
+              "teachers" : [ "men20" ]
+            }, {
+              "appointmentInstance" : 3278329,
+              "end" : "1730986500",
+              "id" : 3436430,
+              "locations" : [ "a138" ],
+              "start" : "1730983500",
+              "subjects" : [ "wi" ],
+              "teachers" : [ "khl", "hee", "hol", "kps", "hkp", "hgd", "ina", "htg" ]
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/inline_response_200_1_data"
+            }
+          },
+          "details" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "message" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "rowCount" : {
+            "type" : "number",
+            "example" : 30
+          },
+          "statusCode" : {
+            "type" : "number",
+            "example" : 200
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "example" : [ {
+              "code" : "vis",
+              "firstName" : "Sienna",
+              "lastName" : "Visscher",
+              "prefix" : "van der"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/inline_response_200_data"
+            }
+          },
+          "details" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "message" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "rowCount" : {
+            "type" : "number",
+            "example" : 1
+          },
+          "statusCode" : {
+            "type" : "number",
+            "example" : 200
+          }
+        }
+      },
+      "inline_response_403" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "example" : [ ],
+            "items" : { }
+          },
+          "details" : {
+            "type" : "string",
+            "example" : "U heeft niet voldoende rechten om te zoeken op (deze waarde van) valid of het veld bestaat niet. Details: SecurityRuleException: U heeft niet voldoende rechten om te zoeken op (deze waarde van) valid of het veld bestaat niet"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "An error occurred while fetching data from Zermelo"
+          },
+          "rowCount" : {
+            "type" : "number",
+            "example" : 0
+          },
+          "statusCode" : {
+            "type" : "number",
+            "example" : 403
+          }
+        }
+      },
+      "inline_response_200_data" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "example" : "vis"
+          },
+          "firstName" : {
+            "type" : "string",
+            "example" : "Sienna"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "Visscher"
+          },
+          "prefix" : {
+            "type" : "string",
+            "example" : "van der"
           }
         }
       }
