@@ -12,7 +12,7 @@
     "url" : "http://localhost:8000"
   } ],
   "security" : [ {
-    "bearerAuth" : [ ]
+    "bearerAuth" : []
   } ],
   "paths" : {
     "/v1/school/{schoolInSchoolYear}/user/{userId}" : {
@@ -943,6 +943,131 @@
         "security" : [ {
           "bearerAuth" : [ ]
         } ]
+      }
+    },
+    "/v1/school": {
+      "get": {
+        "summary": "Retrieve list of schools",
+        "description": "This endpoint retrieves a list of schools for a specific year.",
+        "operationId": "getSchools",
+        "responses": {
+          "200": {
+            "description": "A list of schools.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 200,
+                  "message": "",
+                  "details": "",
+                  "rowCount": 5,
+                  "data": [
+                    {
+                      "schoolInSchoolYearId": 1001452,
+                      "schoolId": 1000552,
+                      "schoolYear": 2024,
+                      "projectName": "De MAVO 2024-2025",
+                      "schoolName": "De MAVO"
+                    },
+                    {
+                      "schoolInSchoolYearId": 1001602,
+                      "schoolId": 101,
+                      "schoolYear": 2024,
+                      "projectName": "School met bijgebouw 2024-2025",
+                      "schoolName": "School met bijgebouw"
+                    }
+                  ]
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": { "type": "number" },
+                    "message": { "type": "string" },
+                    "details": { "type": "string" },
+                    "rowCount": { "type": "number" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "schoolInSchoolYearId": { "type": "number" },
+                          "schoolId": { "type": "number" },
+                          "schoolYear": { "type": "number" },
+                          "projectName": { "type": "string" },
+                          "schoolName": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/school/{id}": {
+      "get": {
+        "summary": "Retrieve details of a school",
+        "description": "This endpoint retrieves detailed information about a specific school.",
+        "operationId": "getSchoolById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the school",
+            "schema": {
+              "type": "number",
+              "example": 1001452
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of a school.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 200,
+                  "message": "",
+                  "details": "",
+                  "rowCount": 1,
+                  "data": [
+                    {
+                      "schoolInSchoolYearId": 1001452,
+                      "schoolId": 1000552,
+                      "schoolYear": 2024,
+                      "projectName": "De MAVO 2024-2025",
+                      "schoolName": "De MAVO"
+                    }
+                  ]
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": { "type": "number" },
+                    "message": { "type": "string" },
+                    "details": { "type": "string" },
+                    "rowCount": { "type": "number" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "schoolInSchoolYearId": { "type": "number" },
+                          "schoolId": { "type": "number" },
+                          "schoolYear": { "type": "number" },
+                          "projectName": { "type": "string" },
+                          "schoolName": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

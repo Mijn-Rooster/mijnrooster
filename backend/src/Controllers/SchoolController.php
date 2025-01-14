@@ -33,21 +33,20 @@ try {
 
     // Get schools from Zermelo API
     $zermeloApi = new ZermeloAPI();
-    if(isset($schoolInSchoolYearId)) {
+    if (isset($schoolInSchoolYearId)) {
         $zermeloData = $zermeloApi->getSchoolInSchoolYear($schoolInSchoolYearId, $schoolYear);
     } else {
         $zermeloData = $zermeloApi->getSchoolsInSchoolYear($schoolYear);
     }
 
     // Check if the Zermelo API returned an error
-    if ($zermeloData['status'] !== 200) {
+    if ($zermeloData['status'] !== 200 && $zermeloData['status'] !== 404) {
         ErrorHandler::handleZermeloError($zermeloData);
     }
 
     // Check if the Zermelo API returned no data
     if (count($zermeloData['data']) === 0) {
-        $response = new Response([]);
-        $response->send();
+        ErrorHandler::handle("SCHOOL_NOT_FOUND");
     }
 
     // Create new school

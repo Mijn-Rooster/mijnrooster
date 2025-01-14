@@ -77,6 +77,11 @@ class Error
             'message' => 'Endpoint not found',
             'details' => 'The requested endpoint does not exist',
         ],
+        'SCHOOL_NOT_FOUND' => [
+            'statusCode' => 404,
+            'message' => 'School not found',
+            'details' => 'No schools were found in the Zermelo API',
+        ],
         'DEFAULT' => [
             'statusCode' => 500,
             'message' => 'An unknown error occurred',
