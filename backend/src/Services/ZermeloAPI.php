@@ -71,11 +71,6 @@ class ZermeloAPI {
      * @return array User data
      */
     public function getStudentDetails($studentId, $schoolInSchoolYear, $fields = 'student,firstName,prefix,lastName,mainGroupName,mainGroup,mentorGroup,departmentOfBranch') {
-        // Check if all required parameters are set
-        if (!isset($studentId, $schoolInSchoolYear)) {
-            ErrorHandler::handle("MISSING_PARAMETERS");
-        }
-
         // Filter out invalid characters
         $schoolInSchoolYear = (int)$schoolInSchoolYear;
 
@@ -94,7 +89,6 @@ class ZermeloAPI {
         ]);
 
         $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         return json_decode($response, true)['response'];
@@ -108,11 +102,6 @@ class ZermeloAPI {
      * @return array Teacher data
      */
     public function getTeacherDetails($teacherId, $schoolInSchoolYear, $fields = 'employee,firstName,prefix,lastName'): array {
-        // Check if all required parameters are set
-        if (!isset($teacherId, $schoolInSchoolYear)) {
-            ErrorHandler::handle("MISSING_PARAMETERS");
-        }
-
         // Filter out invalid characters
         $schoolInSchoolYear = (int)$schoolInSchoolYear;
 
@@ -131,7 +120,74 @@ class ZermeloAPI {
         ]);
 
         $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return json_decode($response, true)['response'];
+    }
+
+    /**
+     * Retrieves the list of schools for a given school year.
+     *
+     * @param int $schoolyear The school year to retrieve schools for. Must be a 4-digit year.
+     * @return array The response containing the list of schools.
+     */
+    public function getSchoolsInSchoolYear($schoolyear) {
+        // Filter out invalid characters
+        $schoolyear = (int)$schoolyear;
+
+        // Check if all required parameters are set
+        if (strlen($schoolyear) !== 4) {
+            ErrorHandler::handle("SCHOOLYEAR_INVALID");
+        }
+
+        // Create query parameters
+        $params = http_build_query([
+            'schoolYear' => $schoolyear
+        ]);
+
+        $ch = curl_init(ZERMELO_PORTAL_URL . '/api/v3/schoolsinschoolyears?' . $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . ZERMELO_API_TOKEN
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($response, true)['response'];
+    }
+
+    /**
+     * Retrieves information about a school in a specific school year from the Zermelo API.
+     *
+     * @param int $schoolInSchoolYearId The ID of the school in the school year.
+     * @param string $schoolYear The school year in the format YYYY.
+     * 
+     * @return array The response from the Zermelo API as an associative array.
+     */
+    public function getSchoolInSchoolYear($schoolInSchoolYearId, $schoolYear) {
+        // Filter out invalid characters
+        $schoolInSchoolYearId = (int)$schoolInSchoolYearId;
+
+        // Check if all required parameters are set
+        if (strlen($schoolYear) !== 4) {
+            ErrorHandler::handle("SCHOOLYEAR_INVALID");
+        }
+
+        // Create query parameters
+        $params = http_build_query([
+            'schoolYear' => $schoolYear
+        ]);
+
+        $ch = curl_init(ZERMELO_PORTAL_URL . '/api/v3/schoolsinschoolyears/'. $schoolInSchoolYearId . '?' . $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . ZERMELO_API_TOKEN
+        ]);
+
+        $response = curl_exec($ch);
         curl_close($ch);
 
         return json_decode($response, true)['response'];
