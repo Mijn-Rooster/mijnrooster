@@ -66,7 +66,7 @@ function getStudentDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $studentData = $zermeloApi->getStudentDetails($userId, $schoolInSchoolYear);
 
     // Check if the Zermelo API returned an error
-    if ($studentData['status'] !== 200) {
+    if ($studentData['status'] !== 200 && $studentData['status'] !== 404) {
         ErrorHandler::handleZermeloError($studentData);
     }
 
@@ -97,7 +97,7 @@ function getTeacherDetails($userId, $schoolInSchoolYear): ?ZermeloUser {
     $teacherData = $zermeloApi->getTeacherDetails($userId, $schoolInSchoolYear);
 
     // Check if the Zermelo API returned an error
-    if ($teacherData['status'] !== 200) {
+    if ($teacherData['status'] !== 200 && $teacherData['status'] !== 404) {
         ErrorHandler::handleZermeloError($teacherData);
     }
 
