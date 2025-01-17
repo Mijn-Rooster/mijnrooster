@@ -51,6 +51,12 @@
 <div class="flex-grow flex flex-col items-center justify-center">
   <ProfileCardSolid class="size-40" style="color: #291c5b;" />
   <p class="text-2xl text-center">
-    Scan je schoolpas om je rooster te bekijken
+    Scan je schoolpas om je rooster te bekijken <br /><br />
+    of <br /><br />
   </p>
+  <Button on:click={() => navigate("/inloggen")} class="bg-primary-700 text-white">
+    <ArrowLeftToBracketOutline class="w-4 h-4 me-2" />
+    Inloggen
+  </Button>
+
 </div>
