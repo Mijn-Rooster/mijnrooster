@@ -3,36 +3,45 @@
    import { navigate } from "../stores/RouterStore";
     import { Button, Footer, Label, Input } from 'flowbite-svelte';
     import { ArrowLeftOutline, UserSolid, LockSolid } from 'flowbite-svelte-icons';
+    import { user } from "../stores/UserStore";
+
+    let leerlingnummer = '';
+    let password = '';
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    // Perform login logic here (e.g., API call)
+    // For now, we'll just update the store
+    user.set({
+      username: leerlingnummer,
+      isLoggedIn: true,
+    });
+    // Navigate to another page after login
+    navigate('/dashboard'); // Change to your desired route
+  }
   </script>
   
   <MenuBar />
 
   <main>
-    <div class="flex-grow flex flex-col items-center justify-center ">
-      <div class="w-full max-w-md p-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+    <div class="my-5 ">
+      <div class="w-full max-w-md p-4 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 my-1">
         <h2 class="text-3xl font-semibold text-center text-gray-800 dark:text-white">Inloggen</h2>
-        <form class="mt-6" action="#" method="POST">
+        <form class="mt-6" on:submit={handleSubmit}>
           <div>
             <Label for="leerlingnummer" class="block text-sm text-gray-800 dark:text-gray-200">leerlingnummer</Label>
-            <Input type="text" id="leerlingnummer" placeholder="leerlingnummer" class="w-full px-4 py-2 mt-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:border-primary-400 focus:outline-none focus:ring dark:text-gray-300"> 
+            <Input type="text" id="leerlingnummer" bind:value={leerlingnummer} placeholder="leerlingnummer" class="w-full px-4 py-2 mt-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:border-primary-400 focus:outline-none focus:ring dark:text-gray-300"> 
               <UserSolid slot="left" class="w-4 h-4" />
             </Input>
           </div>
 
-          <div class="mt-4">
-            <Label for="password" class="block text-sm text-gray-800 dark:text-gray-200">Wachtwoord</Label>
-            <Input type="password" id="password" placeholder="Wachtwoord" class="w-full px-4 py-2 mt-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:border-primary-400 focus:outline-none focus:ring dark:text-gray-300">
-              <LockSolid slot="left" class="w-4 h-4" />
-            </Input>
-            
-          </div>
           <div class="mt-6">
-            <Button type="submit" class="w-full py-2 text-white bg-primary-500 rounded-md hover:bg-primary-600 focus:outline-none focus:ring">Inloggen</Button>
+            <Button type="submit" class="w-full py-2 text-white bg-primary-500 rounded-md hover:bg-primary-600 focus:outline-none focus:ring" on:click={() => navigate("/schedule")}>Bekijk je rooster!</Button>
           </div>
         </form>
       </div>
     </div>
-   
+  
     <Footer class="absolute bottom-0 start-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
       <Button class="gap-2 px-2" on:click={() => navigate("/")}><ArrowLeftOutline/>Terug</Button>
     </Footer>

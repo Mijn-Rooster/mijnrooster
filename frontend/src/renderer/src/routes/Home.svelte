@@ -56,7 +56,7 @@
   </p>
   <Button on:click={() => navigate("/inloggen")} class="bg-primary-700 text-white">
     <ArrowLeftToBracketOutline class="w-4 h-4 me-2" />
-    Inloggen
+    Log in met je leerlingnummer
   </Button>
 
 </div>
