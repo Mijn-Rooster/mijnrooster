@@ -44,7 +44,7 @@ try {
         $response = new Response([]);
         $response->send();
     }
-
+    
     // Create new schedule
     $schedule = new Schedule();
 
@@ -55,6 +55,8 @@ try {
             $appointmentData['appointmentInstance'],
             $appointmentData['start'],
             $appointmentData['end'],
+            $appointmentData['startTimeSlotName'],
+            $appointmentData['endTimeSlotName'],
             $appointmentData['locations'],
             $appointmentData['subjects'],
             $appointmentData['teachers']

@@ -2,7 +2,7 @@
    import MenuBar from "../components/MenuBar.svelte";
    import { navigate } from "../stores/RouterStore";
     import { Button, Footer, Label, Input } from 'flowbite-svelte';
-    import { ArrowLeftOutline, UserSolid, LockSolid } from 'flowbite-svelte-icons';
+    import { ArrowLeftOutline, UserSolid} from 'flowbite-svelte-icons';
     import { user } from "../stores/UserStore";
 
     let leerlingnummer = '';
@@ -10,12 +10,7 @@
 
   function handleSubmit(event) {
     event.preventDefault();
-    // Perform login logic here (e.g., API call)
-    // For now, we'll just update the store
-    user.set({
-      username: leerlingnummer,
-      isLoggedIn: true,
-    });
+    
     // Navigate to another page after login
     navigate('/dashboard'); // Change to your desired route
   }

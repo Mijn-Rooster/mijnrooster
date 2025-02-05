@@ -51,12 +51,13 @@
 <div class="flex-grow flex flex-col items-center justify-center">
   <ProfileCardSolid class="size-40" style="color: #291c5b;" />
   <p class="text-2xl text-center">
-    Scan je schoolpas om je rooster te bekijken <br /><br />
-    of <br /><br />
+    Scan je schoolpas om je rooster te bekijken
   </p>
-  <Button on:click={() => navigate("/inloggen")} class="bg-primary-700 text-white">
-    <ArrowLeftToBracketOutline class="w-4 h-4 me-2" />
-    Log in met je leerlingnummer
-  </Button>
-
 </div>
+
+<Footer class="absolute bottom-0 start-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
+  <Button on:click={() => navigate("/inloggen")} class="bg-primary-700 text-white gap-2 px-2">
+    <ArrowLeftToBracketOutline/>
+    Inloggen met leerlingnummer
+  </Button>
+</Footer>

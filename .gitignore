@@ -33,7 +33,8 @@ Thumbs.db
 *.log*
 
 # Config files
-backend/src/Config/config.php
+backend/api/Config/config.php
+backend/api/logs/*
 
 # Other
 .42c
