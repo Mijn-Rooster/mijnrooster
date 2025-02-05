@@ -17,12 +17,12 @@
     // Get the current date in UNIX timestamp
     const currentDateUnix = Math.floor(Date.now() / 1000);
     // Construct the URL
-    const url = `http://545959.leerlingsites.nl/pws/api/v1/schedule/${username}?start=${currentDateUnix}&end=${currentDateUnix + 86400}`; // 86400 seconds = 1 day
+    const url = `http://localhost:8000/v1/schedule/${username}?start=${currentDateUnix}&end=${currentDateUnix + 86400}`; // 86400 seconds = 1 day
     console.log('Fetching schedule from URL:', url);
     // Fetch schedule data from the API with authorization header
     const response = await fetch(url, {
       headers: {
-        'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your actual token
+        'Authorization': 'Bearer oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem' // Replace with your actual token
       }
     });
     schedule = await response.json();
