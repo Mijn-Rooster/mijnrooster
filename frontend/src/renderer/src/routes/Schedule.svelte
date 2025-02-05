@@ -52,7 +52,10 @@
 <MenuBar />
 
 <h1 class="text-4xl font-bold text-center my-8">Welkom, {username}!</h1>
-<div class="mx-auto w-[100%] max-w-[1000px] h-[65%] flex flex-col gap-4 overflow-y-auto">
+<div
+  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4 overflow-y-auto"
+  style="height: calc(100% - 250px);"
+>
   {#each schedule as item}
     <ScheduleItem {item} />
   {/each}
