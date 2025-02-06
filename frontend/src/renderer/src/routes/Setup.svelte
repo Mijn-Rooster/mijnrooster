@@ -4,7 +4,7 @@
     import { Button, Footer } from 'flowbite-svelte';
     import { ArrowLeftOutline } from 'flowbite-svelte-icons';
     import { onMount } from "svelte";
-    import { getCurrentTime, getCurrentDate } from "../services/TimeService";
+    import { getCurrentTime, getCurrentDate } from "../services/time.service";
 
     $: currentDate = getCurrentDate()
 
