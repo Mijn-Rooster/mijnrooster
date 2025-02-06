@@ -73,11 +73,9 @@
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        accept: "application/json",
-        Authorization: "Bearer oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem",
+      accept: "application/json",
+      Authorization: "Bearer oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem",
       },
-      mode: "cors",
-      credentials: "include",
     });
 
     if (!response.ok) {

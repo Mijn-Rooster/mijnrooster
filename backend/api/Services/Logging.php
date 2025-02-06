@@ -4,6 +4,9 @@ namespace api\Services;
 
 class LoggingRequest {
     public static function logRequest() {
+        if (!file_exists(__DIR__ . '/../logs')) {
+            mkdir(__DIR__ . '/../logs', 0777, true);
+        }
         $logFile = __DIR__ . '/../logs/request.log';
         $headers = getallheaders();
         $log = date('Y-m-d H:i:s') . "\n";
