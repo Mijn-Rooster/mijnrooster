@@ -3,5 +3,3 @@
 </script>
 
 <p>week</p>
-
-<ScheduleItem />

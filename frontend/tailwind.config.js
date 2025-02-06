@@ -1,15 +1,12 @@
-import { Secondary } from "flowbite-svelte";
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./src/**/*.{html,js,svelte,ts}",
     "./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}",
   ],
-
   theme: {
     fontFamily: {
-      sans: ["Inter", "sans-serif"], // To be done
+      sans: ["Overpass", "sans-serif"],
     },
     extend: {
       colors: {
@@ -58,6 +55,5 @@ export default {
       },
     },
   },
-
   plugins: [require("@tailwindcss/typography"), require("flowbite/plugin")],
 };

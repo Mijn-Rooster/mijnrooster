@@ -1,61 +1,131 @@
 <script lang="ts">
   import ScheduleItem from "./ScheduleItem.svelte";
-  import { ButtonGroup, Button } from 'flowbite-svelte';
-  import { ArrowLeftOutline, ArrowRightOutline } from 'flowbite-svelte-icons';
+  import { Button } from "flowbite-svelte";
+  import { ArrowLeftOutline, ArrowRightOutline } from "flowbite-svelte-icons";
   import { getCurrentDate } from "../../services/TimeService";
-  import { navigate } from "../../stores/RouterStore";
   import { onMount } from "svelte";
-  import { user } from "../../stores/UserStore";
+  import type { ScheduleItemModel } from "../../models/scheduleItem.model";
+  import { Spinner } from "flowbite-svelte";
 
-  let currentDate = getCurrentDate();
-  let username = '';
-  let schedule = [];
+  let schedule: ScheduleItemModel[] = [];
 
-  $: $user, username = $user.username;
+  const userId = 138563;
+  let isLoading = false;
+  let todayStartUnix = new Date(getCurrentDate()).setHours(0, 0, 0, 0) / 1000;
+  let todayEndUnix = new Date(getCurrentDate()).setHours(23, 59, 59, 0) / 1000;
+  let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
+    "nl-NL",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    },
+  );
 
   onMount(async () => {
-    console.log('Logged in user:', username);
-    // Get the current date in UNIX timestamp
-    const currentDateUnix = Math.floor(Date.now() / 1000);
-    // Construct the URL
-    const url = `http://545959.leerlingsites.nl/pws/api/v1/schedule/${username}?start=${currentDateUnix}&end=${currentDateUnix + 86400}`; // 86400 seconds = 1 day
-    console.log('Fetching schedule from URL:', url);
-    // Fetch schedule data from the API
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your actual token
-      }
-    });
-    schedule = await response.json();
-    
+    isLoading = true;
+    try {
+      schedule = await retrieveSchedule(userId);
+    } finally {
+      isLoading = false;
+    }
   });
 
-  function previousDay() {
+  async function previousDay() {
     // Logic to navigate to the previous day
+    todayStartUnix -= 86400;
+    todayEndUnix -= 86400;
+    currentDate = new Date(todayStartUnix * 1000).toLocaleDateString("nl-NL", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    isLoading = true;
+    schedule = [];
+    try {
+      schedule = await retrieveSchedule(userId);
+    } finally {
+      isLoading = false;
+    }
   }
 
-  function nextDay() {
+  async function nextDay() {
     // Logic to navigate to the next day
+    todayStartUnix += 86400;
+    todayEndUnix += 86400;
+    currentDate = new Date(todayStartUnix * 1000).toLocaleDateString("nl-NL", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    isLoading = true;
+    schedule = [];
+    try {
+      schedule = await retrieveSchedule(userId);
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  async function retrieveSchedule(user: string | number) {
+    const url = `http://localhost:8000/v1/schedule/${user}?start=${todayStartUnix}&end=${todayEndUnix}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: "Bearer oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem",
+      },
+      mode: "cors",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      console.error("Schedule fetch failed:", response.status);
+      return;
+    }
+
+    const responsedata = await response.json();
+
+    // Sort on lesson start time
+    responsedata.data.sort((a, b) => a.start - b.start);
+
+    return responsedata.data;
   }
 </script>
 
-<!-- Date navigation -->
-<div class="flex justify-between my-5 align-content-center">
-  <!-- Previous -->
-  <Button class="p-2 w-10" on:click={previousDay}>
-    <ArrowLeftOutline />
-  </Button>
+<div
+  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4"
+>
+  <!-- Date navigation -->
+  <div class="flex justify-between my-5 align-content-center">
+    <!-- Previous -->
+    <Button class="p-2 w-10" on:click={previousDay}>
+      <ArrowLeftOutline />
+    </Button>
 
-  <!-- Current date -->
-  <h2 class="text-xl font-bold text-center">{currentDate}</h2>
-  
-  <!-- Next -->
-  <Button class="p-2 w-10" on:click={nextDay}>
-    <ArrowRightOutline />
-  </Button>
+    <!-- Current date -->
+    <h2 class="text-xl font-bold text-center">{currentDate}</h2>
+
+    <!-- Next -->
+    <Button class="p-2 w-10" on:click={nextDay}>
+      <ArrowRightOutline />
+    </Button>
+  </div>
 </div>
 
-<!-- Schedule items -->
-{#each schedule as item}
-  <ScheduleItem {item} />
-{/each}
+<div
+  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4 overflow-y-auto"
+  style="height: calc(100% - 280px);"
+>
+  <!-- Schedule -->
+  {#if isLoading}
+    <div class="text-center"><Spinner /></div>
+  {:else if schedule.length === 0}
+    <p class="text-center">Geen lessen gevonden</p>
+  {:else}
+    {#each schedule as item}
+      <ScheduleItem {item} />
+    {/each}
+  {/if}
+</div>
