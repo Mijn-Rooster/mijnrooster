@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "cd api && php -S localhost:8000 routes.php"
   },
   "dependencies": {
     "php-server": "^2.0.0"

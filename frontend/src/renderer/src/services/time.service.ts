@@ -11,10 +11,16 @@ export function getCurrentTime(): string {
     return `${hours}:${minutes}`;
 }
 
+/**
+ * Returns the current date formatted as "day month year".
+ *
+ * The day is padded to two digits and the month is formatted in Dutch.
+ * 
+ * @returns {string} The current date in the format "dd month yyyy".
+ */
 export function getCurrentDate(): string {
     const now = new Date();
     const year = String(now.getFullYear());
-    const month = String(now.getMonth() + 1).padStart(2, "0");
     const monthName = new Intl.DateTimeFormat("nl", { month: "long" }).format(now);
     const day = String(now.getDate()).padStart(2, "0");
     return `${day} ${monthName} ${year}`;
