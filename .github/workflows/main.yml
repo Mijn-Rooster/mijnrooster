@@ -18,7 +18,7 @@ jobs:
         server: 545959.leerlingsites.nl
         username: g545959
         server-dir: /domains/545959.leerlingsites.nl/public_html/pws/api/
-        local-dir: ./backend/src/
+        local-dir: ./backend/api/
         password: ${{ secrets.ftp_password }}
 
     - name: 📂 Sync doc files
