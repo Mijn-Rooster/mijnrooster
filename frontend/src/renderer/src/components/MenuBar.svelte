@@ -1,8 +1,7 @@
 <script lang="ts">
   export let timeVisible = true;
   import { onMount } from "svelte";
-  import { getCurrentTime } from "../services/TimeService";
-  import { navigate } from "../stores/RouterStore";
+  import { getCurrentTime } from "../services/time.service";
 
   let currentTime: string;
 

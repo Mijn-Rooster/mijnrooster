@@ -3,10 +3,8 @@
    import { navigate } from "../stores/RouterStore";
     import { Button, Footer, Label, Input } from 'flowbite-svelte';
     import { ArrowLeftOutline, UserSolid} from 'flowbite-svelte-icons';
-    import { user } from "../stores/UserStore";
 
     let leerlingnummer = '';
-    let password = '';
 
   function handleSubmit(event) {
     event.preventDefault();

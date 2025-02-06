@@ -2,7 +2,7 @@
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/RouterStore";
   import { onMount } from "svelte";
-  import { getCurrentTime, getCurrentDate } from "../services/TimeService";
+  import { getCurrentTime, getCurrentDate } from "../services/time.service";
   import { ButtonGroup, Button } from "flowbite-svelte";
   import {
     CalendarMonthOutline,

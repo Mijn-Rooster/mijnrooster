@@ -1,27 +1,14 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/RouterStore";
-  import ScheduleItem from "../components/Schedule/ScheduleItem.svelte";
   import { Button, Footer } from "flowbite-svelte";
   import { ArrowLeftToBracketOutline } from "flowbite-svelte-icons";
-  import type { ScheduleItemModel } from "../models/scheduleItem.model";
-  import { onMount } from "svelte";
   import Schedule from "../components/Schedule/Schedule.svelte";
-
-  let username = "";
-
-  function previousDay() {
-    // Logic to navigate to the previous day
-  }
-
-  function nextDay() {
-    // Logic to navigate to the next day
-  }
 </script>
 
 <MenuBar />
 
-<h1 class="text-4xl font-bold text-center my-8">Welkom, {username}!</h1>
+<h1 class="text-4xl font-bold text-center my-8">Welkom!</h1>
 
 <Schedule/>
 
