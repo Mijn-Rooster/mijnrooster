@@ -8,7 +8,7 @@
 
 // Mijn Rooster configuration
 define('TENANT_NAME', 'Testschool');                                    // The name of the school
-define('API_TOKEN', 'oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem');        // The token to access the API on the device
+define('CONNECT_CODE', 'Welkom01!');        // The token to access the API on the device
 define('DEBUG_MODE', true);                                            // Enable or disable debug mode
 
 // Zermelo API

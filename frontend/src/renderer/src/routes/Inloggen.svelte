@@ -6,7 +6,7 @@
 
     let leerlingnummer = '';
 
-  function handleSubmit(event) {
+  function handleSubmit(event: Event) {
     event.preventDefault();
     
     // Navigate to another page after login

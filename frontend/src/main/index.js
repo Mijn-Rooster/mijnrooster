@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import installExtension from 'electron-devtools-installer';
+import { createHash } from 'crypto';
 
 function createWindow() {
   // Create the browser window.
@@ -34,6 +35,12 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
+
+// Registreer de IPC-handler voor het genereren van een SHA256 hash computer-side
+ipcMain.handle('generate-hash', (event, data) => {
+  const hash = createHash('sha256').update(data).digest('hex');
+  return hash;
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
