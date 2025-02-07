@@ -1,4 +1,5 @@
 import type { ScheduleItemModel } from "../models/scheduleItem.model";
+import { SchoolModel } from "../models/school.model";
 import { core } from "../stores/core.store";
 import { getHash } from "./core.service";
 import { get } from "svelte/store";
@@ -60,12 +61,15 @@ export async function retrieveSchedule(
     },
   });
 
+  const responsedata = await response.json();
+
   if (!response.ok) {
-    console.error("Schedule fetch failed:", response.status);
-    return [];
+    const message = responsedata.message || "Er is een fout opgetreden bij het ophalen van het rooster";
+    const details = responsedata.details || null;
+    console.error("Schedule fetch failed:", response.status, message, details);
+    throw new Error(message);
   }
 
-  const responsedata = await response.json();
   responsedata.data.sort((a: any, b: any) => a.start - b.start);
   return responsedata.data;
 }
@@ -80,7 +84,7 @@ export async function retrieveSchedule(
  * - data?: Additional data from the server response
  * @throws Never throws - errors are returned as part of CheckResult
  */
-export async function check(serverUrl: string|null = null, connectPasword: string|null = null): Promise<CheckResult> {
+export async function connectionCheck(serverUrl: string|null = null, connectPasword: string|null = null): Promise<CheckResult> {
   if (!serverUrl) {
     serverUrl = get(core).serverUrl;
   }
@@ -104,30 +108,45 @@ export async function check(serverUrl: string|null = null, connectPasword: strin
     const data = await response.json();
 
     if (response.status === 401) {
-      return {
-        status: 'auth_error',
-        message: data.message || 'Kon niet inloggen op de server'
-      };
+      const message = data.message || 'Onjuist wachtwoord';
+      const details = data.details || null;
+      console.error('Authentication failed:', response.status, message, details);
+      throw new Error(message);
     }
 
     if (!response.ok) {
-      return {
-        status: 'unknown_error',
-        message: data.message || 'Onbekende fout op de server',
-        data: data.data
-      };
+      const message = data.message || 'Er is een fout opgetreden bij het controleren van de verbinding';
+      const details = data.details || null;
+      console.error('Connection check failed:', response.status, message, details);
+      throw new Error(message);
     }
 
-    return {
-      status: 'ok',
-      message: data.message,
-      data: data.data
-    };
+    return data.data;
 
   } catch (error) {
-    return {
-      status: 'url_error',
-      message: 'Kon geen verbinding maken met de server'
-    };
+    throw new Error('Er is een fout opgetreden bij het controleren van de verbinding');
   }
+}
+
+export async function retrieveSchoolList(): Promise<SchoolModel[]> {
+  const url = `${serverUrl}/v1/schools`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const responsedata = await response.json();
+
+  if (!response.ok) {
+    const message = responsedata.message || "Er is een fout opgetreden bij het ophalen van het rooster";
+    const details = responsedata.details || null;
+    console.error("Schedule fetch failed:", response.status, message, details);
+    throw new Error(message);
+  }
+
+  return responsedata.data;
 }

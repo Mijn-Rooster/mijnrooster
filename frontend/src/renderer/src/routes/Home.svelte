@@ -17,7 +17,7 @@
   let currentDate: string;
 
   // Check if Mijn Rooster setup is completed
-  if (isSetupComplete() != 2) {
+  if (isSetupComplete() < 1) {
     navigate("/setup", { setupStep: isSetupComplete() });
   }
 

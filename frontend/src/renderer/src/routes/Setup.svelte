@@ -17,10 +17,7 @@
   $: setupStep = Number($route.params.setupStep) || 0;
 </script>
 
-<MenuBar timeVisible={false} />
-
-<h1 class="text-4xl font-extrabold text-center w-full">{currentTime}</h1>
-<h2 class="text-xl font-bold text-center w-full">{currentDate}</h2>
+<MenuBar />
 
 <div class="pt-8">
   {#if setupStep === 0}

@@ -2,8 +2,9 @@
   import { Button, Label, Input, Footer } from "flowbite-svelte";
   import { navigate } from "../../stores/router.store";
   import { ArrowRightOutline } from "flowbite-svelte-icons";
-  import { check } from "../../services/api.service";
+  import { connectionCheck } from "../../services/api.service";
   import { core } from "../../stores/core.store";
+  import ErrorCard from "../ErrorCard.svelte";
 
   let serverUrl = "";
   let serverPassword = "";
@@ -16,22 +17,10 @@
     errorMessage = "";
 
     try {
-      const result = await check(serverUrl, serverPassword);
-
-      switch (result.status) {
-        case "ok":
-          // Proceed to next step
-          navigate("/setup/second");
-          break;
-        case "auth_error":
-          errorMessage = "Het koppelwachtwoord is onjuist";
-          break;
-        default:
-          errorMessage = result.message;
-          break;
-      }
+      await connectionCheck(serverUrl, serverPassword);
+        navigate("/");
     } catch (error) {
-      errorMessage = "An unexpected error occurred";
+        errorMessage = (error as Error).message;
     } finally {
       isLoading = false;
 
@@ -76,7 +65,7 @@
       />
     </Label>
     {#if errorMessage}
-      <p class="text-red-500">{errorMessage}</p>
+      <ErrorCard message={errorMessage} />
     {/if}
   </form>
 </div>

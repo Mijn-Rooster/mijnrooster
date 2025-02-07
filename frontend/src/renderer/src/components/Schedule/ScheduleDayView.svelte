@@ -6,11 +6,14 @@
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
   import { Spinner } from "flowbite-svelte";
   import { retrieveSchedule } from "../../services/api.service";
+  import ErrorBanner from "../ErrorBanner.svelte";
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId = 138563;
-  let isLoading = false;
+  const userId: number = 138563;
+  let isLoading: boolean = false;
+  let errorMessage: string = "";
+
   let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
   let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
@@ -22,13 +25,22 @@
     },
   );
 
-  onMount(async () => {
+  function loadSchedule() {
     isLoading = true;
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    retrieveSchedule(userId, todayStartUnix, todayEndUnix)
+      .then((data) => {
+        schedule = data;
+      })
+      .catch((error) => {
+        errorMessage = error;
+      })
+      .finally(() => {
+        isLoading = false;
+      });
+  }
+
+  onMount(async () => {
+    loadSchedule();
   });
 
   async function previousDay() {
@@ -40,13 +52,7 @@
       month: "long",
       year: "numeric",
     });
-    isLoading = true;
-    schedule = [];
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    loadSchedule();
   }
 
   async function nextDay() {
@@ -58,13 +64,7 @@
       month: "long",
       year: "numeric",
     });
-    isLoading = true;
-    schedule = [];
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    loadSchedule();
   }
 </script>
 
@@ -101,5 +101,10 @@
     {#each schedule as item}
       <ScheduleItem {item} />
     {/each}
+  {/if}
+
+  <!-- Error message -->
+  {#if errorMessage}
+    <ErrorBanner message={errorMessage} />
   {/if}
 </div>
