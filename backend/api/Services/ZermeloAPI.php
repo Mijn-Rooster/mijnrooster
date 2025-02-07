@@ -166,21 +166,11 @@ class ZermeloAPI {
      * 
      * @return array The response from the Zermelo API as an associative array.
      */
-    public function getSchoolInSchoolYear($schoolInSchoolYearId, $schoolYear) {
+    public function getSchoolInSchoolYear($schoolInSchoolYearId) {
         // Filter out invalid characters
         $schoolInSchoolYearId = (int)$schoolInSchoolYearId;
 
-        // Check if all required parameters are set
-        if (strlen($schoolYear) !== 4) {
-            ErrorHandler::handle("SCHOOLYEAR_INVALID");
-        }
-
-        // Create query parameters
-        $params = http_build_query([
-            'schoolYear' => $schoolYear
-        ]);
-
-        $ch = curl_init(ZERMELO_PORTAL_URL . '/api/v3/schoolsinschoolyears/'. $schoolInSchoolYearId . '?' . $params);
+        $ch = curl_init(ZERMELO_PORTAL_URL . '/api/v3/schoolsinschoolyears/'. $schoolInSchoolYearId);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [

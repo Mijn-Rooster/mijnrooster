@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { route } from '../stores/RouterStore';
+    import { route } from '../stores/router.store';
     import Home from '../routes/Home.svelte';
     import Error from '../routes/Error.svelte';
     import Schedule from '../routes/Schedule.svelte';

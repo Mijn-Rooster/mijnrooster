@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 /**
  * A writable store that holds the current route information.
  */
-export const route = writable({ path: '/', params: {} });
+export const route = writable({ path: '/', params: {} as any });
 
 /**
  * Navigates to a specified path with optional parameters.

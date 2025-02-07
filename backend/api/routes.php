@@ -34,9 +34,9 @@ header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 any('/', 'index.php');
 
-get('/v1/school/$schoolInSchoolYear/user/$userId', 'Controllers/UserDetailsController.php');
-get('/v1/school', 'Controllers/SchoolController.php');
-get('/v1/school/$schoolInSchoolYearId', 'Controllers/SchoolController.php');
+get('/v1/schools/$schoolInSchoolYear/user/$userId', 'Controllers/UserDetailsController.php');
+get('/v1/schools', 'Controllers/SchoolController.php');
+get('/v1/schools/$schoolInSchoolYearId', 'Controllers/SchoolController.php');
 get('/v1/schedule/$studentId', 'Controllers/ScheduleController.php');
 
 // Redirect all other request to page

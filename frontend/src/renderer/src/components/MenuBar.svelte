@@ -1,17 +1,12 @@
 <script lang="ts">
   export let timeVisible = true;
-  import { onMount } from "svelte";
   import { getCurrentTime } from "../services/time.service";
 
   let currentTime: string;
 
-  onMount(() => {
-    currentTime = getCurrentTime();
-    const interval = setInterval(() => {
-      currentTime = getCurrentTime();
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+  // Get current time
+  $: currentTime = getCurrentTime();
+
 </script>
 
 <div class="grid grid-cols-3 grid-flow justify-between items-center">

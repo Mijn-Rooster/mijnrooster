@@ -1,7 +1,6 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
-  import { navigate } from "../stores/RouterStore";
-  import { onMount } from "svelte";
+  import { navigate } from "../stores/router.store";
   import { getCurrentTime, getCurrentDate } from "../services/time.service";
   import { ButtonGroup, Button } from "flowbite-svelte";
   import {
@@ -12,18 +11,20 @@
     ArrowLeftToBracketOutline,
   } from "flowbite-svelte-icons";
   import { Footer } from "flowbite-svelte";
-
-  $: currentDate = getCurrentDate();
+  import { isSetupComplete } from "../stores/core.store";
 
   let currentTime: string;
+  let currentDate: string;
 
-  onMount(() => {
-    currentTime = getCurrentTime();
-    const interval = setInterval(() => {
-      currentTime = getCurrentTime();
-    }, 1000);
-    return () => clearInterval(interval);
-  });
+  // Check if Mijn Rooster setup is completed
+  if (isSetupComplete() != 2) {
+    navigate("/setup", { setupStep: isSetupComplete() });
+  }
+
+  // Get current time and date
+  $: currentDate = getCurrentDate();
+  $: currentTime = getCurrentTime();
+
 </script>
 
 <MenuBar timeVisible={false} />
