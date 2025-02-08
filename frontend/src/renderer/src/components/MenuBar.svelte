@@ -1,11 +1,6 @@
 <script lang="ts">
   export let timeVisible = true;
-  import { getCurrentTime } from "../services/time.service";
-
-  let currentTime: string;
-
-  // Get current time
-  $: currentTime = getCurrentTime();
+  import { timeStore } from "../stores/time.store";
 
 </script>
 
@@ -18,7 +13,7 @@
   <!-- Time -->
   <div class="justify-self-center ">
     {#if timeVisible}
-      <h1 class="text-2xl font-extrabold text-center w-full">{currentTime}</h1>
+      <h1 class="text-2xl font-extrabold text-center w-full">{$timeStore.time}</h1>
     {/if}
   </div>
 
