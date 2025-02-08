@@ -68,7 +68,6 @@ async function ensureToken(): Promise<string> {
  *  - Connection to server fails
  *  - Any other unexpected errors
  */
-
 export async function retrieveSchedule(
   user: string | number,
   todayStartUnix: number,
@@ -168,7 +167,6 @@ export async function connectionCheck(serverUrl: string | null = null, connectPa
     throw error;
   }
 }
-
 
 /**
  * Retrieves a list of schools from the server.
