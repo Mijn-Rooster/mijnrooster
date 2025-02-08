@@ -11,6 +11,10 @@
 
   $: $route, (currentRoute = $route.path); // Automatically re-render when route changes.
 
+  /**
+   * Routes configuration object mapping URL paths to Svelte components.
+   * Declare all routes here!
+   */
   const routes: Record<string, typeof SvelteComponent<any, any, any>> = {
     "/": Home,
     "/error": Error,

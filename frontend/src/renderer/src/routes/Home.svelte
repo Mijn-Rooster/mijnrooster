@@ -2,11 +2,8 @@
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/router.store";
   import { getCurrentTime, getCurrentDate } from "../services/time.service";
-  import { ButtonGroup, Button } from "flowbite-svelte";
+  import { Button } from "flowbite-svelte";
   import {
-    CalendarMonthOutline,
-    CloseCircleOutline,
-    CogOutline,
     ProfileCardSolid,
     ArrowLeftToBracketOutline,
   } from "flowbite-svelte-icons";
@@ -17,7 +14,7 @@
   let currentDate: string;
 
   // Check if Mijn Rooster setup is completed
-  if (isSetupComplete() < 1) {
+  if (isSetupComplete() < 2) {
     navigate("/setup", { setupStep: isSetupComplete() });
   }
 
@@ -31,23 +28,6 @@
 
 <h1 class="text-4xl font-extrabold text-center w-full">{currentTime}</h1>
 <h2 class="text-xl font-bold text-center w-full">{currentDate}</h2>
-
-<div class="flex flex-col items-center mt-8">
-  <ButtonGroup class="*:!ring-primary-700">
-    <Button on:click={() => navigate("/schedule")}>
-      <CalendarMonthOutline class="w-4 h-4 me-2" />
-      Schedule
-    </Button>
-    <Button on:click={() => navigate("/error")}>
-      <CloseCircleOutline class="w-4 h-4 me-2" />
-      Error
-    </Button>
-    <Button on:click={() => navigate("/setup")}>
-      <CogOutline class="w-4 h-4 me-2" />
-      Setup
-    </Button>
-  </ButtonGroup>
-</div>
 
 <div class="flex-grow flex flex-col items-center justify-center">
   <ProfileCardSolid class="size-40" style="color: #291c5b;" />

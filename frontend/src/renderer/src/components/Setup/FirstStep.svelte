@@ -5,32 +5,34 @@
   import { connectionCheck } from "../../services/api.service";
   import { core } from "../../stores/core.store";
   import ErrorCard from "../ErrorCard.svelte";
+  import type { ErrorModel } from "../../models/error.model";
 
   let serverUrl = "";
   let serverPassword = "";
   let isLoading = false;
-  let errorMessage = "";
+  let error: ErrorModel | null = null;
 
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
     isLoading = true;
-    errorMessage = "";
+    error = null;
 
-    try {
-      await connectionCheck(serverUrl, serverPassword);
+    connectionCheck(serverUrl, serverPassword)
+      .then(() => {
+        core.update((state) => ({
+          ...state,
+          serverUrl,
+          serverPassword,
+        }));
+
         navigate("/");
-    } catch (error) {
-        errorMessage = (error as Error).message;
-    } finally {
-      isLoading = false;
-
-      // Update the core store with new values
-      core.update((state) => ({
-        ...state,
-        serverUrl,
-        serverPassword,
-      }));
-    }
+      })
+      .catch((err) => {
+        error = err;
+      })
+      .finally(() => {
+        isLoading = false;
+      });
   }
 </script>
 
@@ -64,8 +66,8 @@
         required
       />
     </Label>
-    {#if errorMessage}
-      <ErrorCard message={errorMessage} />
+    {#if error}
+      <ErrorCard {error} />
     {/if}
   </form>
 </div>
