@@ -2,7 +2,7 @@
   import ScheduleDayView from "./ScheduleDayView.svelte";
   import ScheduleWeekView from "./ScheduleWeekView.svelte";
   import { ButtonGroup, Button } from 'flowbite-svelte';
-  import { navigate } from "../../stores/RouterStore";
+  import { navigate } from "../../stores/router.store";
   import { Tabs, TabItem } from 'flowbite-svelte';
 </script>
 

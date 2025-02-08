@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "strict": true,
+      "module": "CommonJS",
+      "target": "ES2020"
+    },
+    "include": [
+      "src",
+      "frontend/src/renderer/src/global.d.ts"
+    ]
+  }

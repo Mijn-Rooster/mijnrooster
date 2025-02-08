@@ -2,7 +2,7 @@
   "openapi" : "3.0.3",
   "info" : {
     "title" : "Mijn Rooster API",
-    "description" : "Het standaard Auth token voor development is nu **oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem**. Het authenticatie proces wordt waarschijnlijk in de toekomst veranderd.",
+    "description" : "Auth token voor test setup is 6d1bf08b2e7d76448bda72657ce79501607e6dbaa84ea8b6aa6af8bdffbae9a4",
     "contact" : { },
     "version" : "1.0.0"
   },
@@ -15,7 +15,7 @@
     "bearerAuth" : []
   } ],
   "paths" : {
-    "/v1/school/{schoolInSchoolYear}/user/{userId}" : {
+    "/v1/schools/{schoolInSchoolYear}/user/{userId}" : {
       "get" : {
         "summary" : "User endpoint",
         "description" : "This endpoint makes an HTTP GET request to retrieve information about a user in a specific school and school year. The request should include the school ID and the user ID in the URL parameters.\n\n### Request\n- `:schoolInSchoolYear` (path parameter) - The ID of the school in the specific school year.\n    \n- `:userId` (path parameter) - The ID of the user.\n- `type=` (optional) - The type of user: student or teacher\n    \n\n### Response\n\nThe response will have a status code of 200 and a content type of application/json. The response body will include an array of user data, with fields such as code, first name, prefix, and last name.\n\nExample response:\n\n``` json\n{\n    \"statusCode\": 200,\n    \"message\": \"\",\n    \"details\": \"\",\n    \"rowCount\": 1,\n    \"data\": [\n        {\n            \"code\": \"\",\n            \"firstName\": \"\",\n            \"prefix\": \"\",\n            \"lastName\": \"\"\n        }\n    ]\n}\n\n ```\n\n#### JSON Schema\n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"statusCode\": {\n            \"type\": \"number\"\n        },\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"details\": {\n            \"type\": \"string\"\n        },\n        \"rowCount\": {\n            \"type\": \"number\"\n        },\n        \"data\": {\n            \"type\": \"array\",\n            \"items\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"code\": {\n                        \"type\": \"string\"\n                    },\n                    \"firstName\": {\n                        \"type\": \"string\"\n                    },\n                    \"prefix\": {\n                        \"type\": \"string\"\n                    },\n                    \"lastName\": {\n                        \"type\": \"string\"\n                    }\n                }\n            }\n        }\n    }\n}\n\n ```",
@@ -945,7 +945,7 @@
         } ]
       }
     },
-    "/v1/school": {
+    "/v1/schools": {
       "get": {
         "summary": "Retrieve list of schools",
         "description": "This endpoint retrieves a list of schools for a specific year.",
@@ -1005,7 +1005,7 @@
         }
       }
     },
-    "/v1/school/{id}": {
+    "/v1/schools/{id}": {
       "get": {
         "summary": "Retrieve details of a school",
         "description": "This endpoint retrieves detailed information about a specific school.",
@@ -1062,6 +1062,43 @@
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/check": {
+      "get": {
+        "summary": "Check if the API is working",
+        "description": "This endpoint checks if the API is working.",
+        "operationId": "checkApi",
+        "responses": {
+          "200": {
+            "description": "API is working.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 200,
+                  "message": "API is working.",
+                  "details": "",
+                  "rowCount": 0,
+                  "data": [
+                    {
+                      "version": "1.0.0"
+                    }
+                  ]
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": { "type": "number" },
+                    "message": { "type": "string" },
+                    "details": { "type": "string" },
+                    "rowCount": { "type": "number" },
+                    "data": { "type": "array" }
                   }
                 }
               }

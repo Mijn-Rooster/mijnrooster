@@ -1,12 +1,12 @@
 <script lang="ts">
    import MenuBar from "../components/MenuBar.svelte";
-   import { navigate } from "../stores/RouterStore";
+   import { navigate } from "../stores/router.store";
     import { Button, Footer, Label, Input } from 'flowbite-svelte';
     import { ArrowLeftOutline, UserSolid} from 'flowbite-svelte-icons';
 
     let leerlingnummer = '';
 
-  function handleSubmit(event) {
+  function handleSubmit(event: Event) {
     event.preventDefault();
     
     // Navigate to another page after login
