@@ -1,6 +1,6 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
-  import { navigate } from "../stores/RouterStore";
+  import { navigate } from "../stores/router.store";
   import { Button, Footer } from "flowbite-svelte";
   import { ArrowLeftToBracketOutline } from "flowbite-svelte-icons";
   import Schedule from "../components/Schedule/Schedule.svelte";

@@ -1,3 +1,25 @@
+/**
+ * Service module for handling time-related functionality.
+ * 
+ * @module TimeService
+ * 
+ * @remarks
+ * This module provides functionality for retrieving the current time and date.
+ * 
+ * @example
+ * ```typescript
+ * // Get the current time
+ * const time = getCurrentTime();
+ * 
+ * // Get the current date
+ * const date = getCurrentDate();
+ * 
+ * console.log(`The current time is ${time} on ${date}.`);
+ * ```
+ * 
+ * @throws {Error} If the time or date retrieval fails
+ * 
+ * */
 
 /**
  * Returns the current time as a string in the format HH:MM.

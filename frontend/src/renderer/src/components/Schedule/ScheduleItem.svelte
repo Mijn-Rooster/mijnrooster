@@ -2,7 +2,15 @@
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
   export let item: ScheduleItemModel;
 
-  const timeConverter = (UNIX_timestamp: number) => {
+  /**
+   * Converts a UNIX timestamp to a time string in the format "HH:MM"
+   * @param {number} UNIX_timestamp - The UNIX timestamp to convert (in seconds)
+   * @returns {string} The formatted time string
+   * @example
+   * // returns "14:30"
+   * timeConverter(1622548200)
+   */
+  function timeConverter(UNIX_timestamp: number) {
     const a = new Date(UNIX_timestamp * 1000);
     const hour = a.getHours();
     const min = a.getMinutes();

@@ -1,22 +1,8 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
-    import { navigate } from "../stores/RouterStore";
+    import { navigate } from "../stores/router.store";
     import { Button, Footer } from 'flowbite-svelte';
     import { ArrowLeftOutline } from 'flowbite-svelte-icons';
-    import { getCurrentTime, getCurrentDate } from "../services/time.service";
-    import { onMount } from "svelte";
-
-    $: currentDate = getCurrentDate()
-
-    let currentTime: string;
-
-    onMount(() => {
-      currentTime = getCurrentTime();
-      const interval = setInterval(() => {
-        currentTime = getCurrentTime();
-      }, 1000);
-      return () => clearInterval(interval);
-    });
 </script>
 
 <MenuBar timeVisible={true} />

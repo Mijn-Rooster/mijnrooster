@@ -1,6 +1,6 @@
 <script lang="ts">
    import MenuBar from "../components/MenuBar.svelte";
-   import { navigate } from "../stores/RouterStore";
+   import { navigate } from "../stores/router.store";
     import { Button, Footer, Label, Input, Modal } from 'flowbite-svelte';
     import { ArrowLeftOutline, UserSolid, ExclamationCircleOutline  } from 'flowbite-svelte-icons';
     import { user } from "../stores/UserStore"; // Import the user store
@@ -11,7 +11,7 @@
     let leerlingnummer = '';
   let schoolInSchoolYear = '1001702'; // Updated value
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
     
     // Save the leerlingnummer in the user store

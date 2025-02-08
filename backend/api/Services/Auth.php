@@ -8,12 +8,6 @@ namespace api\Services;
  * To be implemented further in the future.
  */
 class Auth {
-    /**
-     * The valid token. See config.php for the API_TOKEN constant.
-     *
-     * @var string
-     */
-    private $validToken = API_TOKEN;
 
     /**
      * Validate the token
@@ -22,7 +16,7 @@ class Auth {
      * @return bool
      */
     private function validateToken($token) {
-        if ($token === $this->validToken) {
+        if ($token === hash('sha256', CONNECT_CODE . 'D@v1dRein0utJ0nathan')) {
             return true;
         } else {
             return false;

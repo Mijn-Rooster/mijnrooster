@@ -6,11 +6,15 @@
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
   import { Spinner } from "flowbite-svelte";
   import { retrieveSchedule } from "../../services/api.service";
+  import ErrorBanner from "../ErrorBanner.svelte";
+  import type { ErrorModel } from "../../models/error.model";
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId = 138563;
-  let isLoading = false;
+  const userId: number = 138563;
+  let isLoading: boolean = false;
+  let error: ErrorModel|null = null;
+
   let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
   let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
@@ -22,17 +26,51 @@
     },
   );
 
-  onMount(async () => {
+  /**
+   * Loads the schedule for a specific user within a time range.
+   * Sets loading state during the operation and handles errors.
+   * 
+   * @async
+   * @function loadSchedule
+   * @returns {Promise<void>}
+   * 
+   * Uses:
+   * - retrieveSchedule() to fetch schedule data
+   * - isLoading state to track loading status
+   * - schedule store to save retrieved data
+   * - error store to save potential errors
+   * - userId, todayStartUnix, todayEndUnix for request parameters
+   */
+  function loadSchedule() {
     isLoading = true;
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    retrieveSchedule(userId, todayStartUnix, todayEndUnix)
+      .then((data) => {
+        schedule = data;
+      })
+      .catch((err) => {
+        error = err;
+      })
+      .finally(() => {
+        isLoading = false;
+      });
+  }
+
+  /**
+   * Lifecycle function that runs when component is mounted.
+   * Initializes the schedule by calling loadSchedule() asynchronously.
+   * @see loadSchedule
+   */
+  onMount(async () => {
+    loadSchedule();
   });
 
+  /**
+   * Navigates to the previous day in the schedule view.
+   * Updates the date range by subtracting 24 hours (86400 seconds) from both start and end timestamps.
+   * Updates the displayed date string using Dutch locale formatting.
+   * Triggers a schedule reload for the new date range.
+   */
   async function previousDay() {
-    // Logic to navigate to the previous day
     todayStartUnix -= 86400;
     todayEndUnix -= 86400;
     currentDate = new Date(todayStartUnix * 1000).toLocaleDateString("nl-NL", {
@@ -40,15 +78,15 @@
       month: "long",
       year: "numeric",
     });
-    isLoading = true;
-    schedule = [];
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    loadSchedule();
   }
 
+  /**
+   * Navigates to the next day in the schedule view
+   * Updates the unix timestamps for start and end of day by adding 24 hours (86400 seconds)
+   * Updates the displayed date string to the new date in Dutch format
+   * Reloads the schedule data for the new date
+   */
   async function nextDay() {
     // Logic to navigate to the next day
     todayStartUnix += 86400;
@@ -58,13 +96,7 @@
       month: "long",
       year: "numeric",
     });
-    isLoading = true;
-    schedule = [];
-    try {
-      schedule = await retrieveSchedule(userId, todayStartUnix, todayEndUnix);
-    } finally {
-      isLoading = false;
-    }
+    loadSchedule();
   }
 </script>
 
@@ -101,5 +133,10 @@
     {#each schedule as item}
       <ScheduleItem {item} />
     {/each}
+  {/if}
+
+  <!-- Error message -->
+  {#if error}
+    <ErrorBanner {error} />
   {/if}
 </div>
