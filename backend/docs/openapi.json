@@ -2,7 +2,7 @@
   "openapi" : "3.0.3",
   "info" : {
     "title" : "Mijn Rooster API",
-    "description" : "Het standaard Auth token voor development is nu **oqkd1ogtDkOUcsa33HOdXvt76uXiTdfwxYGMqWem**. Het authenticatie proces wordt waarschijnlijk in de toekomst veranderd.",
+    "description" : "Auth token voor test setup is 6d1bf08b2e7d76448bda72657ce79501607e6dbaa84ea8b6aa6af8bdffbae9a4",
     "contact" : { },
     "version" : "1.0.0"
   },
@@ -1062,6 +1062,43 @@
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/check": {
+      "get": {
+        "summary": "Check if the API is working",
+        "description": "This endpoint checks if the API is working.",
+        "operationId": "checkApi",
+        "responses": {
+          "200": {
+            "description": "API is working.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 200,
+                  "message": "API is working.",
+                  "details": "",
+                  "rowCount": 0,
+                  "data": [
+                    {
+                      "version": "1.0.0"
+                    }
+                  ]
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statusCode": { "type": "number" },
+                    "message": { "type": "string" },
+                    "details": { "type": "string" },
+                    "rowCount": { "type": "number" },
+                    "data": { "type": "array" }
                   }
                 }
               }
