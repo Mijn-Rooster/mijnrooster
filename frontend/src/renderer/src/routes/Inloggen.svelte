@@ -15,7 +15,7 @@
   let leerlingnummer = "";
   let schoolInSchoolYear = "1001702"; // Updated value
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
 
     // Save the leerlingnummer in the user store
