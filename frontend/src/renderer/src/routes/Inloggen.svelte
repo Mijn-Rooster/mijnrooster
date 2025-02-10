@@ -13,7 +13,7 @@
   let popupModal = false;
 
   let leerlingnummer = "";
-  let schoolInSchoolYear = "1001702"; // Updated value
+  let schoolInSchoolYear: string = "1001702" ; // Updated value
 
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
@@ -22,10 +22,7 @@
     user.update((current) => ({ ...current, leerlingnummer }));
 
     try {
-      const userInfo = await retrieveUserInfo(
-        schoolInSchoolYear,
-        leerlingnummer,
-      );
+      const userInfo = await retrieveUserInfo( schoolInSchoolYear, leerlingnummer );
       if (!userInfo) {
         throw new Error("User info fetch failed");
       }

@@ -8,10 +8,11 @@
   import { retrieveSchedule } from "../../services/api.service";
   import ErrorBanner from "../ErrorBanner.svelte";
   import type { ErrorModel } from "../../models/error.model";
+  import { user } from "../../stores/user.store"; // Import the user store
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId: number = 138563;
+  const userId: number = 138563; 
   let isLoading: boolean = false;
   let error: ErrorModel | null = null;
 
