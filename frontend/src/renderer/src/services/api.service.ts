@@ -2,26 +2,26 @@
  * Service module for handling API communication with the server.
  * This module provides functionality for schedule retrieval, connection checking,
  * and school list retrieval.
- * 
+ *
  * @module ApiService
- * 
+ *
  * @remarks
  * All functions in this service handle server communication and authentication.
  * They use a token-based authentication system where the token is generated
  * from a server password and a salt.
- * 
+ *
  * @example
  * ```typescript
  * // Retrieve schedule for a user
  * const schedule = await retrieveSchedule("user123", startTime, endTime);
- * 
+ *
  * // Check server connection
  * const connectionStatus = await connectionCheck();
- * 
+ *
  * // Get list of schools
  * const schools = await retrieveSchoolList();
  * ```
- * 
+ *
  * @throws {Object} Most functions throw structured error objects with:
  * - message: User-friendly error message in Dutch
  * - details: Technical details about the error
@@ -44,7 +44,7 @@ core.subscribe(async (value) => {
 /**
  * Ensures a token is available by generating it if it doesn't exist.
  * The token is created by hashing the server password combined with a salt.
- * 
+ *
  * @returns A Promise that resolves to the authentication token string
  * @throws {Error} If the core value or server password is unavailable
  */
@@ -58,7 +58,7 @@ async function ensureToken(): Promise<string> {
 
 /**
  * Retrieves schedule items for a specific user within a given time range.
- * 
+ *
  * @param user - The user identifier (can be string or number)
  * @param todayStartUnix - The start timestamp in Unix format
  * @param todayEndUnix - The end timestamp in Unix format
@@ -71,7 +71,7 @@ async function ensureToken(): Promise<string> {
 export async function retrieveSchedule(
   user: string | number,
   todayStartUnix: number,
-  todayEndUnix: number
+  todayEndUnix: number,
 ): Promise<ScheduleItemModel[]> {
   try {
     const url = `${serverUrl}/v1/schedule/${user}?start=${todayStartUnix}&end=${todayEndUnix}`;
@@ -88,19 +88,20 @@ export async function retrieveSchedule(
     const responsedata = await response.json();
 
     if (!response.ok) {
-      throw { 
+      throw {
         message: "Er is een fout opgetreden bij het ophalen van het rooster",
-        details: responsedata.message + ": " + responsedata.details || null
+        details: responsedata.message + ": " + responsedata.details || null,
       };
     }
 
     responsedata.data.sort((a: any, b: any) => a.start - b.start);
     return responsedata.data;
   } catch (error) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw {
         message: "Kon geen verbinding maken met de server",
-        details: "Controleer of de server bereikbaar is en of het adres correct is"
+        details:
+          "Controleer of de server bereikbaar is en of het adres correct is",
       };
     }
     throw error;
@@ -109,7 +110,7 @@ export async function retrieveSchedule(
 
 /**
  * Checks the connection to the server with optional server URL and password.
- * 
+ *
  * @param serverUrl - The URL of the server to check connection with. If null, uses the stored server URL from core.
  * @param connectPasword - The password for server authentication. If null, uses the stored password from core.
  * @returns Promise<CheckModel> - Returns a promise that resolves to the check data from the server.
@@ -119,7 +120,10 @@ export async function retrieveSchedule(
  *  - message: "Kon geen verbinding maken met de server" if network request fails
  *  - details: Additional error information from the server or predefined message
  */
-export async function connectionCheck(serverUrl: string | null = null, connectPasword: string | null = null): Promise<CheckModel> {
+export async function connectionCheck(
+  serverUrl: string | null = null,
+  connectPasword: string | null = null,
+): Promise<CheckModel> {
   try {
     if (!serverUrl) {
       serverUrl = get(core).serverUrl;
@@ -143,25 +147,26 @@ export async function connectionCheck(serverUrl: string | null = null, connectPa
     const data = await response.json();
 
     if (response.status === 401) {
-      throw { 
-        message: 'Onjuist wachtwoord',
-        details: data.message + ": " + data.details || null
+      throw {
+        message: "Onjuist wachtwoord",
+        details: data.message + ": " + data.details || null,
       };
     }
 
     if (!response.ok) {
-      throw { 
-        message: 'Kan geen verbinding maken met de server',
-        details: data.message + ": " + data.details || null
+      throw {
+        message: "Kan geen verbinding maken met de server",
+        details: data.message + ": " + data.details || null,
       };
     }
 
     return data.data;
   } catch (error) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw {
         message: "Kon geen verbinding maken met de server",
-        details: "Controleer of de server bereikbaar is en of het adres correct is"
+        details:
+          "Controleer of de server bereikbaar is en of het adres correct is",
       };
     }
     throw error;
@@ -194,18 +199,19 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
     const responsedata = await response.json();
 
     if (!response.ok) {
-      throw { 
+      throw {
         message: "Er is een fout opgetreden bij het ophalen van de scholen",
-        details: responsedata.message + ": " + responsedata.details || null
+        details: responsedata.message + ": " + responsedata.details || null,
       };
     }
 
     return responsedata.data;
   } catch (error) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw {
         message: "Kon geen verbinding maken met de server",
-        details: "Controleer of de server bereikbaar is en of het adres correct is"
+        details:
+          "Controleer of de server bereikbaar is en of het adres correct is",
       };
     }
     throw error;
@@ -214,7 +220,7 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
 
 export async function retrieveUserInfo(
   schoolInSchoolYear: string,
-  leerlingnummer: string
+  leerlingnummer: string,
 ): Promise<User | null> {
   const url = `http://localhost:8000/v1/school/${schoolInSchoolYear}/user/${leerlingnummer}`;
 
@@ -239,6 +245,6 @@ export async function retrieveUserInfo(
     firstName: data.firstName,
     prefix: data.prefix,
     lastName: data.lastName,
-    code: data.code
+    code: data.code,
   };
 }

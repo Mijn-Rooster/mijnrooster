@@ -19,4 +19,3 @@
     <SecondStep />
   {/if}
 </div>
-

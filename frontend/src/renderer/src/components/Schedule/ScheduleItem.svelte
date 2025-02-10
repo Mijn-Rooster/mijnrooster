@@ -16,7 +16,7 @@
     const min = a.getMinutes();
     const time = hour + ":" + min;
     return time;
-  };
+  }
 </script>
 
 <div class="flex p-4 rounded-lg flex-row items-center gap-5 bg-secondary-700">

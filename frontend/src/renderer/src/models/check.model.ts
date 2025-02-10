@@ -3,5 +3,5 @@
  * @interface CheckModel
  */
 export interface CheckModel {
-    version: string;
+  version: string;
 }

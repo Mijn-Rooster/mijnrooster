@@ -1,9 +1,9 @@
 <script lang="ts">
   import ScheduleDayView from "./ScheduleDayView.svelte";
   import ScheduleWeekView from "./ScheduleWeekView.svelte";
-  import { ButtonGroup, Button } from 'flowbite-svelte';
+  import { ButtonGroup, Button } from "flowbite-svelte";
   import { navigate } from "../../stores/router.store";
-  import { Tabs, TabItem } from 'flowbite-svelte';
+  import { Tabs, TabItem } from "flowbite-svelte";
 </script>
 
 <ScheduleDayView />

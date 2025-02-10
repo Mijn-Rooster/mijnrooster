@@ -1,11 +1,7 @@
-
 # Frontend
 
 The frontend is the software what is running on the Mijn Rooster kiosk devices. \
 It is based on Svelte and Electron.
-
-
-
 
 ## Start developing
 
@@ -16,6 +12,7 @@ Open the frontend folder
 ```
 
 ### Installation
+
 This is not needed when running in codespaces.
 
 ```bash
@@ -42,4 +39,3 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
-    

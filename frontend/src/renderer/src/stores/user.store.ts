@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 export interface User {
   fullName: string;
@@ -12,12 +12,12 @@ export interface User {
 }
 
 export const user = writable<User>({
-  fullName: '',
+  fullName: "",
   isLoggedIn: false,
-  leerlingnummer: '',
-  schoolInSchoolYear: '',
-  firstName: '',
-  prefix: '',
-  lastName: '',
-  code: ''
+  leerlingnummer: "",
+  schoolInSchoolYear: "",
+  firstName: "",
+  prefix: "",
+  lastName: "",
+  code: "",
 });

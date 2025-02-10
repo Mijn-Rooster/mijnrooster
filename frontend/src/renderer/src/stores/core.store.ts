@@ -10,13 +10,13 @@ import { writable, get } from "svelte/store";
  * @property adminPassword - The administration password for elevated operations.
  */
 interface CoreStore {
-    serverUrl: string | null;
-    serverConnected: boolean;
-    serverPassword: string | null;
-    schoolInYearId: number|null;
-    schoolId: number|null;
-    adminPassword: string;
-} 
+  serverUrl: string | null;
+  serverConnected: boolean;
+  serverPassword: string | null;
+  schoolInYearId: number | null;
+  schoolId: number | null;
+  adminPassword: string;
+}
 
 const storedCore = localStorage.getItem("core");
 /**
@@ -34,20 +34,20 @@ const storedCore = localStorage.getItem("core");
  * This store is used to manage the core settings across the application's lifecycle.
  */
 export const core = writable<CoreStore>(
-    storedCore
-        ? JSON.parse(storedCore)
-        : {
-              serverUrl: null,
-              serverConnected: false,
-              serverPassword: null,
-              schoolInYearId: null,
-              schoolId: null,
-              adminPassword: "1234",
-          }
+  storedCore
+    ? JSON.parse(storedCore)
+    : {
+        serverUrl: null,
+        serverConnected: false,
+        serverPassword: null,
+        schoolInYearId: null,
+        schoolId: null,
+        adminPassword: "1234",
+      },
 );
 
 core.subscribe((value) => {
-    localStorage.setItem("core", JSON.stringify(value));
+  localStorage.setItem("core", JSON.stringify(value));
 });
 
 /**
@@ -60,19 +60,13 @@ core.subscribe((value) => {
  *
  * @returns {number} A numeric code representing the setup status.
  */
-export function isSetupComplete() : number {
-    const coreStore: CoreStore = get(core);
-    if(coreStore.serverUrl == null && coreStore.serverPassword == null) {
-        return 0;
-    } else if (coreStore.schoolId == null && coreStore.schoolInYearId == null) {
-        return 1;
-    } else {
-        return 2;
-    }
+export function isSetupComplete(): number {
+  const coreStore: CoreStore = get(core);
+  if (coreStore.serverUrl == null && coreStore.serverPassword == null) {
+    return 0;
+  } else if (coreStore.schoolId == null && coreStore.schoolInYearId == null) {
+    return 1;
+  } else {
+    return 2;
+  }
 }
-
-
-
-
-
-
