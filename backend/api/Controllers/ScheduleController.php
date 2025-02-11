@@ -44,6 +44,8 @@ try {
         $response = new Response([]);
         $response->send();
     }
+
+    //print_r($zermeloData);
     
     // Create new schedule
     $schedule = new Schedule();
