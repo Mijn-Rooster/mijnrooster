@@ -61,7 +61,16 @@ try {
             $appointmentData['endTimeSlotName'],
             $appointmentData['locations'],
             $appointmentData['subjects'],
-            $appointmentData['teachers']
+            $appointmentData['teachers'],
+            $appointmentData['groups'],
+            $appointmentData['type'],
+            $appointmentData['valid'],
+            $appointmentData['cancelled'],
+            $appointmentData['teacherChanged'],
+            $appointmentData['groupChanged'],
+            $appointmentData['locationChanged'],
+            $appointmentData['timeChanged'],
+            $appointmentData['changeDescription']
         );
         $schedule->addAppointment($appointment);
     }

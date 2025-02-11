@@ -8,7 +8,7 @@
 
 <MenuBar />
 
-<h1 class="text-4xl font-bold text-center my-8">Welkom!</h1>
+<h1 class="text-4xl font-bold text-center my-8">Welkom, [naam]!</h1>
 
 <Schedule />
 

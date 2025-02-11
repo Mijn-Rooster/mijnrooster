@@ -51,6 +51,12 @@ class Appointment
     private array $teachers;
 
     /**
+     * The groups participating in this appointment.
+     * @var array $groups
+     */
+    private array $groups;
+
+    /**
      * The starting lesson number for the appointment.
      * @var string $lessonNumberStart
      */
@@ -63,16 +69,73 @@ class Appointment
     private string $lessonNumberEnd;
 
     /**
+     * The type of the appointment.
+     * @var string $type
+     */
+    private string $type;
+
+    /**
+     * Whether the appointment is valid.
+     * @var bool $valid
+     */
+    private bool $valid;
+
+    /**
+     * Whether the appointment is cancelled.
+     * @var bool $cancelled
+     */
+    private bool $cancelled;
+
+    /**
+     * Whether the teacher of the appointment has changed.
+     * @var bool $teacherChanged
+     */
+    private bool $teacherChanged;
+
+    /**
+     * Whether the group of the appointment has changed.
+     * @var bool $groupChanged
+     */
+    private bool $groupChanged;
+
+    /**
+     * Whether the location of the appointment has changed.
+     * @var bool $locationChanged
+     */
+    private bool $locationChanged;
+
+    /**
+     * Whether the time of the appointment has changed.
+     * @var bool $timeChanged
+     */
+    private bool $timeChanged;
+
+    /**
+     * The description of the change.
+     * @var string $changeDescription
+     */
+    private string $changeDescription;
+
+    /**
      * Create a new appointment instance.
      * @param int $id
      * @param string $appointmentInstance
      * @param string $start
      * @param string $end
+     * @param string $lessonNumberStart
+     * @param string $lessonNumberEnd
      * @param array $locations
      * @param array $subjects
      * @param array $teachers
-     * @param string $lessonNumberStart
-     * @param string $lessonNumberEnd
+     * @param array $groups
+     * @param string $type
+     * @param bool $valid
+     * @param bool $cancelled
+     * @param bool $teacherChanged
+     * @param bool $groupChanged
+     * @param bool $locationChanged
+     * @param bool $timeChanged
+     * @param string $changeDescription
      */
     public function __construct(
         int $id,
@@ -81,9 +144,18 @@ class Appointment
         string $end,
         string $lessonNumberStart,
         string $lessonNumberEnd,
-        array $locations = [],
-        array $subjects = [],
-        array $teachers = []
+        array $locations,
+        array $subjects,
+        array $teachers,
+        array $groups,
+        string $type,
+        bool $valid,
+        bool $cancelled,
+        bool $teacherChanged,
+        bool $groupChanged,
+        bool $locationChanged,
+        bool $timeChanged,
+        string $changeDescription
     ) {
         $this->id = $id;
         $this->appointmentInstance = $appointmentInstance;
@@ -92,8 +164,17 @@ class Appointment
         $this->locations = $locations;
         $this->subjects = $subjects;
         $this->teachers = $teachers;
+        $this->groups = $groups;
         $this->lessonNumberStart = $lessonNumberStart;
         $this->lessonNumberEnd = $lessonNumberEnd;
+        $this->type = $type;
+        $this->valid = $valid;
+        $this->cancelled = $cancelled;
+        $this->teacherChanged = $teacherChanged;
+        $this->groupChanged = $groupChanged;
+        $this->locationChanged = $locationChanged;
+        $this->timeChanged = $timeChanged;
+        $this->changeDescription = $changeDescription;
     }
 
     /**
@@ -109,10 +190,21 @@ class Appointment
             'end' => $this->end,
             'locations' => $this->locations,
             'subjects' => $this->subjects,
+            'groups' => $this->groups,
             'subjectsFriendlyNames' => $this->subjectsToFriendlyNames($this->subjects),
             'teachers' => $this->teachers,
             'lessonNumberStart' => $this->lessonNumberStart,
-            'lessonNumberEnd' => $this->lessonNumberEnd
+            'lessonNumberEnd' => $this->lessonNumberEnd,
+            'type' => $this->type,
+            'valid' => $this->valid,
+            'changes' => [
+                'cancelled' => $this->cancelled,
+                'teacherChanged' => $this->teacherChanged,
+                'groupChanged' => $this->groupChanged,
+                'locationChanged' => $this->locationChanged,
+                'timeChanged' => $this->timeChanged,
+                'changeDescription' => $this->changeDescription
+            ]
         ];
     }
 

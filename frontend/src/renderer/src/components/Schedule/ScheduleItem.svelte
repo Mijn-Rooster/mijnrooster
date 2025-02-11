@@ -1,25 +1,12 @@
 <script lang="ts">
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
+  import { timeConverter } from "../../services/time.service";
+
   export let item: ScheduleItemModel;
 
-  /**
-   * Converts a UNIX timestamp to a time string in the format "HH:MM"
-   * @param {number} UNIX_timestamp - The UNIX timestamp to convert (in seconds)
-   * @returns {string} The formatted time string
-   * @example
-   * // returns "14:30"
-   * timeConverter(1622548200)
-   */
-  function timeConverter(UNIX_timestamp: number) {
-    const a = new Date(UNIX_timestamp * 1000);
-    const hour = a.getHours();
-    const min = a.getMinutes();
-    const time = hour + ":" + min;
-    return time;
-  }
 </script>
 
-<div class="flex p-4 rounded-lg flex-row items-center gap-5 bg-secondary-700">
+<div class="flex p-4 rounded-lg flex-row items-center gap-5" class:bg-red-700={item.changes.cancelled} class:bg-secondary-700={!item.changes.cancelled}>
   <!-- hour indication -->
   {#if item.lessonNumberStart != ""}
     {#if item.lessonNumberStart === item.lessonNumberEnd}
@@ -46,6 +33,22 @@
     {:else}
       <p class="font-bold">{item.subjects}</p>
     {/if}
-    <p>{item.locations.join(", ")} - {item.teachers.join(", ")}</p>
+    <div class="flex flex-row gap-1">
+      <p>{item.locations.join(", ")}</p>
+      {#if item.changes.locationChanged}
+      <span class="text-yellow-400">!</span>
+      {/if}
+      {#if item.locations.length = 0}
+        <span class="text-red-400">Geen lokaal</span>
+      {/if}
+      <p>-</p>
+      <p>{item.teachers.join(", ")}</p>
+      {#if item.changes.teacherChanged}
+      <span class="text-yellow-400">!</span>
+      {/if}
+      {#if item.teachers.length = 0}
+        <span class="text-red-400">Geen docent</span>
+      {/if}
+    </div>
   </div>
 </div>

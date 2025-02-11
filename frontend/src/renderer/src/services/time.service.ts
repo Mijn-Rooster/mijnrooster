@@ -49,3 +49,19 @@ export function getCurrentDate(): string {
   const day = String(now.getDate()).padStart(2, "0");
   return `${day} ${monthName} ${year}`;
 }
+
+  /**
+   * Converts a UNIX timestamp to a time string in the format "HH:MM"
+   * @param {number} UNIX_timestamp - The UNIX timestamp to convert (in seconds)
+   * @returns {string} The formatted time string
+   * @example
+   * // returns "14:30"
+   * timeConverter(1622548200)
+   */
+  export function timeConverter(UNIX_timestamp: number) {
+    const a = new Date(UNIX_timestamp * 1000);
+    const hour = a.getHours();
+    const min = a.getMinutes();
+    const time = hour + ":" + min;
+    return time;
+  }
