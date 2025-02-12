@@ -1,6 +1,5 @@
 appId: nl.mijnrooster.client
 productName: Mijn Rooster
-homepage: https://github.com/Mijn-Rooster/mijnrooster
 directories:
   buildResources: build
 files:
@@ -44,3 +43,5 @@ publish:
   repo: mijnrooster
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+extraMetadata:
+  homepage: https://github.com/Mijn-Rooster/mijnrooster
