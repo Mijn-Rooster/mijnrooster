@@ -13,4 +13,4 @@ define('DEBUG_MODE', true);                                            // Enable
 
 // Zermelo API
 define('ZERMELO_PORTAL_URL', 'https://partner-7206.zportal.nl');        // The URL of the Zermelo portal. example: https://school.zportal.nl
-define('ZERMELO_API_TOKEN', '347lfjs88pqhmuru4foaglm5rc');              // The token to access the Zermelo API
+define('ZERMELO_API_TOKEN', '6emqd1tuaihonba1vba41pmgf4');              // The token to access the Zermelo API

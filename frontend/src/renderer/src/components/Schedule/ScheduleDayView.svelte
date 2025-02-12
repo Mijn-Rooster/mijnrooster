@@ -11,9 +11,11 @@
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId: number = 138563;
+  const userId: number = 2022036;
   let isLoading: boolean = false;
-  let error: ErrorModel|null = null;
+  let error: ErrorModel | null = null;
+
+  let fetchController: AbortController | null = null;
 
   let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
@@ -29,11 +31,11 @@
   /**
    * Loads the schedule for a specific user within a time range.
    * Sets loading state during the operation and handles errors.
-   * 
+   *
    * @async
    * @function loadSchedule
    * @returns {Promise<void>}
-   * 
+   *
    * Uses:
    * - retrieveSchedule() to fetch schedule data
    * - isLoading state to track loading status
@@ -42,16 +44,28 @@
    * - userId, todayStartUnix, todayEndUnix for request parameters
    */
   function loadSchedule() {
+    // Abort previous fetch if it exists
+    if (fetchController) {
+      fetchController.abort();
+    }
+    fetchController = new AbortController();
+
     isLoading = true;
-    retrieveSchedule(userId, todayStartUnix, todayEndUnix)
+    retrieveSchedule(
+      userId,
+      todayStartUnix,
+      todayEndUnix,
+      fetchController.signal,
+    )
       .then((data) => {
         schedule = data;
+        isLoading = false;
       })
       .catch((err) => {
-        error = err;
-      })
-      .finally(() => {
-        isLoading = false;
+        // Ignore abort errors
+        if (err.name !== "AbortError") {
+          error = err;
+        }
       });
   }
 
@@ -100,9 +114,7 @@
   }
 </script>
 
-<div
-  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4"
->
+<div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
   <!-- Date navigation -->
   <div class="flex justify-between my-5 align-content-center">
     <!-- Previous -->

@@ -14,41 +14,54 @@ class Appointment
      * @var int $id
      */
     private int $id;
+    
     /**
      * id of the instance this appointment belongs to. All appointment versions referring to the same instance will have the same value for appointmentInstance. If an instance repeats every week every occurrence will have a different appointmentInstance.
      * @var int $appointmentInstance
      */
     private int $appointmentInstance;
+    
     /**
      * UTC Unix time of the start of this appointment. This is the first second this appointment is taking place.
      * @var string $start
      */
     private string $start;
+    
     /**
      * UTC Unix time of the end of this appointment. This is the last second this appointment is taking place.
      * @var string $end
      */
     private string $end;
+
     /**
      * The names of the locations (classrooms) where this appointment will take place.
      * @var array $locations
      */
     private array $locations;
+
     /**
-     * The subject full/friendly names this appointment is about.
-     * @var array $subjectsFriendlyNames
+     * The description/remarks of the appointment.
+     * @var string $description
      */
-    private array $subjectsFriendlyNames;
+    private string $description;
+
     /**
      * The (human readable) subject names or abbreviations this appointment is about.
      * @var array $subjects
      */
     private array $subjects;
+    
     /**
      * The codes/abbreviations of the teachers participating in this appointment.
      * @var array $teachers
      */
     private array $teachers;
+
+    /**
+     * The groups participating in this appointment.
+     * @var array $groups
+     */
+    private array $groups;
 
     /**
      * The starting lesson number for the appointment.
@@ -63,16 +76,74 @@ class Appointment
     private string $lessonNumberEnd;
 
     /**
+     * The type of the appointment.
+     * @var string $type
+     */
+    private string $type;
+
+    /**
+     * Whether the appointment is valid.
+     * @var bool $valid
+     */
+    private bool $valid;
+
+    /**
+     * Whether the appointment is cancelled.
+     * @var bool $cancelled
+     */
+    private bool $cancelled;
+
+    /**
+     * Whether the teacher of the appointment has changed.
+     * @var bool $teacherChanged
+     */
+    private bool $teacherChanged;
+
+    /**
+     * Whether the group of the appointment has changed.
+     * @var bool $groupChanged
+     */
+    private bool $groupChanged;
+
+    /**
+     * Whether the location of the appointment has changed.
+     * @var bool $locationChanged
+     */
+    private bool $locationChanged;
+
+    /**
+     * Whether the time of the appointment has changed.
+     * @var bool $timeChanged
+     */
+    private bool $timeChanged;
+
+    /**
+     * The description of the change.
+     * @var string $changeDescription
+     */
+    private string $changeDescription;
+
+    /**
      * Create a new appointment instance.
      * @param int $id
      * @param string $appointmentInstance
      * @param string $start
      * @param string $end
+     * @param string $description
+     * @param string $lessonNumberStart
+     * @param string $lessonNumberEnd
      * @param array $locations
      * @param array $subjects
      * @param array $teachers
-     * @param string $lessonNumberStart
-     * @param string $lessonNumberEnd
+     * @param array $groups
+     * @param string $type
+     * @param bool $valid
+     * @param bool $cancelled
+     * @param bool $teacherChanged
+     * @param bool $groupChanged
+     * @param bool $locationChanged
+     * @param bool $timeChanged
+     * @param string $changeDescription
      */
     public function __construct(
         int $id,
@@ -81,19 +152,39 @@ class Appointment
         string $end,
         string $lessonNumberStart,
         string $lessonNumberEnd,
-        array $locations = [],
-        array $subjects = [],
-        array $teachers = []
+        string $description,
+        array $locations,
+        array $subjects,
+        array $teachers,
+        array $groups,
+        string $type,
+        bool $valid,
+        bool $cancelled,
+        bool $teacherChanged,
+        bool $groupChanged,
+        bool $locationChanged,
+        bool $timeChanged,
+        string $changeDescription
     ) {
         $this->id = $id;
         $this->appointmentInstance = $appointmentInstance;
         $this->start = $start;
         $this->end = $end;
+        $this->description = $description;
         $this->locations = $locations;
         $this->subjects = $subjects;
         $this->teachers = $teachers;
+        $this->groups = $groups;
         $this->lessonNumberStart = $lessonNumberStart;
         $this->lessonNumberEnd = $lessonNumberEnd;
+        $this->type = $type;
+        $this->valid = $valid;
+        $this->cancelled = $cancelled;
+        $this->teacherChanged = $teacherChanged;
+        $this->groupChanged = $groupChanged;
+        $this->locationChanged = $locationChanged;
+        $this->timeChanged = $timeChanged;
+        $this->changeDescription = $changeDescription;
     }
 
     /**
@@ -107,12 +198,24 @@ class Appointment
             'appointmentInstance' => $this->appointmentInstance,
             'start' => $this->start,
             'end' => $this->end,
+            'description' => $this->description,
             'locations' => $this->locations,
             'subjects' => $this->subjects,
+            'groups' => $this->groups,
             'subjectsFriendlyNames' => $this->subjectsToFriendlyNames($this->subjects),
             'teachers' => $this->teachers,
             'lessonNumberStart' => $this->lessonNumberStart,
-            'lessonNumberEnd' => $this->lessonNumberEnd
+            'lessonNumberEnd' => $this->lessonNumberEnd,
+            'type' => $this->type,
+            'valid' => $this->valid,
+            'changes' => [
+                'cancelled' => $this->cancelled,
+                'teacherChanged' => $this->teacherChanged,
+                'groupChanged' => $this->groupChanged,
+                'locationChanged' => $this->locationChanged,
+                'timeChanged' => $this->timeChanged,
+                'changeDescription' => $this->changeDescription
+            ]
         ];
     }
 

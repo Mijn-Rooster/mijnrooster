@@ -8,9 +8,9 @@
 
 <MenuBar />
 
-<h1 class="text-4xl font-bold text-center my-8">Welkom!</h1>
+<h1 class="text-4xl font-bold text-center my-8">Welkom, [naam]!</h1>
 
-<Schedule/>
+<Schedule />
 
 <Footer
   class="absolute bottom-0 start-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600"

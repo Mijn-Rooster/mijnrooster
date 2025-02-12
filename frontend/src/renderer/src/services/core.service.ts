@@ -1,19 +1,19 @@
 /**
  * Service module for handling core functionality.
- * 
+ *
  * @module CoreService
- * 
- * @remarks 
+ *
+ * @remarks
  * This module provides core functionality for the application, including cryptographic hashing.
- * 
+ *
  * @example
  * ```typescript
  * // Generate a hash for a data string
  * const hash = await getHash("data");
  * ```
- * 
+ *
  * @throws {Error} If the hashing operation fails
- * 
+ *
  */
 /**
  * Computes a cryptographic hash for the supplied data string.
@@ -24,5 +24,5 @@
  * @returns A promise that resolves to a string representing the generated hash.
  */
 export async function getHash(data: string): Promise<string> {
-    return window.api.generateHash(data);
+  return window.api.generateHash(data);
 }

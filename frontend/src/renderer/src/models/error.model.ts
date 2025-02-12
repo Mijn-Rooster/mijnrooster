@@ -5,6 +5,6 @@
  * @property {string|null} details - Additional error details, if available
  */
 export interface ErrorModel {
-    message: string;
-    details: string|null;
+  message: string;
+  details: string | null;
 }
