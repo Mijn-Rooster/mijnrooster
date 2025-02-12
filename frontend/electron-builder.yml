@@ -31,6 +31,7 @@ linux:
   target:
     - AppImage
     - deb
+    - linux-armv7l
   maintainer: electronjs.org
   category: Utility
 appImage:
