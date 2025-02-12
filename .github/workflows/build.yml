@@ -24,14 +24,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install snapcraft (Ubuntu only)
-        if: runner.os == 'Linux'
-        run: sudo snap install snapcraft --classic
-
-      - name: Install dependencies (Ubuntu only)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libarchive-tools
-
       - name: Build and Release Electron App
         uses: samuelmeuli/action-electron-builder@v1.6.0
         with:
