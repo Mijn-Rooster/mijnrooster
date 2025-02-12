@@ -4,6 +4,7 @@
   import Error from "../routes/Error.svelte";
   import Schedule from "../routes/Schedule.svelte";
   import Setup from "../routes/Setup.svelte";
+  import Inloggen from "../routes/Inloggen.svelte";
   import type { SvelteComponent } from "svelte";
 
   let currentRoute: string;
@@ -19,6 +20,7 @@
     "/error": Error,
     "/schedule": Schedule,
     "/setup": Setup,
+    "/inloggen": Inloggen,	
   };
 
   let CurrentComponent;

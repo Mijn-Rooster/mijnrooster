@@ -32,6 +32,7 @@ import { SchoolModel } from "../models/school.model";
 import { core } from "../stores/core.store";
 import { getHash } from "./core.service";
 import { get } from "svelte/store";
+import type { User } from "../stores/user.store";
 
 let serverUrl: string | null = "";
 let token: string | null = "";
@@ -217,4 +218,35 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
     }
     throw error;
   }
+}
+
+export async function retrieveUserInfo(
+  schoolInSchoolYear: string,
+  leerlingnummer: string,
+): Promise<User | null> {
+  const url = `http://localhost:8000/v1/school/${schoolInSchoolYear}/user/${leerlingnummer}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    console.error("User info fetch failed:", response.status);
+    return null;
+  }
+
+  const data = await response.json();
+  return {
+    fullName: `${data.firstName} ${data.prefix} ${data.lastName}`.trim(),
+    isLoggedIn: true,
+    leerlingnummer: data.code,
+    schoolInSchoolYear: schoolInSchoolYear,
+    firstName: data.firstName,
+    prefix: data.prefix,
+    lastName: data.lastName,
+    code: data.code,
+  };
 }
