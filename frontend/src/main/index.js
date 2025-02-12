@@ -1,9 +1,15 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import installExtension from "electron-devtools-installer";
 import { createHash } from "crypto";
+import { autoUpdater } from "electron-updater";
+
+// Enable logging for debugging updates
+import log from "electron-log";
+log.transports.file.level = "info";
+autoUpdater.logger = log;
 
 function createWindow() {
   // Create the browser window.
@@ -34,9 +40,51 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
   }
+
+  return mainWindow;
 }
 
-// Registreer de IPC-handler voor het genereren van een SHA256 hash computer-side
+// Handle auto-updates
+function setupAutoUpdater(win) {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true; // Install on quit
+
+  autoUpdater.on("checking-for-update", () => {
+    log.info("Checking for updates...");
+  });
+
+  autoUpdater.on("update-available", (info) => {
+    log.info(`Update available: ${info.version}`);
+    win.webContents.send("update-available", info.version);
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    log.info("No updates available.");
+  });
+
+  autoUpdater.on("error", (err) => {
+    log.error("Error in auto-updater:", err);
+    dialog.showErrorBox("Update Error", `Failed to update: ${err.message}`);
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    log.info("Update downloaded. Prompting user...");
+    dialog
+      .showMessageBox(win, {
+        type: "info",
+        title: "Update Ready",
+        message: "An update has been downloaded. Restart to install?",
+        buttons: ["Restart", "Later"],
+      })
+      .then((result) => {
+        if (result.response === 0) autoUpdater.quitAndInstall();
+      });
+  });
+
+  autoUpdater.checkForUpdatesAndNotify();
+}
+
+// Generate SHA256 hash (IPC handler)
 ipcMain.handle("generate-hash", (event, data) => {
   const hash = createHash("sha256").update(data).digest("hex");
   return hash;
@@ -59,14 +107,12 @@ app.whenReady().then(() => {
   // Install Svelte DevTools in development mode
   if (is.dev) {
     installExtension("kfidecgcdjjfpeckbblhmfkhmlgecoff")
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log("An error occurred: ", err));
+      .then((name) => console.log(`Added Extension: ${name}`))
+      .catch((err) => console.log("An error occurred:", err));
   }
 
-  // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
-
-  createWindow();
+  const mainWindow = createWindow();
+  setupAutoUpdater(mainWindow);
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
@@ -83,6 +129,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

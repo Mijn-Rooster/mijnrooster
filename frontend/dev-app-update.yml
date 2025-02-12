@@ -1,3 +1,5 @@
-provider: generic
-url: https://example.com/auto-updates
-updaterCacheDirName: frontend-updater
+provider: github
+owner: Mijn-Rooster
+repo: mijnrooster
+updaterCacheDirName: mijnrooster-updater
+releaseType: release
