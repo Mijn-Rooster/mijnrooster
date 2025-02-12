@@ -24,7 +24,7 @@
           serverUrl,
           serverPassword,
         }));
-
+        
         navigate("/");
       })
       .catch((err) => {

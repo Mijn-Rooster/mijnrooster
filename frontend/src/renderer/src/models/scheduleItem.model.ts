@@ -45,5 +45,5 @@ export interface ScheduleItemModel {
     timeChanged: boolean;
     groupChanged: boolean;
     changeDescription: string;
-  }
+  };
 }

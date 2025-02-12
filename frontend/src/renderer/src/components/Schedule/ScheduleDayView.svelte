@@ -8,13 +8,14 @@
   import { retrieveSchedule } from "../../services/api.service";
   import ErrorBanner from "../ErrorBanner.svelte";
   import type { ErrorModel } from "../../models/error.model";
-  import { user } from "../../stores/user.store"; // Import the user store
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId: number = 2022036; 
+  const userId: number = 2022036;
   let isLoading: boolean = false;
   let error: ErrorModel | null = null;
+
+  let fetchController: AbortController | null = null;
 
   let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
@@ -43,16 +44,28 @@
    * - userId, todayStartUnix, todayEndUnix for request parameters
    */
   function loadSchedule() {
+    // Abort previous fetch if it exists
+    if (fetchController) {
+      fetchController.abort();
+    }
+    fetchController = new AbortController();
+
     isLoading = true;
-    retrieveSchedule(userId, todayStartUnix, todayEndUnix)
+    retrieveSchedule(
+      userId,
+      todayStartUnix,
+      todayEndUnix,
+      fetchController.signal,
+    )
       .then((data) => {
         schedule = data;
+        isLoading = false;
       })
       .catch((err) => {
-        error = err;
-      })
-      .finally(() => {
-        isLoading = false;
+        // Ignore abort errors
+        if (err.name !== "AbortError") {
+          error = err;
+        }
       });
   }
 
