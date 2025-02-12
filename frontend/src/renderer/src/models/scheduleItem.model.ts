@@ -5,6 +5,7 @@
  * @property {number} id - The ID of the schedule item.
  * @property {number} start - The start time of the schedule item.
  * @property {number} end - The end time of the schedule item.
+ * @property {string} description - The description of the schedule item.
  * @property {string[]} locations - The locations where the schedule item takes place.
  * @property {string[]} subjects - The subjects of the schedule item.
  * @property {string[]} subjectsFriendlyNames - The friendly names of the subjects.
@@ -27,6 +28,7 @@ export interface ScheduleItemModel {
   id: number;
   start: number;
   end: number;
+  description: string;
   locations: string[];
   subjects: string[];
   subjectsFriendlyNames: string[];

@@ -3,10 +3,14 @@
   import { timeConverter } from "../../services/time.service";
 
   export let item: ScheduleItemModel;
-
 </script>
 
-<div class="flex p-4 rounded-lg flex-row items-center gap-5" class:bg-red-700={item.changes.cancelled} class:bg-secondary-700={!item.changes.cancelled}>
+<div
+  class="flex p-4 rounded-lg flex-row items-center gap-5"
+  class:bg-red-300={item.changes.cancelled}
+  class:bg-yellow-200={!item.changes.cancelled && item.type != "lesson"}
+  class:bg-secondary-700={!item.changes.cancelled && item.type == "lesson"}
+>
   <!-- hour indication -->
   {#if item.lessonNumberStart != ""}
     {#if item.lessonNumberStart === item.lessonNumberEnd}
@@ -26,29 +30,41 @@
     </span>
   {/if}
 
-  <!-- details -->
   <div>
-    {#if item.subjectsFriendlyNames.length > 0}
-      <p class="font-bold">{item.subjectsFriendlyNames.join(", ")}</p>
-    {:else}
-      <p class="font-bold">{item.subjects}</p>
-    {/if}
+    <!-- Subject name -->
     <div class="flex flex-row gap-1">
-      <p>{item.locations.join(", ")}</p>
-      {#if item.changes.locationChanged}
-      <span class="text-yellow-400">!</span>
-      {/if}
-      {#if item.locations.length = 0}
-        <span class="text-red-400">Geen lokaal</span>
-      {/if}
-      <p>-</p>
-      <p>{item.teachers.join(", ")}</p>
-      {#if item.changes.teacherChanged}
-      <span class="text-yellow-400">!</span>
-      {/if}
-      {#if item.teachers.length = 0}
-        <span class="text-red-400">Geen docent</span>
+      {#if item.subjectsFriendlyNames.length > 0}
+        <p class="font-bold">{item.subjectsFriendlyNames.join(", ")}</p>
+      {:else}
+        <p class="font-bold">{item.subjects}</p>
       {/if}
     </div>
+    <!-- Location and teacher -->
+    <div class="flex flex-row gap-1">
+      {#if item.locations.length == 0}
+        <span class="text-red-800">Geen lokaal</span>
+      {:else}
+        <p>{item.locations.join(", ")}</p>
+      {/if}
+      {#if item.changes.locationChanged}
+        <span class="text-red-900 font-bold">!</span>
+      {/if}
+      <p>-</p>
+      {#if item.teachers.length == 0}
+        <span class="text-red-800">Geen docent</span>
+      {:else}
+        <p>{item.teachers.join(", ")}</p>
+      {/if}
+      {#if item.changes.teacherChanged}
+        <span class="text-red-900 font-bold">!</span>
+      {/if}
+    </div>
+    <!-- (Change) description -->
+    {#if item.description && item.type != "lesson"}
+      <p class="text-sm">{item.description}</p>
+    {/if}
+    {#if item.changes.changeDescription}
+      <p class="text-sm">{item.changes.changeDescription}</p>
+    {/if}
   </div>
 </div>

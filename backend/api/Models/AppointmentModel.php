@@ -14,36 +14,43 @@ class Appointment
      * @var int $id
      */
     private int $id;
+    
     /**
      * id of the instance this appointment belongs to. All appointment versions referring to the same instance will have the same value for appointmentInstance. If an instance repeats every week every occurrence will have a different appointmentInstance.
      * @var int $appointmentInstance
      */
     private int $appointmentInstance;
+    
     /**
      * UTC Unix time of the start of this appointment. This is the first second this appointment is taking place.
      * @var string $start
      */
     private string $start;
+    
     /**
      * UTC Unix time of the end of this appointment. This is the last second this appointment is taking place.
      * @var string $end
      */
     private string $end;
+
     /**
      * The names of the locations (classrooms) where this appointment will take place.
      * @var array $locations
      */
     private array $locations;
+
     /**
-     * The subject full/friendly names this appointment is about.
-     * @var array $subjectsFriendlyNames
+     * The description/remarks of the appointment.
+     * @var string $description
      */
-    private array $subjectsFriendlyNames;
+    private string $description;
+
     /**
      * The (human readable) subject names or abbreviations this appointment is about.
      * @var array $subjects
      */
     private array $subjects;
+    
     /**
      * The codes/abbreviations of the teachers participating in this appointment.
      * @var array $teachers
@@ -122,6 +129,7 @@ class Appointment
      * @param string $appointmentInstance
      * @param string $start
      * @param string $end
+     * @param string $description
      * @param string $lessonNumberStart
      * @param string $lessonNumberEnd
      * @param array $locations
@@ -144,6 +152,7 @@ class Appointment
         string $end,
         string $lessonNumberStart,
         string $lessonNumberEnd,
+        string $description,
         array $locations,
         array $subjects,
         array $teachers,
@@ -161,6 +170,7 @@ class Appointment
         $this->appointmentInstance = $appointmentInstance;
         $this->start = $start;
         $this->end = $end;
+        $this->description = $description;
         $this->locations = $locations;
         $this->subjects = $subjects;
         $this->teachers = $teachers;
@@ -188,6 +198,7 @@ class Appointment
             'appointmentInstance' => $this->appointmentInstance,
             'start' => $this->start,
             'end' => $this->end,
+            'description' => $this->description,
             'locations' => $this->locations,
             'subjects' => $this->subjects,
             'groups' => $this->groups,

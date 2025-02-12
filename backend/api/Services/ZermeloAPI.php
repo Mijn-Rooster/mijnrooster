@@ -21,7 +21,7 @@ class ZermeloAPI {
      * @param string $fields Fields to get from the appointments. Check Zermelo API documentation for possible values
      * @return array Lessons from schedule
      */
-    public function getScheduleAppointments($user, $start, $end, $type = 'lesson,exam,oralExam,activity,talk,mixed,meeting,interlude', $fields = 'id,appointmentInstance,start,end,startTimeSlotName,endTimeSlotName,locations,teachers,subjects,groups,type,valid,cancelled,teacherChanged,groupChanged,locationChanged,timeChanged,changeDescription'): array {
+    public function getScheduleAppointments($user, $start, $end, $type = 'lesson,exam,oralExam,activity,talk,mixed,meeting,interlude', $fields = 'id,appointmentInstance,start,end,startTimeSlotName,endTimeSlotName,locations,teachers,subjects,groups,type,valid,cancelled,teacherChanged,groupChanged,locationChanged,timeChanged,changeDescription,remark'): array {
         // Check if all required parameters are set
         if (!isset($user, $start, $end)) {
             ErrorHandler::handle("MISSING_PARAMETERS");

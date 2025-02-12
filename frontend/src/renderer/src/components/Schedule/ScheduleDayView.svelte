@@ -12,7 +12,7 @@
 
   let schedule: ScheduleItemModel[] = [];
 
-  const userId: number = 2018202; 
+  const userId: number = 2022036; 
   let isLoading: boolean = false;
   let error: ErrorModel | null = null;
 

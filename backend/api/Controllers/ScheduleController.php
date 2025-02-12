@@ -44,8 +44,6 @@ try {
         $response = new Response([]);
         $response->send();
     }
-
-    //print_r($zermeloData);
     
     // Create new schedule
     $schedule = new Schedule();
@@ -59,6 +57,7 @@ try {
             $appointmentData['end'],
             $appointmentData['startTimeSlotName'],
             $appointmentData['endTimeSlotName'],
+            $appointmentData['remark'],
             $appointmentData['locations'],
             $appointmentData['subjects'],
             $appointmentData['teachers'],
