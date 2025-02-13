@@ -13,3 +13,8 @@ updates:
     directory: "/backend" # Location of package manifests
     schedule:
       interval: "weekly"
+groups:
+  production-dependencies:
+    dependency-type: "production"
+  development-dependencies:
+    dependency-type: "development"
