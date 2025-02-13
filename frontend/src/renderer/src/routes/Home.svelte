@@ -8,7 +8,7 @@
   } from "flowbite-svelte-icons";
   import { Footer } from "flowbite-svelte";
   import { isSetupComplete } from "../stores/core.store";
-  import { timeStore } from "../stores/time.store";
+  import { time, date } from "../stores/time.store";
 
   // Check if Mijn Rooster setup is completed
   if (isSetupComplete() < 2) {
@@ -18,8 +18,8 @@
 
 <MenuBar timeVisible={false} />
 
-<h1 class="text-4xl font-extrabold text-center w-full">{$timeStore.time}</h1>
-<h2 class="text-xl font-bold text-center w-full">{$timeStore.date}</h2>
+<h1 class="text-4xl font-extrabold text-center w-full">{$time}</h1>
+<h2 class="text-xl font-bold text-center w-full">{$date}</h2>
 
 <div class="flex-grow flex flex-col items-center justify-center">
   <ProfileCardSolid class="size-40" style="color: #291c5b;" />

@@ -82,6 +82,11 @@ class Error
             'message' => 'School niet gevonden',
             'details' => 'Er zijn geen scholen gevonden in de Zermelo API',
         ],
+        'NO_DATA' => [
+            'statusCode' => 500,
+            'message' => 'Er is een fout opgetreden in de communicatie met het netwerk',
+            'details' => 'Controleer de internetverbinding van uw server',
+        ],
         'DEFAULT' => [
             'statusCode' => 500,
             'message' => 'Er is een onbekende fout opgetreden',

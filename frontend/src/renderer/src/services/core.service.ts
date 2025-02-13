@@ -15,6 +15,9 @@
  * @throws {Error} If the hashing operation fails
  *
  */
+
+import { connectionCheck } from "./api.service";
+
 /**
  * Computes a cryptographic hash for the supplied data string.
  *
@@ -25,4 +28,17 @@
  */
 export async function getHash(data: string): Promise<string> {
   return window.api.generateHash(data);
+}
+
+export async function isConnectedToInternet(): Promise<boolean> {
+  return window.api.isOnline();
+}
+
+export async function isConnectedToServer(): Promise<boolean> {
+  try {
+    await connectionCheck();
+    return true;
+  } catch (error) {
+    return false;
+  }
 }

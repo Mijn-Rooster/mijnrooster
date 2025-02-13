@@ -30,7 +30,8 @@ export function getCurrentTime(): string {
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 /**
@@ -65,3 +66,5 @@ export function timeConverter(UNIX_timestamp: number) {
   const time = hour + ":" + min;
   return time;
 }
+
+// create a function that give time in string and update every 1 second
