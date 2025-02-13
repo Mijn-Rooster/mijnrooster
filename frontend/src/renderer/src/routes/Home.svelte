@@ -21,6 +21,14 @@
 <h1 class="text-4xl font-extrabold text-center w-full">{$timeStore.time}</h1>
 <h2 class="text-xl font-bold text-center w-full">{$timeStore.date}</h2>
 
+<Button
+on:click={() => navigate("/error", {message: "test error page", details: "test error detail"})}
+class="bg-primary-700 text-white gap-2 px-2"
+>
+<ArrowLeftToBracketOutline />
+test error page
+</Button>
+
 <div class="flex-grow flex flex-col items-center justify-center">
   <ProfileCardSolid class="size-40" style="color: #291c5b;" />
   <p class="text-2xl text-center">

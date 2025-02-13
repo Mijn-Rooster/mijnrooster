@@ -1,23 +1,27 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/router.store";
-  import { Button, Footer } from "flowbite-svelte";
-  import { ArrowLeftOutline } from "flowbite-svelte-icons";
+  import { route } from "../stores/router.store";
+  import type { ErrorModel } from "../models/error.model";
+
+  const error : ErrorModel = $route.params;
+
+  // Close the error page when the escape key is pressed
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      navigate("/");
+    }
+  });
+
 </script>
 
 <MenuBar timeVisible={true} />
 
-<div class="mx-auto w-[100%] max-w-[1000px]">
-  <h1 class="text-5xl font-bold mb-2">Oeps!</h1>
-  <p class="text-xl w-full">
-    Er is iets misgegaan.<br /><br /> Probeer het later opnieuw.
-  </p>
+<div class="h-[calc(100vh-128px)] flex items-start justify-center pt-32">
+  <div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
+    <h1 class="text-5xl font-bold mb-2">{error.message || "Oeps!"}</h1>
+    <p class="text-xl w-full">
+      {error.details || "Er is iets fout gegaan"}
+    </p>
+  </div>
 </div>
-
-<Footer
-  class="absolute bottom-0 start-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600"
->
-  <Button class="gap-2 px-2" on:click={() => navigate("/")}
-    ><ArrowLeftOutline />Terug</Button
-  >
-</Footer>
