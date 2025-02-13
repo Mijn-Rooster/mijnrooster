@@ -10,10 +10,10 @@ importers:
     dependencies:
       '@electron-toolkit/preload':
         specifier: ^3.0.1
-        version: 3.0.1(electron@31.7.7)
+        version: 3.0.1(electron@34.2.0)
       '@electron-toolkit/utils':
         specifier: ^3.0.0
-        version: 3.0.0(electron@31.7.7)
+        version: 3.0.0(electron@34.2.0)
       '@esm2cjs/is-online':
         specifier: ^10.0.0
         version: 10.0.0
@@ -40,8 +40,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.1)
       electron:
-        specifier: ^31.7.7
-        version: 31.7.7
+        specifier: ^34.2.0
+        version: 34.2.0
       electron-builder:
         specifier: ^24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3)
@@ -1186,8 +1186,8 @@ packages:
       '@swc/core':
         optional: true
 
-  electron@31.7.7:
-    resolution: {integrity: sha512-HZtZg8EHsDGnswFt0QeV8If8B+et63uD6RJ7I4/xhcXqmTIbI08GoubX/wm+HdY0DwcuPe1/xsgqpmYvjdjRoA==}
+  electron@34.2.0:
+    resolution: {integrity: sha512-SYwBJNeXBTm1q/ErybQMUBZAYqEreBUqBwTrNkw1rV4YatDZk5Aittpcus3PPeC4UoI/tqmJ946uG8AKHTd6CA==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -2736,7 +2736,7 @@ snapshots:
       '@babel/parser': 7.25.6
       '@babel/template': 7.25.0
       '@babel/types': 7.25.6
-      debug: 4.3.7
+      debug: 4.4.0
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -2765,13 +2765,13 @@ snapshots:
     dependencies:
       eslint: 8.57.0
 
-  '@electron-toolkit/preload@3.0.1(electron@31.7.7)':
+  '@electron-toolkit/preload@3.0.1(electron@34.2.0)':
     dependencies:
-      electron: 31.7.7
+      electron: 34.2.0
 
-  '@electron-toolkit/utils@3.0.0(electron@31.7.7)':
+  '@electron-toolkit/utils@3.0.0(electron@34.2.0)':
     dependencies:
-      electron: 31.7.7
+      electron: 34.2.0
 
   '@electron/asar@3.2.13':
     dependencies:
@@ -3202,7 +3202,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.17.18
+      '@types/node': 22.13.2
       '@types/responselike': 1.0.3
 
   '@types/debug@4.1.12':
@@ -3224,7 +3224,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.17.18
+      '@types/node': 22.13.2
 
   '@types/minimatch@5.1.2': {}
 
@@ -3248,14 +3248,14 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.17.18
+      '@types/node': 22.13.2
 
   '@types/verror@1.10.10':
     optional: true
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.17.18
+      '@types/node': 22.13.2
     optional: true
 
   '@ungap/structured-clone@1.2.0': {}
@@ -3272,7 +3272,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.7
+      debug: 4.4.0
     transitivePeerDependencies:
       - supports-color
 
@@ -3816,7 +3816,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@31.7.7:
+  electron@34.2.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 20.17.18
