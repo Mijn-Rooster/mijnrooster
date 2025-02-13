@@ -4,10 +4,16 @@ import { getCurrentTime, getCurrentDate } from "../services/time.service";
 export const time = writable(getCurrentTime());
 export const date = writable(getCurrentDate());
 
+/**
+ * Updates the time store with the current time.
+ */
 function updateTime() {
   time.set(getCurrentTime());
 }
 
+/**
+ * Updates the date store with the current date.
+ */
 function updateDate() {
   date.set(getCurrentDate());
 }

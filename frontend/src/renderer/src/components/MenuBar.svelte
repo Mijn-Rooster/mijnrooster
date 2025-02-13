@@ -2,7 +2,7 @@
   export let timeVisible = true;
   import { internetStatus, serverStatus } from "../stores/connection.store";
   import { time } from "../stores/time.store";
-
+  import { Signal_wifi_4_bar, Signal_wifi_statusbar_connected_no_internet_4, Signal_wifi_0_bar } from 'svelte-google-materialdesign-icons';
 </script>
 
 <div class="grid grid-cols-3 grid-flow justify-between items-center">
@@ -24,15 +24,12 @@
   <div class="justify-self-end px-3 flex items-center gap-2">
     {#if $internetStatus}
       {#if $serverStatus}
-        <span class="w-2 h-2 rounded-full bg-green-500"></span>
-        <p>Online</p>
+        <Signal_wifi_4_bar class="w-6 h-6 text-primary-700" />
       {:else}
-        <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-        <p>No Server</p>
+        <Signal_wifi_statusbar_connected_no_internet_4 class="w-6 h-6 text-primary-700" />
       {/if}
     {:else}
-      <span class="w-2 h-2 rounded-full bg-red-500"></span>
-      <p>Offline</p>
+      <Signal_wifi_0_bar class="w-6 h-6 text-primary-700" />
     {/if}
   </div>
 </div>

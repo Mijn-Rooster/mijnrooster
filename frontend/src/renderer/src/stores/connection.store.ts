@@ -1,9 +1,15 @@
 import { writable } from "svelte/store";
 import { isConnectedToInternet, isConnectedToServer } from "../services/core.service";
 
-export const internetStatus = writable(false);
-export const serverStatus = writable(false);
+/**
+ * A writable store that holds the current internet connection status.
+ */
+export const internetStatus = writable(true);
+export const serverStatus = writable(true);
 
+/**
+ * Updates the connection status stores with the current connection status.
+ */
 async function updateConnectionStatus() {
   internetStatus.set(await isConnectedToInternet());
   serverStatus.set(await isConnectedToServer());
