@@ -56,8 +56,11 @@ class ZermeloAPI {
         ]);
 
         $response = curl_exec($ch);
-
         curl_close($ch);
+
+        if (empty($response)) {
+            return [];
+        }
 
         return json_decode($response, true)['response'];
     }
@@ -90,6 +93,10 @@ class ZermeloAPI {
         $response = curl_exec($ch);
         curl_close($ch);
 
+        if (empty($response)) {
+            return [];
+        }
+
         return json_decode($response, true)['response'];
     }
 
@@ -120,6 +127,10 @@ class ZermeloAPI {
 
         $response = curl_exec($ch);
         curl_close($ch);
+
+        if (empty($response)) {
+            return [];
+        }
 
         return json_decode($response, true)['response'];
     }
@@ -154,6 +165,10 @@ class ZermeloAPI {
         $response = curl_exec($ch);
         curl_close($ch);
 
+        if (empty($response)) {
+            return [];
+        }
+
         return json_decode($response, true)['response'];
     }
 
@@ -178,6 +193,10 @@ class ZermeloAPI {
 
         $response = curl_exec($ch);
         curl_close($ch);
+
+        if (empty($response)) {
+            return [];
+        }
 
         return json_decode($response, true)['response'];
     }

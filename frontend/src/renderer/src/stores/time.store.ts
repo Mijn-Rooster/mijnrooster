@@ -1,31 +1,22 @@
 import { writable } from "svelte/store";
 import { getCurrentTime, getCurrentDate } from "../services/time.service";
 
-interface TimeStore {
-  time: string;
-  date: string;
+export const time = writable(getCurrentTime());
+export const date = writable(getCurrentDate());
+
+/**
+ * Updates the time store with the current time.
+ */
+function updateTime() {
+  time.set(getCurrentTime());
 }
 
-function createTimeStore() {
-  const { subscribe, set } = writable<TimeStore>({
-    time: getCurrentTime(),
-    date: getCurrentDate(),
-  });
-
-  // Start the interval when the store is created
-  const interval = setInterval(() => {
-    set({
-      time: getCurrentTime(),
-      date: getCurrentDate(),
-    });
-  }, 1000);
-
-  // Clean up on app exit
-  window.addEventListener("beforeunload", () => clearInterval(interval));
-
-  return {
-    subscribe,
-  };
+/**
+ * Updates the date store with the current date.
+ */
+function updateDate() {
+  date.set(getCurrentDate());
 }
 
-export const timeStore = createTimeStore();
+setInterval(updateTime, 1000); // Update time every second
+setInterval(updateDate, 60000); // Update date every minute

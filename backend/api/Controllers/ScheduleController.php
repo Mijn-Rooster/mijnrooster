@@ -34,6 +34,11 @@ try {
     $endDate = isset($_GET['end']) && !empty($_GET['end']) ? $_GET['end'] : strtotime('this week sunday 23:59:59');
     $zermeloData = $zermeloApi->getScheduleAppointments($studentId, $startDate, $endDate);
 
+    // Check if there is any response from the Zermelo API
+    if($zermeloData == []) {
+        ErrorHandler::handle("NO_DATA");
+    }
+
     // Check if the Zermelo API returned an error
     if ($zermeloData['status'] !== 200) {
         ErrorHandler::handleZermeloError($zermeloData);
