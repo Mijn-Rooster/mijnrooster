@@ -46,8 +46,8 @@ importers:
         specifier: ^24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3)
       electron-devtools-installer:
-        specifier: ^3.2.0
-        version: 3.2.0
+        specifier: ^4.0.0
+        version: 4.0.0
       electron-vite:
         specifier: ^2.3.0
         version: 2.3.0(vite@5.4.14(@types/node@22.13.2))
@@ -1159,8 +1159,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  electron-devtools-installer@3.2.0:
-    resolution: {integrity: sha512-t3UczsYugm4OAbqvdImMCImIMVdFzJAHgbwHpkl5jmfu1izVgUcP/mnrPqJIpEeCK1uZGpt+yHgWEN+9EwoYhQ==}
+  electron-devtools-installer@4.0.0:
+    resolution: {integrity: sha512-9Tntu/jtfSn0n6N/ZI6IdvRqXpDyLQiDuuIbsBI+dL+1Ef7C8J2JwByw58P3TJiNeuqyV3ZkphpNWuZK5iSY2w==}
 
   electron-log@5.3.0:
     resolution: {integrity: sha512-ILgbh2k9IKbSaN8NAbQriVteEhmkdLo/e4J1dg+JIBTFzXS/kO8zNRZBh/4YPwIT/zeyxF1jP6Xz8GLsPE2IBQ==}
@@ -3771,11 +3771,8 @@ snapshots:
       - electron-builder-squirrel-windows
       - supports-color
 
-  electron-devtools-installer@3.2.0:
+  electron-devtools-installer@4.0.0:
     dependencies:
-      rimraf: 3.0.2
-      semver: 7.6.3
-      tslib: 2.7.0
       unzip-crx-3: 0.2.0
 
   electron-log@5.3.0: {}
