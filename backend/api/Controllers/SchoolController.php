@@ -29,15 +29,20 @@ try {
     // Define the school year automatically based on the current date
     $currentMonth = date('n');
     $currentYear = date('Y');
-    
+
     $currentSchoolYear = ($currentMonth < 8) ? $currentYear - 1 : $currentYear;
-    
+
     // Get schools from Zermelo API
     $zermeloApi = new ZermeloAPI();
     if (isset($schoolInSchoolYearId)) {
         $zermeloData = $zermeloApi->getSchoolInSchoolYear($schoolInSchoolYearId);
     } else {
         $zermeloData = $zermeloApi->getSchoolsInSchoolYear($currentSchoolYear);
+    }
+
+    // Check if there is any response from the Zermelo API
+    if ($zermeloData == []) {
+        ErrorHandler::handle("NO_DATA");
     }
 
     // Check if the Zermelo API returned an error

@@ -30,7 +30,10 @@ dmg:
 linux:
   target:
     - AppImage
-    - deb
+    - target: deb
+      arch: 
+        - armv7l
+        - arm64
   maintainer: electronjs.org
   category: Utility
 appImage:

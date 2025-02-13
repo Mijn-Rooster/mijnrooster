@@ -65,3 +65,5 @@ export function timeConverter(UNIX_timestamp: number) {
   const time = hour + ":" + min;
   return time;
 }
+
+// create a function that give time in string and update every 1 second

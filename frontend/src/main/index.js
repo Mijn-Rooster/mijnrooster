@@ -5,6 +5,7 @@ import icon from "../../resources/icon.png?asset";
 import installExtension from "electron-devtools-installer";
 import { createHash } from "crypto";
 import { autoUpdater } from "electron-updater";
+import isOnline from "@esm2cjs/is-online";
 
 // Enable logging for debugging updates
 import log from "electron-log";
@@ -72,8 +73,8 @@ function setupAutoUpdater(win) {
     dialog
       .showMessageBox(win, {
         type: "info",
-        title: "Update Ready",
-        message: "An update has been downloaded. Restart to install?",
+        title: "Er is een nieuwe update beschikbaar!",
+        message: "Er is een nieuwe versie gedownload? Opnieuw opstarten om te installeren?",
         buttons: ["Restart", "Later"],
       })
       .then((result) => {
@@ -88,6 +89,16 @@ function setupAutoUpdater(win) {
 ipcMain.handle("generate-hash", (event, data) => {
   const hash = createHash("sha256").update(data).digest("hex");
   return hash;
+});
+
+// Connection check (IPC handler)
+ipcMain.handle("check-connection", async () => {
+  try {
+    return await isOnline.default();
+  } catch (error) {
+    console.error("Failed to check connection:", error);
+    return false;
+  }
 });
 
 // This method will be called when Electron has finished

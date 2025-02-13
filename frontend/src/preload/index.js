@@ -6,6 +6,9 @@ const api = {
   generateHash: async (data) => {
     return ipcRenderer.invoke("generate-hash", data);
   },
+  isOnline: async () => {
+    return ipcRenderer.invoke('check-connection');
+  }
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
