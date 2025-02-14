@@ -239,10 +239,13 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
  *  - Network connection cannot be established
  */
 export async function retrieveUserInfo(
-  schoolInSchoolYear: string,
-  leerlingnummer: string
+  leerlingnummer: string,
+  schoolInSchoolYear: string|null = null,
 ): Promise<UserModel | null> {
   try {
+    if (!schoolInSchoolYear) {
+      schoolInSchoolYear = get(core).schoolInYearId?.toString() ?? null;
+    }
     const url = `${serverUrl}/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
     const token = await ensureToken();
 
