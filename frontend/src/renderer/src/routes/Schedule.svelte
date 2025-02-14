@@ -4,6 +4,12 @@
   import { Button, Footer } from "flowbite-svelte";
   import { ArrowLeftToBracketOutline } from "flowbite-svelte-icons";
   import Schedule from "../components/Schedule/Schedule.svelte";
+  import { UserModel } from "../models/user.model";
+  import { route } from "../stores/router.store";
+
+  let user: UserModel = $route.params;
+  console.log(user);
+
 </script>
 
 <MenuBar />

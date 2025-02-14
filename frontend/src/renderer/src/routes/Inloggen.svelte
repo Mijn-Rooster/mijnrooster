@@ -7,7 +7,6 @@
       UserSolid,
       ExclamationCircleOutline,
     } from "flowbite-svelte-icons";
-    import { user } from "../stores/user.store"; // Import the user store
     import { retrieveUserInfo } from "../services/api.service"; // Import the retrieveUserInfo function
   
     let popupModal = false;
@@ -17,19 +16,17 @@
   
     async function handleSubmit(event: SubmitEvent) {
       event.preventDefault();
-  
-      // Save the leerlingnummer in the user store
-      user.update((current) => ({ ...current, leerlingnummer }));
+      
+
   
       try {
         const userInfo = await retrieveUserInfo( schoolInSchoolYear, leerlingnummer );
         if (!userInfo) {
           throw new Error("User info fetch failed");
         }
-        // Store the data for later use
-        user.set(userInfo);
+
         // Navigate to another page after login
-        navigate("/dashboard"); // Change to your desired route
+        navigate("/schedule", {user:userInfo}); // Change to your desired route
       } catch (error) {
         // Show a pop-up screen with the error message
         popupModal = true;
@@ -70,8 +67,7 @@
           <div class="mt-6">
             <Button
               type="submit"
-              class="w-full py-2 text-white bg-primary-500 rounded-md hover:bg-primary-600 focus:outline-none focus:ring"
-              >Bekijk je rooster!</Button
+              class="w-full py-2 text-white bg-primary-500 rounded-md hover:bg-primary-600 focus:outline-none focus:ring">Bekijk je rooster!</Button
             >
           </div>
         </form>

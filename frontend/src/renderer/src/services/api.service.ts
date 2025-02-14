@@ -224,12 +224,14 @@ export async function retrieveUserInfo(
   schoolInSchoolYear: string,
   leerlingnummer: string,
 ): Promise<User | null> {
-  const url = `http://localhost:8000/v1/school/${schoolInSchoolYear}/user/${leerlingnummer}`;
+  const url = `http://localhost:8000/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
+  const token = await ensureToken();
 
   const response = await fetch(url, {
     method: "GET",
     headers: {
       accept: "application/json",
+      Authorization: "Bearer " + token,
     },
   });
 

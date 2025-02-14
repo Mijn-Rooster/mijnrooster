@@ -11,7 +11,7 @@
   import { time, date } from "../stores/time.store";
   import { internetStatus, serverStatus } from "../stores/connection.store";
   import { Modal } from "flowbite-svelte";
-  import { Signal_wifi_4_bar, Signal_wifi_statusbar_connected_no_internet_4, Signal_wifi_0_bar } from 'svelte-google-materialdesign-icons';
+  import { Signal_wifi_4_bar, Signal_wifi_statusbar_connected_no_internet_4, Signal_wifi_0_bar } from "svelte-google-materialdesign-icons";
 
   // Check if Mijn Rooster setup is completed
   if (isSetupComplete() < 2) {
@@ -79,7 +79,7 @@
 >
   <Button
     on:click={() => navigate("/inloggen")}
-    class="bg-primary-700 text-white gap-2 px-2"
+    class="color: bg-primary-700 text-white gap-2 px-2"
     disabled={offline}
   >
     <ArrowLeftToBracketOutline />
