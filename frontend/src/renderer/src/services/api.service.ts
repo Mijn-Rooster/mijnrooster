@@ -227,26 +227,51 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
   }
 }
 
+/**
+ * Retrieves user information from the server for a specific student in a school year.
+ * 
+ * @param schoolInSchoolYear - The school identifier combined with school year
+ * @param leerlingnummer - The student number
+ * @returns A Promise that resolves to a UserModel object if successful, or null if not found
+ * @throws {Object} An error object with message and details if:
+ *  - The server request fails
+ *  - The server returns a non-OK status
+ *  - Network connection cannot be established
+ */
 export async function retrieveUserInfo(
   schoolInSchoolYear: string,
-  leerlingnummer: string,
+  leerlingnummer: string
 ): Promise<UserModel | null> {
-  const url = `http://localhost:8000/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
-  const token = await ensureToken();
+  try {
+    const url = `${serverUrl}/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
+    const token = await ensureToken();
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: "Bearer " + token,
-    },
-  });
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
 
-  if (!response.ok) {
-    console.error("User info fetch failed:", response.status);
-    return null;
+    // Parse response before checking status, so we can access the server's error details
+    const responsedata = await response.json();
+
+    if (!response.ok) {
+      throw {
+        message: "Er is een fout opgetreden bij het ophalen van de user info",
+        details: responsedata.message + ": " + (responsedata.details || null),
+      };
+    }
+
+    return responsedata.data[0];
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw {
+        message: "Kon geen verbinding maken met de server",
+        details: "Controleer of de server bereikbaar is en of het adres correct is",
+      };
+    }
+    throw error;
   }
-
-  const data = await response.json();
-  return data.data[0];
 }

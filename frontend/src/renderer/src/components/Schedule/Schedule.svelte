@@ -6,11 +6,10 @@
   import { Tabs, TabItem } from "flowbite-svelte";
   import type { UserModel } from "../../models/user.model";
   
-  export let user: UserModel | null = null;
-  console.log(user);
+  export let user: UserModel;
 </script>
 
-<ScheduleDayView user={user}/>
+<ScheduleDayView {user}/>
 
 <!--<Tabs tabStyle="full" defaultClass="flex rounded-lg divide-x rtl:divide-x-reverse divide-gray-200 dark:divide-gray-700">
   <TabItem open class="w-full">

@@ -10,7 +10,7 @@
   import type { ErrorModel } from "../../models/error.model";
   import type { UserModel } from "../../models/user.model";
 
-  export let user: UserModel | null = null;
+  export let user: UserModel;
 
   let schedule: ScheduleItemModel[] = [];
 
