@@ -32,7 +32,7 @@ import { SchoolModel } from "../models/school.model";
 import { core } from "../stores/core.store";
 import { getHash } from "./core.service";
 import { get } from "svelte/store";
-import type { User } from "../stores/user.store";
+import type { UserModel } from "../models/user.model";
 
 let serverUrl: string | null = "";
 let token: string | null = "";
@@ -135,6 +135,13 @@ export async function connectionCheck(
       connectPasword = get(core).serverPassword;
     }
 
+    if (!serverUrl) {
+      throw {
+        message: "Geen server URL ingesteld",
+        details: "Controleer of de server URL correct is ingesteld",
+      };
+    }
+
     const url = `${serverUrl}/v1/check`;
     const token = await getHash(connectPasword + "D@v1dRein0utJ0nathan");
 
@@ -223,7 +230,7 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
 export async function retrieveUserInfo(
   schoolInSchoolYear: string,
   leerlingnummer: string,
-): Promise<User | null> {
+): Promise<UserModel | null> {
   const url = `http://localhost:8000/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
   const token = await ensureToken();
 
@@ -241,14 +248,5 @@ export async function retrieveUserInfo(
   }
 
   const data = await response.json();
-  return {
-    fullName: `${data.firstName} ${data.prefix} ${data.lastName}`.trim(),
-    isLoggedIn: true,
-    leerlingnummer: data.code,
-    schoolInSchoolYear: schoolInSchoolYear,
-    firstName: data.firstName,
-    prefix: data.prefix,
-    lastName: data.lastName,
-    code: data.code,
-  };
+  return data.data;
 }

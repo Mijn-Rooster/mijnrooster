@@ -17,8 +17,6 @@
     async function handleSubmit(event: SubmitEvent) {
       event.preventDefault();
       
-
-  
       try {
         const userInfo = await retrieveUserInfo( schoolInSchoolYear, leerlingnummer );
         if (!userInfo) {
@@ -26,7 +24,7 @@
         }
 
         // Navigate to another page after login
-        navigate("/schedule", {user:userInfo}); // Change to your desired route
+        navigate("/schedule", {user: userInfo}); // Change to your desired route
       } catch (error) {
         // Show a pop-up screen with the error message
         popupModal = true;
