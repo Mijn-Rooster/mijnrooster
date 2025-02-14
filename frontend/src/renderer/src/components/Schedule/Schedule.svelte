@@ -9,15 +9,23 @@
   export let user: UserModel;
 </script>
 
-<ScheduleDayView {user}/>
 
-<!--<Tabs tabStyle="full" defaultClass="flex rounded-lg divide-x rtl:divide-x-reverse divide-gray-200 dark:divide-gray-700">
-  <TabItem open class="w-full">
-    <span slot="title">Dag</span>
-    <ScheduleDayView />
+<div >
+<Tabs tabStyle="underline" class="text-center justify-center display:flex">
+  <TabItem open>
+    <div slot="title" class="flex items-center gap-2 text-xl">
+      Dag
+    </div>
+    <ScheduleDayView {user}/>
   </TabItem>
-  <TabItem class="w-full">
-    <span slot="title">Week</span>
-    <ScheduleWeekView />
+  <TabItem>
+    <div slot="title" class="flex items-center gap-2 text-xl">
+      Week
+    </div>
+   <ScheduleWeekView/>
   </TabItem>
-</Tabs>-->
+</Tabs>
+</div>
+
+
+
