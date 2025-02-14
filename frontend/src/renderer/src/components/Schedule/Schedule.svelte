@@ -4,9 +4,13 @@
   import { ButtonGroup, Button } from "flowbite-svelte";
   import { navigate } from "../../stores/router.store";
   import { Tabs, TabItem } from "flowbite-svelte";
+  import type { UserModel } from "../../models/user.model";
+  
+  export let user: UserModel | null = null;
+  console.log(user);
 </script>
 
-<ScheduleDayView />
+<ScheduleDayView user={user}/>
 
 <!--<Tabs tabStyle="full" defaultClass="flex rounded-lg divide-x rtl:divide-x-reverse divide-gray-200 dark:divide-gray-700">
   <TabItem open class="w-full">

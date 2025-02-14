@@ -248,5 +248,5 @@ export async function retrieveUserInfo(
   }
 
   const data = await response.json();
-  return data.data;
+  return data.data[0];
 }
