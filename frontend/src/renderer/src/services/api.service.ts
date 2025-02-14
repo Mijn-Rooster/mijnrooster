@@ -32,6 +32,7 @@ import { SchoolModel } from "../models/school.model";
 import { core } from "../stores/core.store";
 import { getHash } from "./core.service";
 import { get } from "svelte/store";
+import type { UserModel } from "../models/user.model";
 
 let serverUrl: string | null = "";
 let token: string | null = "";
@@ -134,6 +135,13 @@ export async function connectionCheck(
       connectPasword = get(core).serverPassword;
     }
 
+    if (!serverUrl) {
+      throw {
+        message: "Geen server URL ingesteld",
+        details: "Controleer of de server URL correct is ingesteld",
+      };
+    }
+
     const url = `${serverUrl}/v1/check`;
     const token = await getHash(connectPasword + "D@v1dRein0utJ0nathan");
 
@@ -213,6 +221,58 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
         message: "Kon geen verbinding maken met de server",
         details:
           "Controleer of de server bereikbaar is en of het adres correct is",
+      };
+    }
+    throw error;
+  }
+}
+
+/**
+ * Retrieves user information from the server for a specific student in a school year.
+ * 
+ * @param schoolInSchoolYear - The school identifier combined with school year
+ * @param leerlingnummer - The student number
+ * @returns A Promise that resolves to a UserModel object if successful, or null if not found
+ * @throws {Object} An error object with message and details if:
+ *  - The server request fails
+ *  - The server returns a non-OK status
+ *  - Network connection cannot be established
+ */
+export async function retrieveUserInfo(
+  leerlingnummer: string,
+  schoolInSchoolYear: string|null = null,
+): Promise<UserModel | null> {
+  try {
+    if (!schoolInSchoolYear) {
+      schoolInSchoolYear = get(core).schoolInYearId?.toString() ?? null;
+    }
+    const url = `${serverUrl}/v1/schools/${schoolInSchoolYear}/user/${leerlingnummer}`;
+    const token = await ensureToken();
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    // Parse response before checking status, so we can access the server's error details
+    const responsedata = await response.json();
+
+    if (!response.ok) {
+      throw {
+        message: "Er is een fout opgetreden bij het ophalen van de user info",
+        details: responsedata.message + ": " + (responsedata.details || null),
+      };
+    }
+
+    return responsedata.data[0];
+  } catch (error: any) {
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      throw {
+        message: "Kon geen verbinding maken met de server",
+        details: "Controleer of de server bereikbaar is en of het adres correct is",
       };
     }
     throw error;

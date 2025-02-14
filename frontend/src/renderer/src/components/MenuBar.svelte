@@ -2,7 +2,7 @@
   export let timeVisible = true;
   import { internetStatus, serverStatus } from "../stores/connection.store";
   import { time } from "../stores/time.store";
-  import { Signal_wifi_4_bar, Signal_wifi_statusbar_connected_no_internet_4, Signal_wifi_0_bar } from 'svelte-google-materialdesign-icons';
+  import { Signal_wifi_4_bar, Signal_wifi_statusbar_connected_no_internet_4, Signal_wifi_0_bar } from "svelte-google-materialdesign-icons";
 </script>
 
 <div class="grid grid-cols-3 grid-flow justify-between items-center">
