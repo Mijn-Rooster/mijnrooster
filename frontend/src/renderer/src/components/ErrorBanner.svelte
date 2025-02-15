@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { Banner } from "flowbite-svelte";
-  import {
-    CloseCircleOutline,
-    ChevronDownOutline,
-  } from "flowbite-svelte-icons";
+  import { Toast } from "flowbite-svelte";
+  import { CloseCircleSolid, ChevronDownOutline } from "flowbite-svelte-icons";
   import { fade } from "svelte/transition";
   import type { ErrorModel } from "../models/error.model";
 
   export let error: ErrorModel | null = null;
   let showDetails = false;
 
+  let timeout: NodeJS.Timeout;
+
   $: {
     if (error) {
-      setTimeout(() => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
         error = null;
         showDetails = false;
       }, 10000);
@@ -21,15 +21,14 @@
 </script>
 
 {#if error}
-  <div transition:fade>
-    <Banner position="absolute" color="gray">
-      <p class="flex flex-col text-red-800">
-        <span class="flex items-center text-sm font-medium">
-          <span class="inline-flex p-1 me-3 bg-red-100 rounded-full">
-            <CloseCircleOutline class="w-3 h-3 text-red-500" />
-            <span class="sr-only">Error</span>
-          </span>
-          <span>{error.message}</span>
+    <Toast color="red" position="top-right" class="bg-red-50 border border-red-200 rounded-lg shadow-sm" transition={fade}>
+      <svelte:fragment slot="icon">
+        <CloseCircleSolid class="w-5 h-5" />
+        <span class="sr-only">Error icon</span>
+      </svelte:fragment>
+      <div class="ml-3 text-sm font-normal">
+        <div class="flex items-center">
+          {error.message}
           {#if error.details}
             <button
               class="ml-2"
@@ -37,19 +36,16 @@
               type="button"
             >
               <ChevronDownOutline
-                class="w-3 h-3 transition-transform {showDetails
-                  ? 'rotate-180'
-                  : ''}"
+                class="w-3 h-3 transition-transform {showDetails ? 'rotate-180' : ''}"
               />
             </button>
           {/if}
-        </span>
+        </div>
         {#if error.details && showDetails}
-          <span class="ml-8 text-xs mt-1 text-red-600" transition:fade>
+          <p class="mt-1 text-xs text-red-600">
             {error.details}
-          </span>
+          </p>
         {/if}
-      </p>
-    </Banner>
-  </div>
+      </div>
+    </Toast>
 {/if}

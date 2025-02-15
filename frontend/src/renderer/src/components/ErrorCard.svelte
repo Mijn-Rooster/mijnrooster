@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { Alert } from "flowbite-svelte";
   import {
-    CloseCircleOutline,
+    CloseCircleSolid,
     ChevronDownOutline,
   } from "flowbite-svelte-icons";
   import { fade } from "svelte/transition";
@@ -11,36 +12,31 @@
 </script>
 
 {#if error}
-  <div
-    transition:fade
-    class="p-4 bg-red-50 border border-red-200 rounded-lg shadow-sm"
-  >
-    <p class="flex flex-col text-red-800">
-      <span class="flex items-center text-sm font-medium">
-        <span class="inline-flex p-1 me-3 bg-red-100 rounded-full">
-          <CloseCircleOutline class="w-3 h-3 text-red-500 " />
-          <span class="sr-only">Error</span>
-        </span>
-        <span>{error.message}</span>
+  <div transition:fade>
+    <Alert border color="red">
+      <div class="flex items-center justify-between w-full">
+        <div class="flex items-center gap-2 align-center">
+          <CloseCircleSolid slot="icon" class="w-5 h-5" />
+          <span class="font-medium">{error.message}</span>
+        </div>
         {#if error.details}
           <button
-            type="button"
-            class="ml-2"
-            on:click={() => (showDetails = !showDetails)}
+        type="button"
+        on:click={() => (showDetails = !showDetails)}
           >
-            <ChevronDownOutline
-              class="w-3 h-3 transition-transform {showDetails
-                ? 'rotate-180'
-                : ''}"
-            />
+        <ChevronDownOutline
+          class="w-3 h-3 transition-transform {showDetails ? 'rotate-180' : ''}"
+        />
           </button>
         {/if}
-      </span>
-      {#if error.details && showDetails}
-        <span class="ml-8 text-xs mt-1 text-red-600" transition:fade>
+      </div>
+      {#if showDetails && error.details} 
+      <div class="mt-1 ml-7" transition:fade>
+        <p class="text-xs">
           {error.details}
-        </span>
+        </p>
+      </div>
       {/if}
-    </p>
+    </Alert>
   </div>
 {/if}
