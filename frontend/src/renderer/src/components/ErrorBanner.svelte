@@ -23,14 +23,10 @@
 {#if error}
   <div transition:fade>
     <Banner position="absolute" color="gray">
-      <p class="flex flex-col text-red-800 dark:text-red-200">
+      <p class="flex flex-col text-red-800">
         <span class="flex items-center text-sm font-medium">
-          <span
-            class="inline-flex p-1 me-3 bg-red-100 rounded-full dark:bg-red-900"
-          >
-            <CloseCircleOutline
-              class="w-3 h-3 text-red-500 dark:text-red-300"
-            />
+          <span class="inline-flex p-1 me-3 bg-red-100 rounded-full">
+            <CloseCircleOutline class="w-3 h-3 text-red-500" />
             <span class="sr-only">Error</span>
           </span>
           <span>{error.message}</span>
@@ -49,10 +45,7 @@
           {/if}
         </span>
         {#if error.details && showDetails}
-          <span
-            class="ml-8 text-xs mt-1 text-red-600 dark:text-red-300"
-            transition:fade
-          >
+          <span class="ml-8 text-xs mt-1 text-red-600" transition:fade>
             {error.details}
           </span>
         {/if}

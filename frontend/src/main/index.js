@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, shell, BrowserWindow, ipcMain, dialog, Menu } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
@@ -22,6 +22,7 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
+      webSecurity: true,	// Set to false to test with server on leerlingsites.nl
     },
   });
 
@@ -34,7 +35,7 @@ function createWindow() {
     return { action: "deny" };
   });
 
-  // HMR for renderer base on electron-vite cli.
+  // HMR for renderer based on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
@@ -48,7 +49,7 @@ function createWindow() {
 // Handle auto-updates
 function setupAutoUpdater(win) {
   autoUpdater.autoDownload = true;
-  autoUpdater.autoInstallOnAppQuit = true; // Install on quit
+  autoUpdater.autoInstallOnAppQuit = true;
 
   autoUpdater.on("checking-for-update", () => {
     log.info("Checking for updates...");
@@ -70,18 +71,25 @@ function setupAutoUpdater(win) {
 
   autoUpdater.on("update-downloaded", () => {
     log.info("Update downloaded. Prompting user...");
+
     dialog
       .showMessageBox(win, {
         type: "info",
-        title: "Er is een nieuwe update beschikbaar!",
-        message: "Er is een nieuwe versie gedownload? Opnieuw opstarten om te installeren?",
-        buttons: ["Restart", "Later"],
+        title: "Updates beschikbaar",
+        message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
+        detail:
+          "De update is al gedownload en klaar om te installeren. De app zal automatisch herstarten.",
+        buttons: ["Nu installeren", "Later"],
+        icon: icon,
       })
       .then((result) => {
-        if (result.response === 0) autoUpdater.quitAndInstall();
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall();
+        }
       });
   });
 
+  // Perform an initial check for updates
   autoUpdater.checkForUpdatesAndNotify();
 }
 
@@ -101,16 +109,13 @@ ipcMain.handle("check-connection", async () => {
   }
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// This method will be called when Electron has finished initialization.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId("com.electron");
+  electronApp.setAppUserModelId("nl.mijnrooster.client");
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on("browser-window-created", (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
@@ -125,16 +130,85 @@ app.whenReady().then(() => {
   const mainWindow = createWindow();
   setupAutoUpdater(mainWindow);
 
+  // Create an application menu that includes update checks, zoom controls, and developer tools.
+  const menuTemplate = [
+    {
+      label: "Mijn Rooster",
+      submenu: [
+        {
+          label: "Over Mijn Rooster",
+          click: () => {
+            dialog.showMessageBox({
+              type: "info",
+              title: "Over Mijn Rooster",
+              message: "Mijn Rooster",
+              detail: "Mijn Rooster is een roosterapplicatie om op een eenvoudige manier je rooster te bekijken op een kiosk-apparaat op school.\n\nDeze applicatie is gemaakt door David Jongeneel, Reinout Muis en Jonathan van der Pligt en ontwikkeld als PWS project.\n\n(c) 2025 Mijn Rooster. Alle rechten voorbehouden.",
+              buttons: ["OK"],
+              icon: icon,
+            });
+          },
+        },
+        {
+          label: "GitHub",
+          click: () => {
+            shell.openExternal("https://github.com/Mijn-Rooster/mijnrooster");
+          }
+        },
+        { type: "separator" },
+        { 
+          label: "Instellingen",
+          click: () => {
+            mainWindow.webContents.send("open-settings");
+          },
+        },
+        {
+          label: "Controleren op updates",
+          click: () => {
+            log.info("Manual update check initiated.");
+            autoUpdater.checkForUpdates().then(() => {
+              dialog.showMessageBox({
+                type: "info",
+                title: "Updates",
+                message: "Controleren op updates",
+                detail: "Je hebt de laatste versie van Mijn Rooster.",
+                buttons: ["OK"]
+              });
+            });
+          },
+        },
+        { type: "separator" },
+        { role: "quit" },
+      ],
+    },
+    {
+      label: "Weergave",
+      submenu: [
+        { role: "reload" },
+        { role: "forceReload" },
+        {
+          role: "toggleDevTools",
+          label: "Toggle Developer Tools",
+        },
+        { type: "separator" },
+        { role: "resetZoom", label: "Reset Zoom" },
+        { role: "zoomIn", label: "Zoom In" },
+        { role: "zoomOut", label: "Zoom Out" },
+        { type: "separator" },
+        { role: "togglefullscreen", label: "Toggle Fullscreen" },
+      ],
+    },
+  ];
+
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(menu);
+
   app.on("activate", function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
+    // On macOS it's common to re-create a window when the dock icon is clicked.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed, except on macOS.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();

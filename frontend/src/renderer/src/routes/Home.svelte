@@ -67,47 +67,41 @@
 
 <!-- Time and Date -->
 <div class="text-center mt-4">
-  <h1 class="text-4xl font-extrabold w-full text-gray-800 dark:text-gray-200">
+  <h1 class="text-4xl font-extrabold w-full text-gray-800">
     {$time}
   </h1>
-  <h2 class="text-xl font-bold w-full text-gray-600 dark:text-gray-300">
+  <h2 class="text-xl font-bold w-full text-gray-600">
     {$date}
   </h2>
 </div>
 
-<main class="flex-grow flex flex-col justify-center items-center overflow-y-auto">
+<main
+  class="flex-grow flex flex-col justify-center items-center overflow-y-auto"
+>
   <div
     class="my-5 w-full max-w-md p-10 mx-auto bg-white rounded-lg border border-gray-200"
   >
     <div class="flex justify-center mb-4">
       <ProfileCardSolid size="lg" class="w-16 h-16 text-primary-600" />
     </div>
-    <h2
-      class="text-3xl font-semibold text-center text-gray-800 dark:text-white"
-    >
+    <h2 class="text-3xl font-semibold text-center text-gray-800">
       Scan je schoolpas
     </h2>
-    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+    <p class="text-center text-sm text-gray-500 mt-1">
       Houd je schoolpas tegen de kaartlezer
     </p>
   </div>
   <div
     class="my-5 w-full max-w-md p-10 mx-auto bg-white rounded-lg border border-gray-200"
   >
-    <h2
-      class="text-3xl font-semibold text-center text-gray-800 dark:text-white"
-    >
-      Inloggen
-    </h2>
-    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+    <h2 class="text-3xl font-semibold text-center text-gray-800">Inloggen</h2>
+    <p class="text-center text-sm text-gray-500 mt-1">
       Voer je leerlingnummer in om verder te gaan
     </p>
 
     <form class="mt-6" on:submit={handleSubmit}>
       <div>
-        <Label
-          for="leerlingnummer"
-          class="block text-sm text-gray-800 dark:text-gray-200"
+        <Label for="leerlingnummer" class="block text-sm text-gray-800"
           >Leerlingnummer</Label
         >
         <Input
@@ -115,7 +109,7 @@
           id="leerlingnummer"
           bind:value={leerlingnummer}
           placeholder="bijv. 2022036"
-          class="w-full px-4 py-2 mt-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:border-primary-400 focus:outline-none focus:ring dark:text-gray-300"
+          class="w-full px-4 py-2 mt-2 border rounded-lg focus:border-primary-400 focus:outline-none focus:ring"
         >
           <UserSolid slot="left" class="w-4 h-4" />
         </Input>
@@ -146,13 +140,13 @@
 </main>
 
 <Modal title="Buiten gebruik" bind:open={offline} dismissable={false}>
-  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+  <p class="text-base leading-relaxed text-gray-500">
     We konden geen contact opnemen met de server. Controleer uw
     netwerkverbinding.
   </p>
-  <div class="border-t border-gray-200 dark:border-gray-600 my-4"></div>
+  <div class="border-t border-gray-200 my-4"></div>
   <div
-    class="mt-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400 flex space-between justify-around gap-4"
+    class="mt-2 text-xs leading-relaxed text-gray-500 flex space-between justify-around gap-4"
   >
     <div class="grid grid-cols-1 gap-2">
       <p class="flex items-center justify-center gap-2">
