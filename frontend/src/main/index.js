@@ -152,18 +152,20 @@ app.whenReady().then(() => {
           label: "GitHub",
           click: () => {
             shell.openExternal("https://github.com/Mijn-Rooster/mijnrooster");
-          }
-        },
-        { type: "separator" },
-        { 
-          label: "Instellingen",
-          click: () => {
-            mainWindow.webContents.send("open-settings");
+            }
           },
-        },
-        {
-          label: "Controleren op updates",
-          click: () => {
+          { type: "separator" },
+          { 
+            label: "Instellingen",
+            accelerator: "CmdOrCtrl+,",
+            click: () => {
+            mainWindow.webContents.send("open-settings");
+            },
+          },
+          {
+            label: "Controleren op updates",
+            accelerator: "CmdOrCtrl+U",
+            click: () => {
             log.info("Manual update check initiated.");
             autoUpdater.checkForUpdates().then(() => {
               dialog.showMessageBox({

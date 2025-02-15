@@ -8,7 +8,10 @@ const api = {
   },
   isOnline: async () => {
     return ipcRenderer.invoke('check-connection');
-  }
+  },
+  onOpenSettings: (callback) => {
+    ipcRenderer.on("open-settings", callback);
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -5,6 +5,7 @@ declare global {
     api: {
       generateHash: (data: string) => Promise<string>;
       isOnline: () => Promise<boolean>;
+      onOpenSettings: (callback: () => void) => void;
     };
   }
 }

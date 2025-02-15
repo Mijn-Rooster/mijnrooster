@@ -36,13 +36,12 @@
 
     try {
       if (!selectedSchoolData) {
-        throw { message: "Selecteer een school", details: null };
+        throw { message: "Selecteer een school" };
       }
 
       if (adminPassword.length < 4) {
         throw {
           message: "Beheerderscode moet minimaal 4 tekens lang zijn",
-          details: null,
         };
       }
 
