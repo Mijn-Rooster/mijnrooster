@@ -9,6 +9,77 @@
   import ErrorBanner from "../ErrorBanner.svelte";
   import type { ErrorModel } from "../../models/error.model";
   import type { UserModel } from "../../models/user.model";
+  
+  export let user: UserModel;
+
+  let schedule: { [key: string]: ScheduleItemModel[] } = {};
+
+  const userId: string = user?.code || "";
+  let isLoading: boolean = false;
+  let error: ErrorModel | null = null;
+
+  let fetchController: AbortController | null = null;
+
+  async function loadSchedule() {
+    // Abort previous fetch if it exists
+    if (fetchController) {
+      fetchController.abort();
+    }
+    fetchController = new AbortController();
+
+    isLoading = true;
+    schedule = {};
+
+    const startOfWeek = new Date(todayStartUnix * 1000);
+    const dayOfWeek = startOfWeek.getDay();
+    const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+    const monday = new Date(startOfWeek);
+    monday.setDate(startOfWeek.getDate() - diffToMonday);
+    const friday = new Date(monday);
+    friday.setDate(monday.getDate() + 4);
+
+    const startOfWeekUnix = monday.setHours(0, 0, 0, 0) / 1000;
+    const endOfWeekUnix = friday.setHours(23, 59, 59, 0) / 1000;
+
+    try {
+      for (let day = startOfWeekUnix; day <= endOfWeekUnix; day += 86400) {
+        const data = await retrieveSchedule(userId, day, day + 86399, fetchController.signal);
+        const dateKey = new Date(day * 1000).toLocaleDateString("nl-NL", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        schedule[dateKey] = data;
+      }
+      isLoading = false;
+    } catch (err) {
+      // Ignore abort errors
+      if (err instanceof Error && err.name !== "AbortError") {
+        error = { message: err.message, details: err.stack || "" };
+      }
+      isLoading = false;
+    }
+  }
+
+  /**
+   * Lifecycle function that runs when component is mounted.
+   * Initializes the schedule by calling loadSchedule() asynchronously.
+   * @see loadSchedule
+   */
+  onMount(async () => {
+    loadSchedule();
+  });
+
+  let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
+  let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
+  let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
+    "nl-NL",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    },
+  );
 
   let weekStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let weekEndUnix = weekStartUnix + 6 * 86400;
@@ -56,13 +127,6 @@
     loadSchedule();
   }
 
-  function loadSchedule() {
-    // Your existing loadSchedule logic here
-  }
-
-  onMount(async () => {
-    loadSchedule();
-  });
 </script>
 
 <div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
@@ -84,30 +148,24 @@
 
   <!-- Week schedule -->
   <div class="grid grid-cols-5 gap-4">
-    {#each weekDates as date, index}
+    {#each weekDates as date}
       <div>
         <h3 class="text-lg font-bold text-center">{date}</h3>
-        <!-- Example schedule items for each day -->
-        <div class="bg-secondary-700 rounded-lg h-20 flex items-center justify-between p-6 mb-3">
-          <span class="text-white px-4 py-2 w-fit rounded-3xl bg-primary-700">
-            u1
-          </span>
-          <div class="flex flex-col items-center">
-            <b>Bv</b>
-            <p>Bv2 - pro</p>
-          </div>
-        </div>
-        <div class="bg-secondary-700 rounded-lg h-20 flex items-center justify-between p-6 mb-3">
-          <span class="text-white px-4 py-2 w-fit rounded-3xl bg-primary-700">
-            u2
-          </span>
-          <div class="flex flex-col items-center">
-            <b>Bv</b>
-            <p>Bv2 - pro</p>
-          </div>
-        </div>
-        <!-- Add more schedule items as needed -->
+        {#if isLoading}
+          <div class="text-center"><Spinner /></div>
+        {:else if schedule[date] && schedule[date].length === 0}
+          <p class="text-center">Geen lessen gevonden</p>
+        {:else if schedule[date]}
+          {#each schedule[date] as item}
+            <ScheduleItem {item} />
+          {/each}
+        {/if}
       </div>
     {/each}
   </div>
+
+  <!-- Error message -->
+  {#if error}
+    <ErrorBanner {error} />
+  {/if}
 </div>
