@@ -31,7 +31,7 @@
   function getWeekDates(startUnix: number): string[] {
     const dates = [];
     const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];
-    for (let i = 2; i <= 6; i++) { // Loop from 1 (Monday) to 5 (Friday)
+    for (let i = 0; i <= 4; i++) { // Loop from 1 (Monday) to 5 (Friday)
       const date = new Date((startUnix + i * 86400) * 1000);
       const day = days[date.getDay()];
       const dayOfMonth = date.getDate();
