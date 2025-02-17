@@ -42,15 +42,18 @@
     const endOfWeekUnix = friday.setHours(23, 59, 59, 0) / 1000;
 
     try {
-      for (let day = startOfWeekUnix; day <= endOfWeekUnix; day += 86400) {
-        const data = await retrieveSchedule(userId, day, day + 86399, fetchController.signal);
-        const dateKey = new Date(day * 1000).toLocaleDateString("nl-NL", {
-          day: "numeric",
-          month: "long",
+      const data = await retrieveSchedule(userId, startOfWeekUnix, endOfWeekUnix, fetchController.signal);
+      data.forEach((item: ScheduleItemModel) => {
+        const dateKey = new Date(item.startTime * 1000).toLocaleDateString("nl-NL", {
           year: "numeric",
-        });
-        schedule[dateKey] = data;
-      }
+          month: "2-digit",
+          day: "2-digit",
+        }).replace(/-/g, '');
+        if (!schedule[dateKey]) {
+          schedule[dateKey] = [];
+        }
+        schedule[dateKey].push(item);
+      });
       isLoading = false;
     } catch (err) {
       // Ignore abort errors
@@ -127,6 +130,14 @@
     loadSchedule();
   }
 
+  function formatDateKey(dateKey: string): string {
+    const date = new Date(dateKey.slice(0, 4) + '-' + dateKey.slice(4, 6) + '-' + dateKey.slice(6, 8));
+    const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];
+    const day = days[date.getDay()];
+    const dayOfMonth = date.getDate();
+    return `${day} ${dayOfMonth}`;
+  }
+
 </script>
 
 <div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
@@ -148,15 +159,15 @@
 
   <!-- Week schedule -->
   <div class="grid grid-cols-5 gap-4">
-    {#each weekDates as date}
+    {#each Object.keys(schedule) as dateKey}
       <div>
-        <h3 class="text-lg font-bold text-center">{date}</h3>
+        <h3 class="text-lg font-bold text-center">{formatDateKey(dateKey)}</h3>
         {#if isLoading}
           <div class="text-center"><Spinner /></div>
-        {:else if schedule[date] && schedule[date].length === 0}
+        {:else if schedule[dateKey] && schedule[dateKey].length === 0}
           <p class="text-center">Geen lessen gevonden</p>
-        {:else if schedule[date]}
-          {#each schedule[date] as item}
+        {:else if schedule[dateKey]}
+          {#each schedule[dateKey] as item}
             <ScheduleItem {item} />
           {/each}
         {/if}

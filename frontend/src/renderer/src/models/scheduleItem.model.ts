@@ -24,6 +24,7 @@
  * @property {string} changes.changeDescription - The description of the changes made to the schedule item.
  */
 export interface ScheduleItemModel {
+  startTime: number;
   appointmentInstanceId: number;
   id: number;
   start: number;
