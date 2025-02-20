@@ -1,46 +1,43 @@
 <script lang="ts">
+  import { Alert } from "flowbite-svelte";
   import {
-    CloseCircleOutline,
+    CloseCircleSolid,
     ChevronDownOutline,
   } from "flowbite-svelte-icons";
   import { fade } from "svelte/transition";
   import type { ErrorModel } from "../models/error.model";
 
   export let error: ErrorModel | null = null;
+  export let size: "sm" | "md" = "md";
   let showDetails = false;
 </script>
 
 {#if error}
-  <div
-    transition:fade
-    class="p-4 bg-red-50 border border-red-200 rounded-lg shadow-sm"
-  >
-    <p class="flex flex-col text-red-800">
-      <span class="flex items-center text-sm font-medium">
-        <span class="inline-flex p-1 me-3 bg-red-100 rounded-full">
-          <CloseCircleOutline class="w-3 h-3 text-red-500 " />
-          <span class="sr-only">Error</span>
-        </span>
-        <span>{error.message}</span>
+  <div transition:fade>
+    <Alert border color="red" class={size === 'sm' ? 'p-2' : ''}>
+      <div class="flex items-center justify-between w-full">
+        <div class="flex items-center gap-2 align-center">
+          <CloseCircleSolid slot="icon" class="{size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'}" />
+          <span class="font-medium">{error.message}</span>
+        </div>
         {#if error.details}
           <button
             type="button"
-            class="ml-2"
             on:click={() => (showDetails = !showDetails)}
           >
             <ChevronDownOutline
-              class="w-3 h-3 transition-transform {showDetails
-                ? 'rotate-180'
-                : ''}"
+              class="transition-transform {size === 'sm' ? 'w-2 h-2' : 'w-3 h-3'} {showDetails ? 'rotate-180' : ''}"
             />
           </button>
         {/if}
-      </span>
-      {#if error.details && showDetails}
-        <span class="ml-8 text-xs mt-1 text-red-600" transition:fade>
-          {error.details}
-        </span>
+      </div>
+      {#if showDetails && error.details}
+        <div class="mt-1 {size === 'sm' ? 'ml-6' : 'ml-7'}" transition:fade>
+          <p class="text-xs">
+            {error.details}
+          </p>
+        </div>
       {/if}
-    </p>
+    </Alert>
   </div>
 {/if}

@@ -200,4 +200,26 @@ class ZermeloAPI {
 
         return json_decode($response, true)['response'];
     }
+
+    public function getSchoolsAssignedToToken() {
+        $params = http_build_query([
+            'fields' => 'employeeSchoolInSchoolYears'
+        ]);
+
+        $ch = curl_init(ZERMELO_PORTAL_URL . '/api/v3/users/~me?' . $params);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . ZERMELO_API_TOKEN
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        if (empty($response)) {
+            return [];
+        }
+
+        return json_decode($response, true)['response'];
+    }
 }

@@ -8,7 +8,19 @@ const api = {
   },
   isOnline: async () => {
     return ipcRenderer.invoke('check-connection');
-  }
+  },
+  onOpenSettings: (callback) => {
+    ipcRenderer.on("open-settings", callback);
+  },
+  appInfo: async () => {
+    return {
+      appVersion: await ipcRenderer.invoke('get-app-version'),
+      electronVersion: process.versions.electron,
+      nodeVersion: process.versions.node,
+      chromeVersion: process.versions.chrome,
+      v8Version: process.versions.v8,
+    };
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

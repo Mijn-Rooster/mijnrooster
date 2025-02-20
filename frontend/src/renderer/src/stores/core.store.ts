@@ -16,9 +16,23 @@ interface CoreStore {
   schoolInYearId: number | null;
   schoolId: number | null;
   adminPassword: string;
+  weekView: boolean;
+  numPadControl: boolean;
 }
 
+const DEFAULT: CoreStore = {
+  serverUrl: null,
+  serverConnected: false,
+  serverPassword: null,
+  schoolInYearId: null,
+  schoolId: null,
+  adminPassword: "1234",
+  weekView: false,
+  numPadControl: false,
+};
+
 const storedCore = localStorage.getItem("core");
+
 /**
  * Represents the core configuration state for the application.
  *
@@ -37,12 +51,7 @@ export const core = writable<CoreStore>(
   storedCore
     ? JSON.parse(storedCore)
     : {
-        serverUrl: null,
-        serverConnected: false,
-        serverPassword: null,
-        schoolInYearId: null,
-        schoolId: null,
-        adminPassword: "1234",
+        ...DEFAULT
       },
 );
 
@@ -69,4 +78,16 @@ export function isSetupComplete(): number {
   } else {
     return 2;
   }
+}
+
+/**
+ * Resets the core store to its default state by removing the "core" item from localStorage
+ * and setting the core store to its default values.
+ * @returns void
+ */
+export function resetCoreStore(): void {
+  localStorage.removeItem("core");
+  core.set({
+    ...DEFAULT
+  });
 }

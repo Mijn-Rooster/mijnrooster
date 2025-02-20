@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     ProfileCardSolid,
-    ArrowLeftToBracketOutline,
     UserSolid,
   } from "flowbite-svelte-icons";
   import { isSetupComplete } from "../stores/core.store";

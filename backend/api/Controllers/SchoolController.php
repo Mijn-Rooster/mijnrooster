@@ -37,7 +37,7 @@ try {
     if (isset($schoolInSchoolYearId)) {
         $zermeloData = $zermeloApi->getSchoolInSchoolYear($schoolInSchoolYearId);
     } else {
-        $zermeloData = $zermeloApi->getSchoolsInSchoolYear($currentSchoolYear);
+        $zermeloData = $zermeloApi->getSchoolsAssignedToToken();
     }
 
     // Check if there is any response from the Zermelo API
@@ -53,6 +53,17 @@ try {
     // Check if the Zermelo API returned no data
     if (count($zermeloData['data']) === 0) {
         ErrorHandler::handle("SCHOOL_NOT_FOUND");
+    }
+
+    if (isset($zermeloData['data'][0]['employeeSchoolInSchoolYears'])) {
+        $schoolsAssignedToToken = $zermeloData['data'][0]['employeeSchoolInSchoolYears'];
+        $zermeloData = [];
+        foreach ($schoolsAssignedToToken as $schoolAssignedToToken) {
+            $request = $zermeloApi->getSchoolInSchoolYear($schoolAssignedToToken);
+            if ($request['status'] === 200) {
+                $zermeloData['data'][] = $request['data'][0];
+            }
+        }
     }
 
     // Create new school

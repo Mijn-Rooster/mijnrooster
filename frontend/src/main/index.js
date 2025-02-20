@@ -109,6 +109,11 @@ ipcMain.handle("check-connection", async () => {
   }
 });
 
+// Get app version (IPC handler)
+ipcMain.handle("get-app-version", () => {
+  return app.getVersion();
+});
+
 // This method will be called when Electron has finished initialization.
 app.whenReady().then(() => {
   // Set app user model id for windows
@@ -152,18 +157,20 @@ app.whenReady().then(() => {
           label: "GitHub",
           click: () => {
             shell.openExternal("https://github.com/Mijn-Rooster/mijnrooster");
-          }
-        },
-        { type: "separator" },
-        { 
-          label: "Instellingen",
-          click: () => {
-            mainWindow.webContents.send("open-settings");
+            }
           },
-        },
-        {
-          label: "Controleren op updates",
-          click: () => {
+          { type: "separator" },
+          { 
+            label: "Instellingen",
+            accelerator: "CmdOrCtrl+,",
+            click: () => {
+            mainWindow.webContents.send("open-settings");
+            },
+          },
+          {
+            label: "Controleren op updates",
+            accelerator: "CmdOrCtrl+U",
+            click: () => {
             log.info("Manual update check initiated.");
             autoUpdater.checkForUpdates().then(() => {
               dialog.showMessageBox({
