@@ -17,6 +17,8 @@
  */
 
 import { connectionCheck } from "./api.service";
+import { core } from "../stores/core.store";
+import { get } from "svelte/store";
 
 /**
  * Computes a cryptographic hash for the supplied data string.
@@ -50,4 +52,22 @@ export async function isConnectedToServer(): Promise<boolean> {
   } catch (error) {
     return false;
   }
+}
+
+/**
+ * Checks if the provided password matches the stored admin password hash.
+ * 
+ * @param password - The password to validate against the stored admin password
+ * @returns A promise that resolves to true if the password matches, false otherwise
+ * @example
+ * ```ts
+ * const isValid = await checkAdminPassword("myPassword123");
+ * if (isValid) {
+ *   // Password matches
+ * }
+ * ```
+ */
+export async function checkAdminPassword(password: string): Promise<boolean> {
+  const hashedPassword = await getHash(password);
+  return hashedPassword === get(core).adminPassword;
 }

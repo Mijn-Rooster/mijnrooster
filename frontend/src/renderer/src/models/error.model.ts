@@ -6,5 +6,5 @@
  */
 export interface ErrorModel {
   message: string;
-  details: string | null;
+  details?: string | null;
 }

@@ -23,6 +23,7 @@ try {
 
     // Create response
     $response = new Response([
+        'tenant' => TENANT_NAME,
         'version' => API_VERSION,
     ], 200, "Device is connected to the API");
     $response->send();

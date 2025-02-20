@@ -7,14 +7,32 @@ import { isConnectedToInternet, isConnectedToServer } from "../services/core.ser
 export const internetStatus = writable(true);
 export const serverStatus = writable(true);
 
+internetStatus.subscribe(value => {
+  console.log("Internet status changed to", value);
+});
+serverStatus.subscribe(value => {
+  console.log("Server status changed to", value);
+});
+
 /**
- * Updates the connection status stores with the current connection status.
+ * Updates the internet connection status.
  */
-async function updateConnectionStatus() {
+async function updateInternetStatus() {
   internetStatus.set(await isConnectedToInternet());
+}
+
+/**
+ * Updates the server connection status.
+ */
+async function updateServerStatus() {
   serverStatus.set(await isConnectedToServer());
 }
 
-// Update connection status every 10 seconds
-setInterval(updateConnectionStatus, 10000);
-updateConnectionStatus(); // Initial call to set the status immediately
+// Update internet status every 10 seconds
+setInterval(updateInternetStatus, 10000);
+// Update server status every 30 seconds
+setInterval(updateServerStatus, 30000);
+
+// Initial calls to set the status immediately
+updateInternetStatus();
+updateServerStatus();
