@@ -80,7 +80,7 @@
     } catch (err) {
       error = err as ErrorModel;
     } finally {
-      isLoading = false;
+      isSaving = false;
     }
   }
 

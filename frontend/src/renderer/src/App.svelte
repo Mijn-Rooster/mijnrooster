@@ -63,7 +63,7 @@
     </div>
 
     {#if error}
-      <ErrorCard {error} />
+      <ErrorCard {error} size="sm" />
     {/if}
 
     <Button type="submit" class="w-full">Bevestigen</Button>
