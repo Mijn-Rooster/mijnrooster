@@ -1,12 +1,12 @@
 <script lang="ts">
   import Router from "./components/Router.svelte";
   import { onMount } from "svelte";
-  import { core } from "./stores/core.store";
   import { Modal, Button, Input, Label } from "flowbite-svelte";
   import type { ErrorModel } from "./models/error.model";
   import ErrorCard from "./components/ErrorCard.svelte";
   import SettingsMenu from "./components/SettingsMenu.svelte";
   import { checkAdminPassword } from "./services/core.service";
+  import { isSetupComplete } from "./stores/core.store";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
@@ -15,9 +15,11 @@
 
   onMount(() => {
     window.api.onOpenSettings(() => {
-      showPasswordModal = true;
-      error = null;
-      password = "";
+      if (isSetupComplete()) {
+        showPasswordModal = true;
+        error = null;
+        password = "";
+      }
     });
   });
 

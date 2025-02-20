@@ -53,7 +53,7 @@
       <Input
         type="url"
         bind:value={serverUrl}
-        placeholder="https://localhost:8000"
+        placeholder="Bijv. http://localhost:8000"
         required
       />
     </Label>
@@ -62,7 +62,7 @@
       <Input
         type="password"
         bind:value={serverPassword}
-        placeholder="Welkom01!"
+        placeholder="Bijv. Welkom123"
         required
       />
     </Label>

@@ -80,11 +80,14 @@ export function isSetupComplete(): number {
   }
 }
 
-// Reset the core store to its default values
+/**
+ * Resets the core store to its default state by removing the "core" item from localStorage
+ * and setting the core store to its default values.
+ * @returns void
+ */
 export function resetCoreStore(): void {
   localStorage.removeItem("core");
   core.set({
     ...DEFAULT
   });
-  location.reload();
 }

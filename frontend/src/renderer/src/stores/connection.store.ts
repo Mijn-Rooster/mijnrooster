@@ -7,6 +7,13 @@ import { isConnectedToInternet, isConnectedToServer } from "../services/core.ser
 export const internetStatus = writable(true);
 export const serverStatus = writable(true);
 
+internetStatus.subscribe(value => {
+  console.log("Internet status changed to", value);
+});
+serverStatus.subscribe(value => {
+  console.log("Server status changed to", value);
+});
+
 /**
  * Updates the internet connection status.
  */
