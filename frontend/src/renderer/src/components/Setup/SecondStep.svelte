@@ -8,6 +8,7 @@
   import type { ErrorModel } from "../../models/error.model";
   import ErrorCard from "../ErrorCard.svelte";
   import { onMount } from "svelte";
+  import { getHash } from "../../services/core.service";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -46,11 +47,12 @@
       }
 
       // Update the core store with the selected school and admin password
+      const hashedPassword = await getHash(adminPassword);
       core.update((state) => ({
         ...state,
         schoolId: selectedSchoolData.schoolId,
         schoolInYearId: selectedSchoolData.schoolInSchoolYearId,
-        adminPassword,
+        adminPassword: hashedPassword,
       }));
 
       // Navigate to the main application if validation passes

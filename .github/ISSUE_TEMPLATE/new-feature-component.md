@@ -15,11 +15,13 @@ A detailed description of the new feature or component, including its purpose an
 
 **User Stories**
 List the user stories that this feature/component addresses:
+
 - As a [user], I want [functionality] so that [benefit].
 - As a [user], I need [functionality] to [benefit].
 
 **Acceptance Criteria**
 Define the acceptance criteria for this feature/component:
+
 - [ ] Criteria 1
 - [ ] Criteria 2
 - [ ] Criteria 3
@@ -32,6 +34,7 @@ Include any designs, wireframes, or mockups related to this feature/component.
 
 **Implementation Steps**
 Outline the steps required to implement this feature/component:
+
 1. Step one
 2. Step two
 3. Step three

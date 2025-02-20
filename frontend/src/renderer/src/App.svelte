@@ -6,6 +6,7 @@
   import type { ErrorModel } from "./models/error.model";
   import ErrorCard from "./components/ErrorCard.svelte";
   import SettingsMenu from "./components/SettingsMenu.svelte";
+  import { checkAdminPassword } from "./services/core.service";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
@@ -20,8 +21,8 @@
     });
   });
 
-  function handlePasswordSubmit() {
-    if (password === $core.adminPassword) {
+  async function handlePasswordSubmit() {
+    if (await checkAdminPassword(password)) {
       showPasswordModal = false;
       showSettingsModal = true;
       error = null;
@@ -68,11 +69,8 @@
 </Modal>
 
 <!-- Settings Modal -->
-<Modal bind:open={showSettingsModal} size="lg" title="Instellingen" autoclose>
+<Modal bind:open={showSettingsModal} size="lg" title="Instellingen">
   <div class="p-4">
-    <SettingsMenu close={() => {
-      showSettingsModal = false;
-      // Optionally reload data or update UI after settings change
-    }} />
+    <SettingsMenu />
   </div>
 </Modal>
