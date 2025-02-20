@@ -12,6 +12,15 @@ const api = {
   onOpenSettings: (callback) => {
     ipcRenderer.on("open-settings", callback);
   },
+  appInfo: () => {
+    return {
+      appVersion: process.env.npm_package_version, // or use ipcRenderer.invoke if needed
+      electronVersion: process.versions.electron,
+      nodeVersion: process.versions.node,
+      chromeVersion: process.versions.chrome,
+      v8Version: process.versions.v8,
+    };
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

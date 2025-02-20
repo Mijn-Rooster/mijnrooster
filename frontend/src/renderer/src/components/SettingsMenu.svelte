@@ -7,6 +7,7 @@
   import ErrorCard from "./ErrorCard.svelte";
   import { onMount } from "svelte";
   import { getHash } from "../services/core.service";
+  import type { AppInfoModel } from "../models/appInfo.model";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -18,9 +19,13 @@
   let isSaved = false;
   let error: ErrorModel | null = null;
   let showResetModal = false;
+  let appInfo: AppInfoModel;
 
-  // Load initial values from store
   onMount(async () => {
+    appInfo = window.api.appInfo();
+    console.log(appInfo);
+
+    // Retrieve the school list
     try {
       schools = await retrieveSchoolList();
       // Double check the selectedSchool is available in the retrieved schools
@@ -37,6 +42,7 @@
       isLoading = false;
     }
 
+    // Load core store values
     const coreValues = $core;
     selectedSchool = coreValues.schoolId;
     weekView = coreValues.weekView;
@@ -136,6 +142,29 @@
       <Toggle bind:checked={numPadControl} />
       <span>Gebruik NumPad besturing</span>
     </Label>
+  </div>
+
+  <!-- App versions -->
+  <div class="border-t border-gray-200 pt-4">
+    <h3 class="text-lg font-semibold text-gray-900">App Informatie</h3>
+    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600 mt-2">
+      <div class="flex justify-between">
+        <span class="font-medium">App Versie:</span>
+        <span>{appInfo?.appVersion || "Onbekend"}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-medium">Electron:</span>
+        <span>{appInfo?.electronVersion || "Onbekend"}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-medium">Node.js:</span>
+        <span>{appInfo?.nodeVersion || "Onbekend"}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-medium">Chrome:</span>
+        <span>{appInfo?.chromeVersion || "Onbekend"}</span>
+      </div>
+    </div>
   </div>
 
   <div class="flex justify-between items-center">
