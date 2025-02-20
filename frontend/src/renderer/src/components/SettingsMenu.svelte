@@ -23,7 +23,6 @@
 
   onMount(async () => {
     appInfo = window.api.appInfo();
-    console.log(appInfo);
 
     // Retrieve the school list
     try {
