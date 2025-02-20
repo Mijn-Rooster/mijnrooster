@@ -22,7 +22,7 @@
   let appInfo: AppInfoModel;
 
   onMount(async () => {
-    appInfo = window.api.appInfo();
+    appInfo = await window.api.appInfo();
 
     // Retrieve the school list
     try {

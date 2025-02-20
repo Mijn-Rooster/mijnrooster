@@ -12,9 +12,9 @@ const api = {
   onOpenSettings: (callback) => {
     ipcRenderer.on("open-settings", callback);
   },
-  appInfo: () => {
+  appInfo: async () => {
     return {
-      appVersion: process.env.npm_package_version, // or use ipcRenderer.invoke if needed
+      appVersion: await ipcRenderer.invoke('get-app-version'),
       electronVersion: process.versions.electron,
       nodeVersion: process.versions.node,
       chromeVersion: process.versions.chrome,

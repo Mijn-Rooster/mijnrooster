@@ -109,6 +109,11 @@ ipcMain.handle("check-connection", async () => {
   }
 });
 
+// Get app version (IPC handler)
+ipcMain.handle("get-app-version", () => {
+  return app.getVersion();
+});
+
 // This method will be called when Electron has finished initialization.
 app.whenReady().then(() => {
   // Set app user model id for windows
