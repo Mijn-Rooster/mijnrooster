@@ -20,7 +20,7 @@
     <div slot="title" class="flex items-center gap-2 text-xl">
       Week
     </div>
-   <ScheduleWeekView/>
+   <ScheduleWeekView {user}/>
   </TabItem>
 </Tabs>
 </div>
