@@ -21,6 +21,12 @@ const api = {
       v8Version: process.versions.v8,
     };
   },
+  getAutoLaunchStatus: async () => {
+    return ipcRenderer.invoke('get-auto-launch-status');
+  },
+  setAutoLaunch: async (value) => {
+    return ipcRenderer.invoke('set-auto-launch', value);
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

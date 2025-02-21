@@ -6,12 +6,24 @@ import installExtension from "electron-devtools-installer";
 import { createHash } from "crypto";
 import { autoUpdater } from "electron-updater";
 import isOnline from "@esm2cjs/is-online";
+import AutoLaunch from 'auto-launch';
 
-// Enable logging for debugging updates
-import log from "electron-log";
-log.transports.file.level = "info";
-autoUpdater.logger = log;
-
+/**
+ * Creates and configures the main application window.
+ * 
+ * @function createWindow
+ * @returns {BrowserWindow} The configured Electron browser window instance
+ * 
+ * @description
+ * Creates a fullscreen browser window with the following features:
+ * - Hidden until ready to show
+ * - Auto-hidden menu bar
+ * - Linux-specific icon handling
+ * - Preloaded scripts with sandbox disabled and web security enabled
+ * - External links handled by the system's default browser
+ * - Development mode uses ELECTRON_RENDERER_URL
+ * - Production mode loads local HTML file
+ */
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -46,7 +58,20 @@ function createWindow() {
   return mainWindow;
 }
 
-// Handle auto-updates
+/**
+ * Sets up the auto-updater functionality for the application
+ * @param {Electron.BrowserWindow} win - The main browser window instance
+ * @description
+ * Configures the electron auto-updater with the following functionality:
+ * - Enables automatic download of updates
+ * - Enables automatic installation on app quit
+ * - Logs update checks and status
+ * - Notifies the renderer process when updates are available
+ * - Shows error dialogs when update fails
+ * - Prompts user to install downloaded updates
+ * - Performs initial update check on setup
+ * @throws {Error} When auto-updater encounters an error during update process
+ */
 function setupAutoUpdater(win) {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
@@ -219,5 +244,31 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
+  }
+});
+
+// Auto-launch configuration with platform-specific paths
+const autoLauncher = new AutoLaunch({
+  name: 'Mijn Rooster',
+  path: process.platform === 'linux' 
+    ? process.execPath  // Use process.execPath for Linux
+    : app.getPath('exe'),  // Use app.getPath for Windows/macOS
+});
+
+ipcMain.handle('get-auto-launch-status', async () => {
+  return await autoLauncher.isEnabled();
+});
+
+ipcMain.handle('set-auto-launch', async (_, enabled) => {
+  try {
+    if (enabled) {
+      await autoLauncher.enable();
+    } else {
+      await autoLauncher.disable();
+    }
+    return true;
+  } catch (error) {
+    console.error('Failed to set auto-launch:', error);
+    return false;
   }
 });
