@@ -8,6 +8,9 @@ import { writable, get } from "svelte/store";
  * @property serverPassword - The server password used for authentication, or null if not provided.
  * @property schoolInYearId - The identifier for the current school year, or null if not specified.
  * @property adminPassword - The administration password for elevated operations.
+ * @property weekView - A flag indicating whether the application should display the week view.
+ * @property numPadControl - A flag indicating whether the application should use the numpad for input.
+ * @property logoutTimeOut - The time in minutes before the application automatically logs out from the schedule view.
  */
 interface CoreStore {
   serverUrl: string | null;
@@ -18,6 +21,8 @@ interface CoreStore {
   adminPassword: string;
   weekView: boolean;
   numPadControl: boolean;
+  autoLogout:  boolean;
+  logoutTimeOut: number;
 }
 
 const DEFAULT: CoreStore = {
@@ -29,6 +34,8 @@ const DEFAULT: CoreStore = {
   adminPassword: "1234",
   weekView: false,
   numPadControl: false,
+  autoLogout: false,
+  logoutTimeOut: 20
 };
 
 const storedCore = localStorage.getItem("core");
@@ -37,22 +44,17 @@ const storedCore = localStorage.getItem("core");
  * Represents the core configuration state for the application.
  *
  * This writable store is initialized with the stored core values (if available) using JSON parsing.
- * If no stored state is found, it defaults to the following values:
- *
- * - serverUrl: The URL of the server (default is null).
- * - serverConnected: A flag indicating whether the application is connected to the server (default is false).
- * - serverPassword: The server password (default is null).
- * - schoolInYearId: The identifier for the current school year (default is null).
- * - adminPassword: The administrative password (default is "1234").
- *
  * This store is used to manage the core settings across the application's lifecycle.
  */
 export const core = writable<CoreStore>(
   storedCore
-    ? JSON.parse(storedCore)
+    ? {
+        ...DEFAULT,                 // First spread defaults
+        ...JSON.parse(storedCore)  // Then overlay stored values
+      }
     : {
         ...DEFAULT
-      },
+      }
 );
 
 core.subscribe((value) => {
