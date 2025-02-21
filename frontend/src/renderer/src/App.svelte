@@ -37,13 +37,25 @@
   }
 </script>
 
+<style>
+  /* Remove focus outline */
+:global(svg:focus) {
+    outline: none !important;
+  }
+  
+  /* Remove focus outline on buttons */
+  :global(button:focus) {
+    outline: none !important;
+  }
+</style>
+
 <Router />
 
 <!-- Password Check Modal -->
 <Modal
   bind:open={showPasswordModal}
   size="md"
-  title="Beheerderswachtwoord"
+  title="Instellingen"
   outsideclose
 >
   <form

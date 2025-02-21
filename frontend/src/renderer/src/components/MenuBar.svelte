@@ -37,7 +37,7 @@
         />
       {/if}
     {:else}
-      <Signal_wifi_0_bar class="w-6 h-6 text-primary-700" />
+      <Signal_wifi_0_bar class="w-6 h-6 text-primary-700 pointer-events-none" />
     {/if}
   </div>
 </div>
