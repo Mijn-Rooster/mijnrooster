@@ -1,9 +1,6 @@
 <script lang="ts">
   import { Alert } from "flowbite-svelte";
-  import {
-    CloseCircleSolid,
-    ChevronDownOutline,
-  } from "flowbite-svelte-icons";
+  import { CloseCircleSolid, ChevronDownOutline } from "flowbite-svelte-icons";
   import { fade } from "svelte/transition";
   import type { ErrorModel } from "../models/error.model";
 
@@ -14,19 +11,21 @@
 
 {#if error}
   <div transition:fade>
-    <Alert border color="red" class={size === 'sm' ? 'p-2' : ''}>
+    <Alert border color="red" class={size === "sm" ? "p-2" : ""}>
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center gap-2 align-center">
-          <CloseCircleSolid slot="icon" class="{size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'}" />
+          <CloseCircleSolid
+            slot="icon"
+            class={size === "sm" ? "w-4 h-4" : "w-5 h-5"}
+          />
           <span class="font-medium">{error.message}</span>
         </div>
         {#if error.details}
-          <button
-            type="button"
-            on:click={() => (showDetails = !showDetails)}
-          >
+          <button type="button" on:click={() => (showDetails = !showDetails)}>
             <ChevronDownOutline
-              class="transition-transform {size === 'sm' ? 'w-2 h-2' : 'w-3 h-3'} {showDetails ? 'rotate-180' : ''}"
+              class="transition-transform {size === 'sm'
+                ? 'w-2 h-2'
+                : 'w-3 h-3'} {showDetails ? 'rotate-180' : ''}"
             />
           </button>
         {/if}

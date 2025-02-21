@@ -39,7 +39,7 @@
 
   /**
    * Initializes the settings menu component on mount.
-   * 
+   *
    * This function:
    * 1. Retrieves app information from the API
    * 2. Fetches the list of available schools
@@ -52,7 +52,7 @@
    *    - Server URL
    *    - Auto logout settings
    * 6. Checks auto-launch status
-   * 
+   *
    * @throws {ErrorModel} When school list retrieval fails
    */
   onMount(async () => {
@@ -74,13 +74,15 @@
       }
     } catch (err) {
       if ($core.schoolId && $core.schoolInYearId) {
-        schools = [{
-          schoolId: $core.schoolId,
-          schoolInSchoolYearId: $core.schoolInYearId,
-          schoolYear: 0,
-          schoolName: "Onbekende school (id " + $core.schoolId +  ")",
-          projectName: "project " + $core.schoolInYearId,
-        }];
+        schools = [
+          {
+            schoolId: $core.schoolId,
+            schoolInSchoolYearId: $core.schoolInYearId,
+            schoolYear: 0,
+            schoolName: "Onbekende school (id " + $core.schoolId + ")",
+            projectName: "project " + $core.schoolInYearId,
+          },
+        ];
       }
       error = err as ErrorModel;
     } finally {
@@ -100,19 +102,19 @@
 
   /**
    * Saves the user settings to the core state.
-   * 
+   *
    * This async function handles saving various settings including:
    * - School selection
    * - Admin password (hashed)
    * - Week view preference
    * - Numpad control settings
    * - Auto logout settings and timeout
-   * 
+   *
    * @throws {ErrorModel} If:
    * - No school is selected
    * - Admin password is less than 4 characters
    * - Logout timeout is less than 5 seconds
-   * 
+   *
    * @effects
    * - Sets isSaving flag during operation
    * - Updates core state with new settings
@@ -178,7 +180,7 @@
   /**
    * Toggles the auto-launch setting for the application.
    * When enabled, the application will automatically start on system startup.
-   * 
+   *
    * @async
    * @function toggleAutoLaunch
    * @throws {Error} If the auto-launch setting cannot be modified
@@ -190,7 +192,7 @@
         autoLaunchEnabled = !autoLaunchEnabled;
       }
     } catch (err) {
-      console.error('Failed to toggle auto-launch:', err);
+      console.error("Failed to toggle auto-launch:", err);
     }
   }
 

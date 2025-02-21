@@ -4,7 +4,7 @@
   import { route } from "../stores/router.store";
   import type { ErrorModel } from "../models/error.model";
 
-  const error : ErrorModel = $route.params;
+  const error: ErrorModel = $route.params;
 
   // Close the error page when the escape key is pressed
   window.addEventListener("keydown", (e) => {
@@ -12,7 +12,6 @@
       navigate("/");
     }
   });
-
 </script>
 
 <MenuBar timeVisible={true} />

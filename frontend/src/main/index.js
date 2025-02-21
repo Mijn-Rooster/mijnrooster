@@ -6,14 +6,14 @@ import installExtension from "electron-devtools-installer";
 import { createHash } from "crypto";
 import { autoUpdater } from "electron-updater";
 import isOnline from "@esm2cjs/is-online";
-import AutoLaunch from 'auto-launch';
+import AutoLaunch from "auto-launch";
 
 /**
  * Creates and configures the main application window.
- * 
+ *
  * @function createWindow
  * @returns {BrowserWindow} The configured Electron browser window instance
- * 
+ *
  * @description
  * Creates a fullscreen browser window with the following features:
  * - Hidden until ready to show
@@ -34,7 +34,7 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
-      webSecurity: true,	// Set to false to test with server on leerlingsites.nl
+      webSecurity: true, // Set to false to test with server on leerlingsites.nl
     },
   });
 
@@ -172,7 +172,8 @@ app.whenReady().then(() => {
               type: "info",
               title: "Over Mijn Rooster",
               message: "Mijn Rooster",
-              detail: "Mijn Rooster is een roosterapplicatie om op een eenvoudige manier je rooster te bekijken op een kiosk-apparaat op school.\n\nDeze applicatie is gemaakt door David Jongeneel, Reinout Muis en Jonathan van der Pligt en ontwikkeld als PWS project.\n\n(c) 2025 Mijn Rooster. Alle rechten voorbehouden.",
+              detail:
+                "Mijn Rooster is een roosterapplicatie om op een eenvoudige manier je rooster te bekijken op een kiosk-apparaat op school.\n\nDeze applicatie is gemaakt door David Jongeneel, Reinout Muis en Jonathan van der Pligt en ontwikkeld als PWS project.\n\n(c) 2025 Mijn Rooster. Alle rechten voorbehouden.",
               buttons: ["OK"],
               icon: icon,
             });
@@ -182,20 +183,20 @@ app.whenReady().then(() => {
           label: "GitHub",
           click: () => {
             shell.openExternal("https://github.com/Mijn-Rooster/mijnrooster");
-            }
           },
-          { type: "separator" },
-          { 
-            label: "Instellingen",
-            accelerator: "CmdOrCtrl+,",
-            click: () => {
+        },
+        { type: "separator" },
+        {
+          label: "Instellingen",
+          accelerator: "CmdOrCtrl+,",
+          click: () => {
             mainWindow.webContents.send("open-settings");
-            },
           },
-          {
-            label: "Controleren op updates",
-            accelerator: "CmdOrCtrl+U",
-            click: () => {
+        },
+        {
+          label: "Controleren op updates",
+          accelerator: "CmdOrCtrl+U",
+          click: () => {
             log.info("Manual update check initiated.");
             autoUpdater.checkForUpdates().then(() => {
               dialog.showMessageBox({
@@ -203,7 +204,7 @@ app.whenReady().then(() => {
                 title: "Updates",
                 message: "Controleren op updates",
                 detail: "Je hebt de laatste versie van Mijn Rooster.",
-                buttons: ["OK"]
+                buttons: ["OK"],
               });
             });
           },
@@ -249,17 +250,18 @@ app.on("window-all-closed", () => {
 
 // Auto-launch configuration with platform-specific paths
 const autoLauncher = new AutoLaunch({
-  name: 'Mijn Rooster',
-  path: process.platform === 'linux' 
-    ? process.execPath  // Use process.execPath for Linux
-    : app.getPath('exe'),  // Use app.getPath for Windows/macOS
+  name: "Mijn Rooster",
+  path:
+    process.platform === "linux"
+      ? process.execPath // Use process.execPath for Linux
+      : app.getPath("exe"), // Use app.getPath for Windows/macOS
 });
 
-ipcMain.handle('get-auto-launch-status', async () => {
+ipcMain.handle("get-auto-launch-status", async () => {
   return await autoLauncher.isEnabled();
 });
 
-ipcMain.handle('set-auto-launch', async (_, enabled) => {
+ipcMain.handle("set-auto-launch", async (_, enabled) => {
   try {
     if (enabled) {
       await autoLauncher.enable();
@@ -268,7 +270,7 @@ ipcMain.handle('set-auto-launch', async (_, enabled) => {
     }
     return true;
   } catch (error) {
-    console.error('Failed to set auto-launch:', error);
+    console.error("Failed to set auto-launch:", error);
     return false;
   }
 });

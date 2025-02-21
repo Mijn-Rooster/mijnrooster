@@ -31,7 +31,7 @@ linux:
   target:
     - AppImage
     - target: deb
-      arch: 
+      arch:
         - armv7l
         - arm64
   maintainer: electronjs.org
