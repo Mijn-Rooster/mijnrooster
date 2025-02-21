@@ -7,6 +7,11 @@ import { createHash } from "crypto";
 import { autoUpdater } from "electron-updater";
 import isOnline from "@esm2cjs/is-online";
 import AutoLaunch from "auto-launch";
+import log from "electron-log";
+
+// Enable logging
+log.transports.file.level = "info";
+autoUpdater.logger = log;
 
 /**
  * Creates and configures the main application window.
@@ -123,20 +128,21 @@ ipcMain.handle("generate-hash", (event, data) => {
   const hash = createHash("sha256").update(data).digest("hex");
   return hash;
 });
-
 // Connection check (IPC handler)
 ipcMain.handle("check-connection", async () => {
   try {
     return await isOnline.default();
   } catch (error) {
-    console.error("Failed to check connection:", error);
+    log.error("Failed to check connection:", error);
     return false;
   }
 });
 
 // Get app version (IPC handler)
 ipcMain.handle("get-app-version", () => {
-  return app.getVersion();
+  const version = app.getVersion();
+  log.info(`App version requested: ${version}`);
+  return version;
 });
 
 // This method will be called when Electron has finished initialization.
@@ -258,19 +264,23 @@ const autoLauncher = new AutoLaunch({
 });
 
 ipcMain.handle("get-auto-launch-status", async () => {
-  return await autoLauncher.isEnabled();
+  const status = await autoLauncher.isEnabled();
+  log.info(`Auto-launch status checked: ${status}`);
+  return status;
 });
 
 ipcMain.handle("set-auto-launch", async (_, enabled) => {
   try {
     if (enabled) {
       await autoLauncher.enable();
+      log.info("Auto-launch enabled");
     } else {
       await autoLauncher.disable();
+      log.info("Auto-launch disabled");
     }
     return true;
   } catch (error) {
-    console.error("Failed to set auto-launch:", error);
+    log.error("Failed to set auto-launch:", error);
     return false;
   }
 });
