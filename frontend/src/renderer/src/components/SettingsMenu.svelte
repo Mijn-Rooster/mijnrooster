@@ -20,7 +20,6 @@
   import { getHash } from "../services/core.service";
   import type { AppInfoModel } from "../models/appInfo.model";
   import { serverStatus } from "../stores/connection.store";
-  import { date } from "../stores/time.store";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -36,7 +35,26 @@
   let ServerUrl: string | null = null;
   let logoutTimeOut: number = 20;
   let autoLogout: boolean = false;
+  let autoLaunchEnabled = false;
 
+  /**
+   * Initializes the settings menu component on mount.
+   * 
+   * This function:
+   * 1. Retrieves app information from the API
+   * 2. Fetches the list of available schools
+   * 3. Validates if the currently selected school exists in the retrieved list
+   * 4. Falls back to a placeholder school entry if school retrieval fails
+   * 5. Loads user preferences from the core store including:
+   *    - Selected school
+   *    - Week view setting
+   *    - Numpad control setting
+   *    - Server URL
+   *    - Auto logout settings
+   * 6. Checks auto-launch status
+   * 
+   * @throws {ErrorModel} When school list retrieval fails
+   */
   onMount(async () => {
     appInfo = await window.api.appInfo();
 
@@ -77,8 +95,31 @@
     ServerUrl = coreValues.serverUrl;
     autoLogout = coreValues.autoLogout;
     logoutTimeOut = coreValues.logoutTimeOut;
+    autoLaunchEnabled = await window.api.getAutoLaunchStatus();
   });
 
+  /**
+   * Saves the user settings to the core state.
+   * 
+   * This async function handles saving various settings including:
+   * - School selection
+   * - Admin password (hashed)
+   * - Week view preference
+   * - Numpad control settings
+   * - Auto logout settings and timeout
+   * 
+   * @throws {ErrorModel} If:
+   * - No school is selected
+   * - Admin password is less than 4 characters
+   * - Logout timeout is less than 5 seconds
+   * 
+   * @effects
+   * - Sets isSaving flag during operation
+   * - Updates core state with new settings
+   * - Clears admin password after saving
+   * - Shows success state for 3 seconds via isSaved flag
+   * - Sets error state if validation fails
+   */
   async function saveSettings() {
     isSaving = true;
     error = null;
@@ -86,10 +127,12 @@
       (s) => s.schoolId === selectedSchool,
     );
     try {
+      // Hash the admin password if it exists
       const hashedPassword = adminPassword
         ? await getHash(adminPassword)
         : null;
 
+      // Check user input
       if (!selectedSchoolData) {
         throw { message: "Selecteer een school" };
       }
@@ -106,6 +149,7 @@
         };
       }
 
+      // Update store
       core.update((state) => ({
         ...state,
         schoolId: selectedSchoolData.schoolId,
@@ -116,6 +160,9 @@
         autoLogout: autoLogout,
         logoutTimeOut: logoutTimeOut,
       }));
+
+      // Toggle auto-launch setting
+      await window.api.setAutoLaunch(autoLaunchEnabled);
 
       adminPassword = "";
       isSaving = false;
@@ -128,6 +175,33 @@
     }
   }
 
+  /**
+   * Toggles the auto-launch setting for the application.
+   * When enabled, the application will automatically start on system startup.
+   * 
+   * @async
+   * @function toggleAutoLaunch
+   * @throws {Error} If the auto-launch setting cannot be modified
+   */
+  async function toggleAutoLaunch() {
+    try {
+      const success = await window.api.setAutoLaunch(!autoLaunchEnabled);
+      if (success) {
+        autoLaunchEnabled = !autoLaunchEnabled;
+      }
+    } catch (err) {
+      console.error('Failed to toggle auto-launch:', err);
+    }
+  }
+
+  /**
+   * Handles the confirmation of resetting the application state.
+   * Performs the following actions:
+   * 1. Resets the core store to its initial state
+   * 2. Closes the reset confirmation modal
+   * 3. Sets loading state to true
+   * 4. Reloads the application after a 1 second delay
+   */
   function confirmReset() {
     resetCoreStore();
     showResetModal = false;
@@ -195,6 +269,12 @@
           bind:value={logoutTimeOut}
           disabled={!autoLogout}
         />
+      </Label>
+
+      <!-- Auto Launch Toggle -->
+      <Label class="flex items-center space-x-2">
+        <Toggle bind:checked={autoLaunchEnabled} />
+        <span>Start automatisch op bij opstarten computer</span>
       </Label>
     </div>
 
