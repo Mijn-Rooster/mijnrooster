@@ -1,5 +1,16 @@
 <script lang="ts">
-  import { Button, Label, Input, Select, Toggle, Modal, Alert, Spinner } from "flowbite-svelte";
+  import {
+    Button,
+    Label,
+    Input,
+    Select,
+    Toggle,
+    Modal,
+    Badge,
+    Spinner,
+    Popover,
+    Indicator,
+  } from "flowbite-svelte";
   import { retrieveSchoolList } from "../services/api.service";
   import { core, resetCoreStore } from "../stores/core.store";
   import type { SchoolModel } from "../models/school.model";
@@ -8,6 +19,8 @@
   import { onMount } from "svelte";
   import { getHash } from "../services/core.service";
   import type { AppInfoModel } from "../models/appInfo.model";
+  import { serverStatus } from "../stores/connection.store";
+  import { date } from "../stores/time.store";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -20,6 +33,9 @@
   let error: ErrorModel | null = null;
   let showResetModal = false;
   let appInfo: AppInfoModel;
+  let ServerUrl: string | null = null;
+  let logoutTimeOut: number = 20;
+  let autoLogout: boolean = false;
 
   onMount(async () => {
     appInfo = await window.api.appInfo();
@@ -28,14 +44,26 @@
     try {
       schools = await retrieveSchoolList();
       // Double check the selectedSchool is available in the retrieved schools
-      if (selectedSchool && !schools.some(s => s.schoolId === selectedSchool)) {
+      if (
+        selectedSchool &&
+        !schools.some((s) => s.schoolId === selectedSchool)
+      ) {
         error = {
           message: "Geselecteerde school niet gevonden",
-          details: "De opgeslagen school bestaat niet meer in de database"
+          details: "De opgeslagen school bestaat niet meer in de database",
         };
         selectedSchool = null;
       }
     } catch (err) {
+      if ($core.schoolId && $core.schoolInYearId) {
+        schools = [{
+          schoolId: $core.schoolId,
+          schoolInSchoolYearId: $core.schoolInYearId,
+          schoolYear: 0,
+          schoolName: "Onbekende school (id " + $core.schoolId +  ")",
+          projectName: "project " + $core.schoolInYearId,
+        }];
+      }
       error = err as ErrorModel;
     } finally {
       isLoading = false;
@@ -46,6 +74,9 @@
     selectedSchool = coreValues.schoolId;
     weekView = coreValues.weekView;
     numPadControl = coreValues.numPadControl;
+    ServerUrl = coreValues.serverUrl;
+    autoLogout = coreValues.autoLogout;
+    logoutTimeOut = coreValues.logoutTimeOut;
   });
 
   async function saveSettings() {
@@ -69,6 +100,12 @@
         };
       }
 
+      if (logoutTimeOut && logoutTimeOut < 5) {
+        throw {
+          message: "Automatisch uitloggen moet minimaal 5 seconde zijn",
+        };
+      }
+
       core.update((state) => ({
         ...state,
         schoolId: selectedSchoolData.schoolId,
@@ -76,6 +113,8 @@
         adminPassword: hashedPassword || state.adminPassword,
         weekView: weekView,
         numPadControl: numPadControl,
+        autoLogout: autoLogout,
+        logoutTimeOut: logoutTimeOut,
       }));
 
       adminPassword = "";
@@ -119,79 +158,118 @@
         </Select>
       </Label>
 
-    <!-- Admin Password Change -->
-    <Label class="space-y-2">
-      <span>Wijzig admin wachtwoord</span>
-      <Input
-        type="password"
-        bind:value={adminPassword}
-        placeholder="Nieuw wachtwoord (optioneel)"
-        minlength={4}
-      />
-    </Label>
+      <!-- Admin Password Change -->
+      <Label class="space-y-2">
+        <span>Wijzig admin wachtwoord</span>
+        <Input
+          type="password"
+          bind:value={adminPassword}
+          placeholder="Nieuw wachtwoord (optioneel)"
+          minlength={4}
+        />
+      </Label>
 
-    <!-- Week View Toggle -->
-    <Label class="flex items-center space-x-2">
-      <Toggle bind:checked={weekView} />
-      <span>Toon weekoverzicht</span>
-    </Label>
+      <!-- Week View Toggle -->
+      <Label class="flex items-center space-x-2">
+        <Toggle bind:checked={weekView} />
+        <span>Toon weekoverzicht</span>
+      </Label>
 
-    <!-- NumPad Control Toggle -->
-    <Label class="flex items-center space-x-2">
-      <Toggle bind:checked={numPadControl} />
-      <span>Gebruik NumPad besturing</span>
-    </Label>
-  </div>
+      <!-- NumPad Control Toggle -->
+      <Label class="flex items-center space-x-2">
+        <Toggle bind:checked={numPadControl} />
+        <span>Gebruik NumPad besturing</span>
+      </Label>
 
-  <!-- App versions -->
-  <div class="border-t border-gray-200 pt-4">
-    <h3 class="text-lg font-semibold text-gray-900">App Informatie</h3>
-    <div class="grid grid-cols-2 gap-4 text-sm text-gray-600 mt-2">
-      <div class="flex justify-between">
-        <span class="font-medium">App Versie:</span>
-        <span>{appInfo?.appVersion || "Onbekend"}</span>
-      </div>
-      <div class="flex justify-between">
-        <span class="font-medium">Electron:</span>
-        <span>{appInfo?.electronVersion || "Onbekend"}</span>
-      </div>
-      <div class="flex justify-between">
-        <span class="font-medium">Node.js:</span>
-        <span>{appInfo?.nodeVersion || "Onbekend"}</span>
-      </div>
-      <div class="flex justify-between">
-        <span class="font-medium">Chrome:</span>
-        <span>{appInfo?.chromeVersion || "Onbekend"}</span>
+      <!-- Auto Logout Toggle -->
+      <Label class="flex items-center space-x-2">
+        <Toggle bind:checked={autoLogout} />
+        <span>Automatisch uitloggen</span>
+      </Label>
+
+      <!-- Logout Timeout -->
+      <Label>
+        <span>Automatisch uitloggen (sec)</span>
+        <Input
+          type="number"
+          bind:value={logoutTimeOut}
+          disabled={!autoLogout}
+        />
+      </Label>
+    </div>
+
+    <!-- App versions -->
+    <div class="border-t border-gray-200 pt-4">
+      <h3 class="text-lg font-semibold text-gray-900">App Informatie</h3>
+      <div class="grid grid-cols-1 gap-4 text-sm text-gray-600 mt-2">
+        <div class="flex justify-between">
+          <span class="font-medium">Server URL:</span>
+          <div class="flex gap-2">
+            <Badge id="hover" color="none">{ServerUrl || "Onbekend"}</Badge>
+            {#if $serverStatus}
+              <Badge color="green" rounded class="px-2.5 py-0.5">
+                <Indicator color="green" size="xs" class="me-1" />Verbonden
+              </Badge>
+            {:else}
+              <Badge color="red" rounded class="px-2.5 py-0.5">
+                <Indicator color="red" size="xs" class="me-1" />Niet verbonden
+              </Badge>
+            {/if}
+          </div>
+          <Popover
+            class="w-64 text-sm font-light "
+            title="Let op!"
+            triggeredBy="#hover"
+            >Server URL kan alleen worden gewijzigd door de applicatie te
+            resetten</Popover
+          >
+        </div>
+        <div class="flex justify-between">
+          <span class="font-medium">App versie:</span>
+          <div>
+            <Badge color="dark"
+              >Mijn Rooster {appInfo?.appVersion || "Onbekend"}</Badge
+            >
+            <Badge color="dark"
+              >Electron {appInfo?.electronVersion || "Onbekend"}</Badge
+            >
+            <Badge color="dark"
+              >Node.js {appInfo?.nodeVersion || "Onbekend"}</Badge
+            >
+            <Badge color="dark"
+              >Chrome {appInfo?.chromeVersion || "Onbekend"}</Badge
+            >
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="flex justify-between items-center">
-    <!-- Reset Application Button -->
-    <Button color="red" on:click={() => (showResetModal = true)}>
-      Reset Applicatie
-    </Button>
-
-    <div class="flex items-center gap-4">
-      {#if error}
-        <ErrorCard {error} size="sm"/>
-      {/if}
-
-      {#if isSaved}
-        <Alert color="green" class="!p-2">Wijzigingen opgeslagen</Alert>
-      {/if}
-
-      <!-- Save Button -->
-      <Button on:click={saveSettings} disabled={isSaving}>
-        {#if isSaving}
-          Opslaan...
-        {:else}
-          Opslaan
-        {/if}
+    <div class="flex justify-between items-center">
+      <!-- Reset Application Button -->
+      <Button color="red" on:click={() => (showResetModal = true)}>
+        Reset Applicatie
       </Button>
+
+      <div class="flex items-center gap-4">
+        {#if error}
+          <ErrorCard {error} size="sm" />
+        {/if}
+
+        {#if isSaved}
+          <Badge color="green">Wijzigingen opgeslagen</Badge>
+        {/if}
+
+        <!-- Save Button -->
+        <Button on:click={saveSettings} disabled={isSaving}>
+          {#if isSaving}
+            Opslaan...
+          {:else}
+            Opslaan
+          {/if}
+        </Button>
+      </div>
     </div>
-  </div>
-</form>
+  </form>
 {/if}
 
 <!-- Reset Confirmation Modal -->
