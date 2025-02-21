@@ -1,8 +1,5 @@
 <script lang="ts">
-  import {
-    ProfileCardSolid,
-    UserSolid,
-  } from "flowbite-svelte-icons";
+  import { ProfileCardSolid, UserSolid } from "flowbite-svelte-icons";
   import { isSetupComplete } from "../stores/core.store";
   import { time, date } from "../stores/time.store";
   import { internetStatus, serverStatus } from "../stores/connection.store";

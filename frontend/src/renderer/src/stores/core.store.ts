@@ -21,7 +21,7 @@ interface CoreStore {
   adminPassword: string;
   weekView: boolean;
   numPadControl: boolean;
-  autoLogout:  boolean;
+  autoLogout: boolean;
   logoutTimeOut: number;
 }
 
@@ -35,7 +35,7 @@ const DEFAULT: CoreStore = {
   weekView: false,
   numPadControl: false,
   autoLogout: false,
-  logoutTimeOut: 20
+  logoutTimeOut: 20,
 };
 
 const storedCore = localStorage.getItem("core");
@@ -49,12 +49,12 @@ const storedCore = localStorage.getItem("core");
 export const core = writable<CoreStore>(
   storedCore
     ? {
-        ...DEFAULT,                 // First spread defaults
-        ...JSON.parse(storedCore)  // Then overlay stored values
+        ...DEFAULT, // First spread defaults
+        ...JSON.parse(storedCore), // Then overlay stored values
       }
     : {
-        ...DEFAULT
-      }
+        ...DEFAULT,
+      },
 );
 
 core.subscribe((value) => {
@@ -90,6 +90,6 @@ export function isSetupComplete(): number {
 export function resetCoreStore(): void {
   localStorage.removeItem("core");
   core.set({
-    ...DEFAULT
+    ...DEFAULT,
   });
 }

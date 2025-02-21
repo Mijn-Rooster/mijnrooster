@@ -7,8 +7,8 @@
  * @property {string} lastName - The user's last name
  */
 export interface UserModel {
-    code: string;
-    firstName: string;
-    prefix: string;
-    lastName: string;
+  code: string;
+  firstName: string;
+  prefix: string;
+  lastName: string;
 }

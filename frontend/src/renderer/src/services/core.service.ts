@@ -56,7 +56,7 @@ export async function isConnectedToServer(): Promise<boolean> {
 
 /**
  * Checks if the provided password matches the stored admin password hash.
- * 
+ *
  * @param password - The password to validate against the stored admin password
  * @returns A promise that resolves to true if the password matches, false otherwise
  * @example

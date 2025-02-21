@@ -13,6 +13,8 @@ declare global {
         chromeVersion: string;
         v8Version: string;
       };
+      getAutoLaunchStatus: () => Promise<boolean>;
+      setAutoLaunch: (enabled: boolean) => Promise<boolean>;
     };
   }
 }

@@ -20,11 +20,11 @@
 
   /**
    * Resets the auto-logout timers and warning state.
-   * 
+   *
    * This function manages two timers:
    * - Warning timer: Shows a warning message after WARNING_DELAY milliseconds of inactivity
    * - Logout timer: Redirects user to home page after LOGOUT_DELAY milliseconds of inactivity
-   * 
+   *
    * Both timers are cleared before being reset to prevent multiple concurrent timers.
    * The warning state is also reset to false when this function is called.
    */
@@ -55,14 +55,14 @@
    * Sets up event listeners for user activity tracking when component is mounted.
    * If auto-logout is enabled, this initializes the logout timer and attaches
    * multiple event listeners to reset the timer on user interaction.
-   * 
+   *
    * Event listeners are added for:
    * - Mouse movement
    * - Mouse clicks
    * - Keyboard input
    * - Touch events
    * - Scroll events
-   * 
+   *
    * @requires AUTO_LOGOUT_ENABLED - Boolean flag to enable/disable auto logout
    * @requires resetLogoutTimer - Function to reset the auto logout timer
    * @requires handleUserActivity - Event handler function for user interactions
