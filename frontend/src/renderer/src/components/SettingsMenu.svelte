@@ -20,6 +20,7 @@
   import { getHash } from "../services/core.service";
   import type { AppInfoModel } from "../models/appInfo.model";
   import { serverStatus } from "../stores/connection.store";
+  import { date } from "../stores/time.store";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -54,6 +55,15 @@
         selectedSchool = null;
       }
     } catch (err) {
+      if ($core.schoolId && $core.schoolInYearId) {
+        schools = [{
+          schoolId: $core.schoolId,
+          schoolInSchoolYearId: $core.schoolInYearId,
+          schoolYear: 0,
+          schoolName: "Onbekende school (id " + $core.schoolId +  ")",
+          projectName: "project " + $core.schoolInYearId,
+        }];
+      }
       error = err as ErrorModel;
     } finally {
       isLoading = false;
@@ -196,7 +206,7 @@
           <span class="font-medium">Server URL:</span>
           <div class="flex gap-2">
             <Badge id="hover" color="none">{ServerUrl || "Onbekend"}</Badge>
-            {#if serverStatus}
+            {#if $serverStatus}
               <Badge color="green" rounded class="px-2.5 py-0.5">
                 <Indicator color="green" size="xs" class="me-1" />Verbonden
               </Badge>
