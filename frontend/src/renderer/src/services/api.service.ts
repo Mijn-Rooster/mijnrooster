@@ -229,7 +229,7 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
 
 /**
  * Retrieves user information from the server for a specific student in a school year.
- * 
+ *
  * @param schoolInSchoolYear - The school identifier combined with school year
  * @param leerlingnummer - The student number
  * @returns A Promise that resolves to a UserModel object if successful, or null if not found
@@ -240,7 +240,7 @@ export async function retrieveSchoolList(): Promise<SchoolModel[]> {
  */
 export async function retrieveUserInfo(
   leerlingnummer: string,
-  schoolInSchoolYear: string|null = null,
+  schoolInSchoolYear: string | null = null,
 ): Promise<UserModel | null> {
   try {
     if (!schoolInSchoolYear) {
@@ -272,7 +272,8 @@ export async function retrieveUserInfo(
     if (error instanceof TypeError && error.message === "Failed to fetch") {
       throw {
         message: "Kon geen verbinding maken met de server",
-        details: "Controleer of de server bereikbaar is en of het adres correct is",
+        details:
+          "Controleer of de server bereikbaar is en of het adres correct is",
       };
     }
     throw error;

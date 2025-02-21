@@ -7,19 +7,25 @@ const api = {
     return ipcRenderer.invoke("generate-hash", data);
   },
   isOnline: async () => {
-    return ipcRenderer.invoke('check-connection');
+    return ipcRenderer.invoke("check-connection");
   },
   onOpenSettings: (callback) => {
     ipcRenderer.on("open-settings", callback);
   },
   appInfo: async () => {
     return {
-      appVersion: await ipcRenderer.invoke('get-app-version'),
+      appVersion: await ipcRenderer.invoke("get-app-version"),
       electronVersion: process.versions.electron,
       nodeVersion: process.versions.node,
       chromeVersion: process.versions.chrome,
       v8Version: process.versions.v8,
     };
+  },
+  getAutoLaunchStatus: async () => {
+    return ipcRenderer.invoke("get-auto-launch-status");
+  },
+  setAutoLaunch: async (value) => {
+    return ipcRenderer.invoke("set-auto-launch", value);
   },
 };
 

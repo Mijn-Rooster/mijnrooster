@@ -1,5 +1,8 @@
 import { writable } from "svelte/store";
-import { isConnectedToInternet, isConnectedToServer } from "../services/core.service";
+import {
+  isConnectedToInternet,
+  isConnectedToServer,
+} from "../services/core.service";
 
 /**
  * A writable store that holds the current internet connection status.
@@ -7,10 +10,10 @@ import { isConnectedToInternet, isConnectedToServer } from "../services/core.ser
 export const internetStatus = writable(true);
 export const serverStatus = writable(true);
 
-internetStatus.subscribe(value => {
+internetStatus.subscribe((value) => {
   console.log("Internet status changed to", value);
 });
-serverStatus.subscribe(value => {
+serverStatus.subscribe((value) => {
   console.log("Server status changed to", value);
 });
 

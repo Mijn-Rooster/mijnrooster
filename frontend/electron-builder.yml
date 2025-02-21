@@ -31,11 +31,11 @@ linux:
   target:
     - AppImage
     - target: deb
-      arch: 
+      arch:
         - armv7l
         - arm64
   maintainer: electronjs.org
-  category: Utility
+  category: Education
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false

@@ -21,31 +21,38 @@
 </script>
 
 {#if error}
-    <Toast color="red" position="top-right" class="bg-red-50 border border-red-200 rounded-lg shadow-sm" transition={fade}>
-      <svelte:fragment slot="icon">
-        <CloseCircleSolid class="w-5 h-5" />
-        <span class="sr-only">Error icon</span>
-      </svelte:fragment>
-      <div class="ml-3 text-sm font-normal">
-        <div class="flex items-center">
-          {error.message}
-          {#if error.details}
-            <button
-              class="ml-2"
-              on:click={() => (showDetails = !showDetails)}
-              type="button"
-            >
-              <ChevronDownOutline
-                class="w-3 h-3 transition-transform {showDetails ? 'rotate-180' : ''}"
-              />
-            </button>
-          {/if}
-        </div>
-        {#if error.details && showDetails}
-          <p class="mt-1 text-xs text-red-600">
-            {error.details}
-          </p>
+  <Toast
+    color="red"
+    position="top-right"
+    class="bg-red-50 border border-red-200 rounded-lg shadow-sm"
+    transition={fade}
+  >
+    <svelte:fragment slot="icon">
+      <CloseCircleSolid class="w-5 h-5" />
+      <span class="sr-only">Error icon</span>
+    </svelte:fragment>
+    <div class="ml-3 text-sm font-normal">
+      <div class="flex items-center">
+        {error.message}
+        {#if error.details}
+          <button
+            class="ml-2"
+            on:click={() => (showDetails = !showDetails)}
+            type="button"
+          >
+            <ChevronDownOutline
+              class="w-3 h-3 transition-transform {showDetails
+                ? 'rotate-180'
+                : ''}"
+            />
+          </button>
         {/if}
       </div>
-    </Toast>
+      {#if error.details && showDetails}
+        <p class="mt-1 text-xs text-red-600">
+          {error.details}
+        </p>
+      {/if}
+    </div>
+  </Toast>
 {/if}
