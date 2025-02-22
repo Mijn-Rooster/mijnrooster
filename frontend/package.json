@@ -1,6 +1,6 @@
 {
   "name": "mijnrooster-client",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Mijn Rooster is een kiosk-applicatie voor het tonen van roosters op schermen",
   "main": "./out/main/index.js",
   "author": "David Jongeneel, Reinout Muis, Jonathan van der Pligt",
