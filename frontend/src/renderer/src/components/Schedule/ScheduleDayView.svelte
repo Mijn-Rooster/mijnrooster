@@ -138,6 +138,7 @@
 <div
   class="mx-auto w-full max-w-[1000px] flex flex-col gap-4 overflow-y-auto"
   style="height: calc(100% - 300px);"
+  data-numpad="scroll-window"
 >
   <!-- Schedule -->
   {#if isLoading}

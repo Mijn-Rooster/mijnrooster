@@ -127,6 +127,20 @@ export function registerScheduleHandlers() {
     handlers['NumpadMultiply'] = () => document.querySelector<HTMLButtonElement>('[data-numpad="next"]')?.click();          // Next (*)
     handlers['NumpadSubtract'] = () => document.querySelector<HTMLButtonElement>('[data-numpad="toggle-view"]')?.click();   // Toggle view (-)
     handlers['NumpadAdd'] = () => document.querySelector<HTMLButtonElement>('[data-numpad="logout"]')?.click();             // Logout (+)
+
+    // Page up/down controls using arrow keys 2 and 8 of numpad
+    handlers['Numpad8'] = () => {
+        const scrollWindow = document.querySelector<HTMLDivElement>('[data-numpad="scroll-window"]');
+        if (scrollWindow) {
+            scrollWindow.scrollTop -= 50;
+        }
+    };
+    handlers['Numpad2'] = () => {
+        const scrollWindow = document.querySelector<HTMLDivElement>('[data-numpad="scroll-window"]');
+        if (scrollWindow) {
+            scrollWindow.scrollTop += 50;
+        }
+    };
 }
 
 /**
