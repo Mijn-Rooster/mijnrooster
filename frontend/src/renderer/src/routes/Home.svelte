@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte";
   import { ProfileCardSolid, UserSolid } from "flowbite-svelte-icons";
   import { isSetupComplete } from "../stores/core.store";
   import { time, date } from "../stores/time.store";
   import { internetStatus, serverStatus } from "../stores/connection.store";
   import { Modal } from "flowbite-svelte";
+  import { core } from "../stores/core.store";
   import {
     Signal_wifi_4_bar,
     Signal_wifi_statusbar_connected_no_internet_4,
@@ -12,15 +14,61 @@
   import MenuBar from "../components/MenuBar.svelte";
   import { navigate } from "../stores/router.store";
   import ErrorCard from "../components/ErrorCard.svelte";
-  import { Button, Footer, Label, Input } from "flowbite-svelte";
+  import { Button, Label, Input } from "flowbite-svelte";
   import { retrieveUserInfo } from "../services/api.service";
   import type { ErrorModel } from "../models/error.model";
   import { Spinner } from "flowbite-svelte";
+  import { registerLoginHandlers, clearHandlers } from "../services/numpad.service";
 
   let error: ErrorModel | null = null;
   let isLoading: boolean = false;
   let leerlingnummer: string = "";
 
+  /**
+   * Component lifecycle hooks for handling login functionality
+   * 
+   * onMount:
+   * - Checks if numpad control is enabled in core settings
+   * - If enabled, registers login event handlers that trigger form submission
+   *   when a valid student number is entered
+   * 
+   * onDestroy:
+   * - Cleans up by removing all registered event handlers
+   * 
+   * @requires registerLoginHandlers - Function to set up numpad input handlers
+   * @requires clearHandlers - Function to remove event listeners
+   * @requires core - Store containing app settings
+   * @requires leerlingnummer - Student number state variable
+   * @requires handleSubmit - Form submission handler function
+   */
+   onMount(() => {
+    if ($core.numPadControl) {
+      console.log("Registering login handlers");
+      registerLoginHandlers(() => {
+        if (leerlingnummer) {
+          handleSubmit(new SubmitEvent('submit'));
+        }
+      });
+    }
+  });
+
+  onDestroy(() => {
+    clearHandlers();
+  });
+
+  /**
+   * Handles the form submission event.
+   * Validates the student number and attempts to retrieve user information.
+   * If successful, navigates to the schedule page with the user info.
+   * If unsuccessful, displays an error message.
+   * 
+   * @param {SubmitEvent} event - The form submission event
+   * @returns {void}
+   * 
+   * State affected:
+   * - isLoading: Set to true during API call, false after completion
+   * - error: Set to null initially, updated with error details on failure
+   */
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
     if (leerlingnummer.length < 1) return;
@@ -32,23 +80,31 @@
       .then((userInfo) => {
         navigate("/schedule", { user: userInfo });
       })
-      .catch((err) => {
+      .catch(() => {
         error = {
           message: "Onjuist leerlingnummer",
           details: "",
         };
+        leerlingnummer = "";
       })
       .finally(() => {
         isLoading = false;
       });
   }
 
-  // Check if Mijn Rooster setup is completed
+  /**
+   * Redirects to setup page if initial setup is not complete
+   * Checks setup completion status and navigates to appropriate setup step
+   */
   if (isSetupComplete() < 2) {
     navigate("/setup", { setupStep: isSetupComplete() });
   }
 
-  // Disable functionality when offline
+  /**
+   * Checks if the internet connection or server status is offline
+   * If either is offline, sets the offline state to true
+   * Needed for showing the offline modal
+   */
   let offline = false;
   $: {
     if (!$internetStatus || !$serverStatus) {
@@ -105,6 +161,7 @@
           id="leerlingnummer"
           bind:value={leerlingnummer}
           placeholder="bijv. 2022036"
+          data-numpad="input"
           class="w-full px-4 py-2 mt-2 border rounded-lg focus:border-primary-400 focus:outline-none focus:ring"
         >
           <UserSolid slot="left" class="w-4 h-4" />

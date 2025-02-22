@@ -1,18 +1,32 @@
 <script lang="ts">
   import Router from "./components/Router.svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { Modal, Button, Input, Label } from "flowbite-svelte";
   import type { ErrorModel } from "./models/error.model";
   import ErrorCard from "./components/ErrorCard.svelte";
   import SettingsMenu from "./components/SettingsMenu.svelte";
   import { checkAdminPassword } from "./services/core.service";
-  import { isSetupComplete } from "./stores/core.store";
+  import { isSetupComplete, core } from "./stores/core.store";
+  import { destroyNumpadControls, initNumpadControls } from "./services/numpad.service";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
   let password = "";
   let error: ErrorModel | null = null;
 
+  $: if ($core.numPadControl) {
+    initNumpadControls();
+  } else {
+    destroyNumpadControls();
+  }
+
+  /**
+   * Initializes the application when component is mounted.
+   * Sets up:
+   * - Event listener for settings dialog
+   *   - Shows password modal if setup is complete
+   *   - Resets error state and password field
+   */
   onMount(() => {
     window.api.onOpenSettings(() => {
       if (isSetupComplete()) {
@@ -23,6 +37,17 @@
     });
   });
 
+  /**
+   * Handles the submission of the admin password.
+   * Validates the password using checkAdminPassword function.
+   * If password is correct:
+   * - Closes the password modal
+   * - Opens the settings modal
+   * - Clears any previous errors
+   * If password is incorrect:
+   * - Sets error message "Onjuist wachtwoord"
+   * In both cases, clears the password field afterward.
+   */
   async function handlePasswordSubmit() {
     if (await checkAdminPassword(password)) {
       showPasswordModal = false;

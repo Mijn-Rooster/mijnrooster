@@ -121,7 +121,7 @@
   <!-- Date navigation -->
   <div class="flex justify-between my-5 align-content-center">
     <!-- Previous -->
-    <Button class="p-2 w-10" on:click={previousDay}>
+    <Button class="p-2 w-10" on:click={previousDay} data-numpad="previous">
       <ArrowLeftOutline />
     </Button>
 
@@ -129,7 +129,7 @@
     <h2 class="text-xl font-bold text-center">{currentDate}</h2>
 
     <!-- Next -->
-    <Button class="p-2 w-10" on:click={nextDay}>
+    <Button class="p-2 w-10" on:click={nextDay} data-numpad="next">
       <ArrowRightOutline />
     </Button>
   </div>
