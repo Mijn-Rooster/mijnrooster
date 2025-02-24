@@ -6,7 +6,7 @@
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
   import { Spinner } from "flowbite-svelte";
   import { retrieveSchedule } from "../../services/api.service";
-  import ErrorBanner from "../ErrorBanner.svelte";
+  import ErrorToast from "../ErrorToast.svelte";
   import type { ErrorModel } from "../../models/error.model";
   import type { UserModel } from "../../models/user.model";
   
@@ -177,6 +177,6 @@
 
   <!-- Error message -->
   {#if error}
-    <ErrorBanner {error} />
+    <ErrorToast {error} />
   {/if}
 </div>
