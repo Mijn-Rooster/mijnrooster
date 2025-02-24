@@ -20,6 +20,7 @@
 
   let fetchController: AbortController | null = null;
 
+  // Function to load the schedule for the week
   async function loadSchedule() {
     // Abort previous fetch if it exists
     if (fetchController) {
@@ -30,6 +31,7 @@
     isLoading = true;
     schedule = {};
 
+    // Calculate the start and end of the week (Monday 00:00 to Friday 23:59)
     const startOfWeek = new Date(todayStartUnix * 1000);
     const dayOfWeek = startOfWeek.getDay();
     const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
@@ -42,21 +44,25 @@
     const endOfWeekUnix = friday.setHours(23, 59, 59, 0) / 1000;
 
     try {
+      // Fetch the schedule for the entire week
       const data = await retrieveSchedule(userId, startOfWeekUnix, endOfWeekUnix, fetchController.signal);
       data.forEach((item: ScheduleItemModel) => {
+        // Create a key for each day in the format 'YYYYMMDD'
         const dateKey = new Date(item.startTime * 1000).toLocaleDateString("nl-NL", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
         }).replace(/-/g, '');
+        // Initialize the array for the day if it doesn't exist
         if (!schedule[dateKey]) {
           schedule[dateKey] = [];
         }
+        // Add the item to the corresponding day
         schedule[dateKey].push(item);
       });
       isLoading = false;
     } catch (err) {
-      // Ignore abort errors
+      // Handle errors, ignoring abort errors
       if (err instanceof Error && err.name !== "AbortError") {
         error = { message: err.message, details: err.stack || "" };
       }
@@ -64,11 +70,7 @@
     }
   }
 
-  /**
-   * Lifecycle function that runs when component is mounted.
-   * Initializes the schedule by calling loadSchedule() asynchronously.
-   * @see loadSchedule
-   */
+  // Lifecycle function that runs when the component is mounted
   onMount(async () => {
     loadSchedule();
   });
@@ -89,6 +91,7 @@
   let currentWeek = getWeekLabel(weekStartUnix);
   let weekDates = getWeekDates(weekStartUnix);
 
+  // Function to get the label for the current week
   function getWeekLabel(startUnix: number): string {
     const startDate = new Date(startUnix * 1000);
     const month = startDate.toLocaleDateString("nl-NL", { month: "long" });
@@ -96,16 +99,18 @@
     return `${month} | week ${weekNumber}`;
   }
 
+  // Function to get the week number
   function getWeekNumber(date: Date): number {
     const startOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear = (date.getTime() - startOfYear.getTime()) / 86400000;
     return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
   }
 
+  // Function to get the dates for the week
   function getWeekDates(startUnix: number): string[] {
     const dates = [];
     const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];
-    for (let i = 0; i <= 4; i++) { // Loop from 1 (Monday) to 5 (Friday)
+    for (let i = 0; i <= 4; i++) { // Loop from Monday to Friday
       const date = new Date((startUnix + i * 86400) * 1000);
       const day = days[date.getDay()];
       const dayOfMonth = date.getDate();
@@ -114,6 +119,7 @@
     return dates;
   }
 
+  // Function to go to the previous week
   async function previousWeek() {
     weekStartUnix -= 7 * 86400;
     weekEndUnix -= 7 * 86400;
@@ -122,6 +128,7 @@
     loadSchedule();
   }
 
+  // Function to go to the next week
   async function nextWeek() {
     weekStartUnix += 7 * 86400; 
     weekEndUnix += 7 * 86400;
@@ -130,6 +137,7 @@
     loadSchedule();
   }
 
+  // Function to format the date key to a shorter version like 'ma 17'
   function formatDateKey(dateKey: string): string {
     const date = new Date(dateKey.slice(0, 4) + '-' + dateKey.slice(4, 6) + '-' + dateKey.slice(6, 8));
     const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];

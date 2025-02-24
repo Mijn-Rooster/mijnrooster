@@ -39,7 +39,7 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
-      webSecurity: true, // Set to false to test with server on leerlingsites.nl
+      webSecurity: false, // Set to false to test with server on leerlingsites.nl
     },
   });
 
