@@ -9,6 +9,7 @@
   import { onMount, onDestroy } from "svelte";
   import { core } from "../stores/core.store";
   import { get } from "svelte/store";
+  import { clearHandlers, registerScheduleHandlers } from "../services/numpad.service";
 
   let user: UserModel = $route.params.user;
   let logoutTimer: NodeJS.Timeout;
@@ -52,43 +53,36 @@
   }
 
   /**
-   * Sets up event listeners for user activity tracking when component is mounted.
-   * If auto-logout is enabled, this initializes the logout timer and attaches
-   * multiple event listeners to reset the timer on user interaction.
-   *
-   * Event listeners are added for:
-   * - Mouse movement
-   * - Mouse clicks
-   * - Keyboard input
-   * - Touch events
-   * - Scroll events
-   *
-   * @requires AUTO_LOGOUT_ENABLED - Boolean flag to enable/disable auto logout
-   * @requires resetLogoutTimer - Function to reset the auto logout timer
-   * @requires handleUserActivity - Event handler function for user interactions
+   * Lifecycle function that sets up event listeners when the component is mounted:
+   * 
+   * 1. If auto logout is enabled:
+   *    - Resets the logout timer
+   *    - Adds event listeners for user activity tracking (mouse, keyboard, touch, scroll)
+   *    to prevent automatic logout
+   * 
+   * 2. If numpad control is enabled in core settings:
+   *    - Registers schedule-specific keyboard handlers
    */
   onMount(() => {
     if (AUTO_LOGOUT_ENABLED) {
       resetLogoutTimer();
       window.addEventListener("mousemove", handleUserActivity);
       window.addEventListener("mousedown", handleUserActivity);
-      window.addEventListener("keypress", handleUserActivity);
+      window.addEventListener("keydown", handleUserActivity);
       window.addEventListener("touchstart", handleUserActivity);
       window.addEventListener("scroll", handleUserActivity);
+    }
+    if ($core.numPadControl) {
+      registerScheduleHandlers();
     }
   });
 
   /**
-   * Cleanup function that runs when component is destroyed.
+   * Cleanup function executed when component is destroyed.
    * If auto logout is enabled:
-   * - Clears any existing logout and warning timers
-   * - Removes all event listeners that were tracking user activity:
-   *   - Mouse movement
-   *   - Mouse clicks
-   *   - Keyboard presses
-   *   - Touch events
-   *   - Scroll events
-   * This prevents memory leaks and ensures proper cleanup of auto-logout functionality.
+   * - Clears logout and warning timers
+   * - Removes all user activity event listeners (mousemove, mousedown, keypress, touchstart, scroll)
+   * Finally calls clearHandlers() to perform additional cleanup
    */
   onDestroy(() => {
     if (AUTO_LOGOUT_ENABLED) {
@@ -96,10 +90,11 @@
       if (warningTimer) clearTimeout(warningTimer);
       window.removeEventListener("mousemove", handleUserActivity);
       window.removeEventListener("mousedown", handleUserActivity);
-      window.removeEventListener("keypress", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
       window.removeEventListener("touchstart", handleUserActivity);
       window.removeEventListener("scroll", handleUserActivity);
     }
+    clearHandlers();
   });
 </script>
 
@@ -132,7 +127,7 @@
   <Footer
     class="absolute bottom-0 start-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6"
   >
-    <Button class="gap-2 px-2" on:click={() => navigate("/")}
+    <Button class="gap-2 px-2" on:click={() => navigate("/")} data-numpad="logout"
       ><ArrowLeftToBracketOutline />Uitloggen</Button
     >
   </Footer>

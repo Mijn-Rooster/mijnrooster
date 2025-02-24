@@ -11,7 +11,8 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: frontend
+  executableName: mijnrooster
+  icon: build/icons/win/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -19,6 +20,7 @@ nsis:
   createDesktopShortcut: always
 mac:
   entitlementsInherit: build/entitlements.mac.plist
+  icon: build/icons/mac/icon.icns
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
@@ -37,6 +39,7 @@ linux:
         - x64
   maintainer: electronjs.org
   category: Education
+  icon: build/icons/png
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
