@@ -20,6 +20,18 @@
 
   let fetchController: AbortController | null = null;
 
+  // Function to calculate the start of the week (Monday 00:00) UNIX timestamp
+  function getStartOfWeekUnix(date: Date): number {
+    const dayOfWeek = date.getDay();
+    const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+    const monday = new Date(date);
+    monday.setDate(date.getDate() - diffToMonday);
+    return monday.setHours(0, 0, 0, 0) / 1000;
+  }
+
+  // Initialize the start of the week UNIX timestamp
+  let weekStartUnix = getStartOfWeekUnix(new Date());
+
   // Function to load the schedule for the week
   async function loadSchedule() {
     // Abort previous fetch if it exists
@@ -31,40 +43,48 @@
     isLoading = true;
     schedule = {};
 
-    // Calculate the start and end of the week (Monday 00:00 to Friday 23:59)
-    const startOfWeek = new Date(todayStartUnix * 1000);
-    const dayOfWeek = startOfWeek.getDay();
-    const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
-    const monday = new Date(startOfWeek);
-    monday.setDate(startOfWeek.getDate() - diffToMonday);
+    // Calculate the end of the week (Friday 23:59) UNIX timestamp
+    const monday = new Date(weekStartUnix * 1000);
     const friday = new Date(monday);
     friday.setDate(monday.getDate() + 4);
-
-    const startOfWeekUnix = monday.setHours(0, 0, 0, 0) / 1000;
     const endOfWeekUnix = friday.setHours(23, 59, 59, 0) / 1000;
 
     try {
       // Fetch the schedule for the entire week
-      const data = await retrieveSchedule(userId, startOfWeekUnix, endOfWeekUnix, fetchController.signal);
+      const data = await retrieveSchedule(userId, weekStartUnix, endOfWeekUnix, fetchController.signal);
       data.forEach((item: ScheduleItemModel) => {
-        // Create a key for each day in the format 'YYYYMMDD'
-        const dateKey = new Date(item.startTime * 1000).toLocaleDateString("nl-NL", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }).replace(/-/g, '');
-        // Initialize the array for the day if it doesn't exist
-        if (!schedule[dateKey]) {
-          schedule[dateKey] = [];
+        if (item.start === undefined) {
+          console.error("Item startTime is undefined:", item); // Debugging statement
+        } else {
+          
+          // Ensure item.startTime is a valid number
+          if (!isNaN(item.start)) {
+            // Create a key for each day in the format 'YYYYMMDD'
+            const date = new Date(item.start * 1000);
+            const dateKey = date.toLocaleDateString("nl-NL", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }).replace(/-/g, '');
+            
+            // Initialize the array for the day if it doesn't exist
+            if (!schedule[dateKey]) {
+              schedule[dateKey] = [];
+            }
+            // Add the item to the corresponding day
+            schedule[dateKey].push(item);
+          } else {
+            console.error("Invalid startTime:", item.start); // Debugging statement
+          }
         }
-        // Add the item to the corresponding day
-        schedule[dateKey].push(item);
       });
+      
       isLoading = false;
     } catch (err) {
       // Handle errors, ignoring abort errors
       if (err instanceof Error && err.name !== "AbortError") {
         error = { message: err.message, details: err.stack || "" };
+        console.error("Error loading schedule:", error); // Debugging statement
       }
       isLoading = false;
     }
@@ -86,8 +106,6 @@
     },
   );
 
-  let weekStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
-  let weekEndUnix = weekStartUnix + 6 * 86400;
   let currentWeek = getWeekLabel(weekStartUnix);
   let weekDates = getWeekDates(weekStartUnix);
 
@@ -107,22 +125,27 @@
   }
 
   // Function to get the dates for the week
-  function getWeekDates(startUnix: number): string[] {
+  function getWeekDates(startUnix: number): { displayDate: string, dateKey: string }[] {
     const dates = [];
-    const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];
+    const days = ["zo", "ma", "di", "wo", "do", "vr", "za"]; // Abbreviations for days of the week
     for (let i = 0; i <= 4; i++) { // Loop from Monday to Friday
       const date = new Date((startUnix + i * 86400) * 1000);
       const day = days[date.getDay()];
-      const dayOfMonth = date.getDate();
-      dates.push(`${day} ${dayOfMonth}`);
+      const displayDate = `${day} ${date.getDate()}`;
+      const dateKey = date.toLocaleDateString("nl-NL", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).replace(/-/g, '');
+      dates.push({ displayDate, dateKey });
     }
     return dates;
   }
+  
 
   // Function to go to the previous week
   async function previousWeek() {
     weekStartUnix -= 7 * 86400;
-    weekEndUnix -= 7 * 86400;
     currentWeek = getWeekLabel(weekStartUnix);
     weekDates = getWeekDates(weekStartUnix);
     loadSchedule();
@@ -131,22 +154,37 @@
   // Function to go to the next week
   async function nextWeek() {
     weekStartUnix += 7 * 86400; 
-    weekEndUnix += 7 * 86400;
     currentWeek = getWeekLabel(weekStartUnix);
     weekDates = getWeekDates(weekStartUnix);
     loadSchedule();
   }
 
-  // Function to format the date key to a shorter version like 'ma 17'
-  function formatDateKey(dateKey: string): string {
-    const date = new Date(dateKey.slice(0, 4) + '-' + dateKey.slice(4, 6) + '-' + dateKey.slice(6, 8));
-    const days = ["zo", "ma", "di", "wo", "do", "vr", "za"];
-    const day = days[date.getDay()];
-    const dayOfMonth = date.getDate();
-    return `${day} ${dayOfMonth}`;
+</script>
+
+<style>
+  .schedule-item {
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-</script>
+  :global(.schedule-item span) {
+    padding: 2px 4px;
+    font-size: 14px;
+    border-radius: 10px;
+    background-color: #291c5b;
+  }
+
+  :global(.schedule-item div) {
+    gap: 10px;
+  }
+
+</style>
 
 <div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
   <!-- Date navigation -->
@@ -167,16 +205,18 @@
 
   <!-- Week schedule -->
   <div class="grid grid-cols-5 gap-4">
-    {#each Object.keys(schedule) as dateKey}
+    {#each weekDates as { displayDate, dateKey }}
       <div>
-        <h3 class="text-lg font-bold text-center">{formatDateKey(dateKey)}</h3>
+        <h3 class="text-lg font-bold text-center">{displayDate}</h3>
         {#if isLoading}
           <div class="text-center"><Spinner /></div>
         {:else if schedule[dateKey] && schedule[dateKey].length === 0}
           <p class="text-center">Geen lessen gevonden</p>
         {:else if schedule[dateKey]}
           {#each schedule[dateKey] as item}
-            <ScheduleItem {item} />
+            <div class="schedule-item">
+              <ScheduleItem {item} />
+            </div>
           {/each}
         {/if}
       </div>
