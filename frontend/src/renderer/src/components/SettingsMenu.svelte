@@ -1,25 +1,25 @@
 <script lang="ts">
   import {
-    Button,
-    Label,
-    Input,
-    Select,
-    Toggle,
-    Modal,
     Badge,
-    Spinner,
-    Popover,
+    Button,
     Indicator,
+    Input,
+    Label,
+    Modal,
+    Popover,
+    Select,
+    Spinner,
+    Toggle,
   } from "flowbite-svelte";
-  import { retrieveSchoolList } from "../services/api.service";
-  import { core, resetCoreStore } from "../stores/core.store";
-  import type { SchoolModel } from "../models/school.model";
-  import type { ErrorModel } from "../models/error.model";
-  import ErrorCard from "./ErrorCard.svelte";
   import { onMount } from "svelte";
-  import { getHash } from "../services/core.service";
   import type { AppInfoModel } from "../models/appInfo.model";
+  import type { ErrorModel } from "../models/error.model";
+  import type { SchoolModel } from "../models/school.model";
+  import { retrieveSchoolList } from "../services/api.service";
+  import { getHash } from "../services/core.service";
   import { serverStatus } from "../stores/connection.store";
+  import { core, resetCoreStore } from "../stores/core.store";
+  import ErrorCard from "./ErrorCard.svelte";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;
@@ -174,25 +174,6 @@
       error = err as ErrorModel;
     } finally {
       isSaving = false;
-    }
-  }
-
-  /**
-   * Toggles the auto-launch setting for the application.
-   * When enabled, the application will automatically start on system startup.
-   *
-   * @async
-   * @function toggleAutoLaunch
-   * @throws {Error} If the auto-launch setting cannot be modified
-   */
-  async function toggleAutoLaunch() {
-    try {
-      const success = await window.api.setAutoLaunch(!autoLaunchEnabled);
-      if (success) {
-        autoLaunchEnabled = !autoLaunchEnabled;
-      }
-    } catch (err) {
-      console.error("Failed to toggle auto-launch:", err);
     }
   }
 

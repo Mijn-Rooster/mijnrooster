@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { Button, Label, Input, Footer, Select } from "flowbite-svelte";
-  import { navigate } from "../../stores/router.store";
+  import { Button, Footer, Input, Label, Select } from "flowbite-svelte";
   import { ArrowRightOutline } from "flowbite-svelte-icons";
-  import { retrieveSchoolList } from "../../services/api.service";
-  import { core } from "../../stores/core.store";
-  import type { SchoolModel } from "../../models/school.model";
-  import type { ErrorModel } from "../../models/error.model";
-  import ErrorCard from "../ErrorCard.svelte";
   import { onMount } from "svelte";
+  import type { ErrorModel } from "../../models/error.model";
+  import type { SchoolModel } from "../../models/school.model";
+  import { retrieveSchoolList } from "../../services/api.service";
   import { getHash } from "../../services/core.service";
+  import { core } from "../../stores/core.store";
+  import { navigate } from "../../stores/router.store";
+  import ErrorCard from "../ErrorCard.svelte";
 
   let schools: SchoolModel[] = [];
   let selectedSchool: number | null = null;

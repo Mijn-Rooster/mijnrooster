@@ -1,8 +1,7 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
-  import { navigate } from "../stores/router.store";
-  import { route } from "../stores/router.store";
   import type { ErrorModel } from "../models/error.model";
+  import { navigate, route } from "../stores/router.store";
 
   const error: ErrorModel = $route.params;
 

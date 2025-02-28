@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Alert } from "flowbite-svelte";
-  import { CloseCircleSolid, ChevronDownOutline } from "flowbite-svelte-icons";
+  import { ChevronDownOutline, CloseCircleSolid } from "flowbite-svelte-icons";
   import { fade } from "svelte/transition";
   import type { ErrorModel } from "../models/error.model";
 

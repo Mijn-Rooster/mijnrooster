@@ -1,14 +1,14 @@
 <script lang="ts">
-  import ScheduleItem from "./ScheduleItem.svelte";
-  import { Button } from "flowbite-svelte";
+  import { Button, Spinner } from "flowbite-svelte";
   import { ArrowLeftOutline, ArrowRightOutline } from "flowbite-svelte-icons";
   import { onMount } from "svelte";
+  import type { ErrorModel } from "../../models/error.model";
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
-  import { Spinner } from "flowbite-svelte";
+  import type { UserModel } from "../../models/user.model";
   import { retrieveSchedule } from "../../services/api.service";
   import ErrorToast from "../ErrorToast.svelte";
-  import type { ErrorModel } from "../../models/error.model";
-  import type { UserModel } from "../../models/user.model";
+  import ScheduleItem from "./ScheduleItem.svelte";
+  import { get } from "svelte/store";
 
   export let user: UserModel;
 
@@ -22,14 +22,7 @@
 
   let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
   let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
-  let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
-    "nl-NL",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  );
+  $: currentDate = getCurrentDate(todayStartUnix);
 
   /**
    * Loads the schedule for a specific user within a time range.
@@ -46,7 +39,7 @@
    * - error store to save potential errors
    * - userId, todayStartUnix, todayEndUnix for request parameters
    */
-  function loadSchedule() {
+  async function loadSchedule() {
     // Abort previous fetch if it exists
     if (fetchController) {
       fetchController.abort();
@@ -62,6 +55,7 @@
     )
       .then((data) => {
         schedule = data;
+        error = null;
         isLoading = false;
       })
       .catch((err) => {
@@ -90,11 +84,6 @@
   async function previousDay() {
     todayStartUnix -= 86400;
     todayEndUnix -= 86400;
-    currentDate = new Date(todayStartUnix * 1000).toLocaleDateString("nl-NL", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
     loadSchedule();
   }
 
@@ -108,12 +97,15 @@
     // Logic to navigate to the next day
     todayStartUnix += 86400;
     todayEndUnix += 86400;
-    currentDate = new Date(todayStartUnix * 1000).toLocaleDateString("nl-NL", {
+    loadSchedule();
+  }
+
+  function getCurrentDate(unix: number) {
+    return new Date(unix * 1000).toLocaleDateString("nl-NL", {
       day: "numeric",
       month: "long",
       year: "numeric",
     });
-    loadSchedule();
   }
 </script>
 
@@ -136,15 +128,18 @@
 </div>
 
 <div
-  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4 overflow-y-auto"
-  style="height: calc(100% - 300px);"
+  class="mx-auto w-full max-w-[1000px] flex flex-col gap-4 overflow-y-auto h-[calc(100%-50px)]"
   data-numpad="scroll-window"
 >
   <!-- Schedule -->
   {#if isLoading}
-    <div class="text-center"><Spinner /></div>
+    <div class="flex justify-center items-center w-full h-96">
+      <Spinner />
+    </div>
   {:else if schedule.length === 0}
-    <p class="text-center">Geen lessen gevonden</p>
+    <div class="flex justify-center items-center w-full h-96">
+      <p class="text-lg text-gray-500">Geen lessen gevonden voor vandaag</p>
+    </div>
   {:else}
     {#each schedule as item}
       <ScheduleItem {item} />

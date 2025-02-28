@@ -1,23 +1,31 @@
 <script lang="ts">
-  import Router from "./components/Router.svelte";
-  import { onDestroy, onMount } from "svelte";
-  import { Modal, Button, Input, Label } from "flowbite-svelte";
-  import type { ErrorModel } from "./models/error.model";
+  import { Button, Input, Label, Modal } from "flowbite-svelte";
+  import { onMount } from "svelte";
   import ErrorCard from "./components/ErrorCard.svelte";
+  import Router from "./components/Router.svelte";
   import SettingsMenu from "./components/SettingsMenu.svelte";
+  import type { ErrorModel } from "./models/error.model";
   import { checkAdminPassword } from "./services/core.service";
-  import { isSetupComplete, core } from "./stores/core.store";
   import { destroyNumpadControls, initNumpadControls } from "./services/numpad.service";
+  import { core, isSetupComplete } from "./stores/core.store";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
   let password = "";
   let error: ErrorModel | null = null;
+  /**
+   * Reactive statement that handles numpad controls initialization and cleanup
+   * When $core.numPadControl is true, initializes numpad controls
+   * When $core.numPadControl is false, destroys numpad controls
+   * @reactive $core.numPadControl
+   */
 
-  $: if ($core.numPadControl) {
-    initNumpadControls();
-  } else {
-    destroyNumpadControls();
+  $: {
+    if ($core.numPadControl) {
+      initNumpadControls();
+    } else {
+      destroyNumpadControls();
+    }
   }
 
   /**

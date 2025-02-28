@@ -132,13 +132,19 @@ export function registerScheduleHandlers() {
     handlers['Numpad8'] = () => {
         const scrollWindow = document.querySelector<HTMLDivElement>('[data-numpad="scroll-window"]');
         if (scrollWindow) {
-            scrollWindow.scrollTop -= 50;
+            scrollWindow.scrollTo({
+                top: scrollWindow.scrollTop - 50,
+                behavior: 'smooth'
+            });
         }
     };
     handlers['Numpad2'] = () => {
         const scrollWindow = document.querySelector<HTMLDivElement>('[data-numpad="scroll-window"]');
         if (scrollWindow) {
-            scrollWindow.scrollTop += 50;
+            scrollWindow.scrollTo({
+                top: scrollWindow.scrollTop + 50,
+                behavior: 'smooth'
+            });
         }
     };
 }
