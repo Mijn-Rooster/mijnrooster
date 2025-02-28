@@ -9,7 +9,7 @@
   import ErrorToast from "../ErrorToast.svelte";
   import type { ErrorModel } from "../../models/error.model";
   import type { UserModel } from "../../models/user.model";
-  
+
   export let user: UserModel;
 
   let schedule: { [key: string]: ScheduleItemModel[] } = {};
@@ -23,7 +23,7 @@
   // Function to calculate the start of the week (Monday 00:00) UNIX timestamp
   function getStartOfWeekUnix(date: Date): number {
     const dayOfWeek = date.getDay();
-    const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
     const monday = new Date(date);
     monday.setDate(date.getDate() - diffToMonday);
     return monday.setHours(0, 0, 0, 0) / 1000;
@@ -32,7 +32,30 @@
   // Initialize the start of the week UNIX timestamp
   let weekStartUnix = getStartOfWeekUnix(new Date());
 
-  // Function to load the schedule for the week
+  /**
+   * Loads and organizes schedule data for a week view.
+   *
+   * This async function handles fetching schedule data for an entire week, from Monday to Friday.
+   * It includes abort controller logic to cancel previous fetch requests when new ones are made.
+   *
+   * The function:
+   * 1. Aborts any existing fetch request
+   * 2. Calculates the week's time range (Monday 00:00 to Friday 23:59)
+   * 3. Fetches schedule data using the retrieveSchedule function
+   * 4. Organizes items by date in YYYYMMDD format
+   *
+   * @throws {Error} Propagates errors from the fetch operation, excluding AbortError
+   *
+   * State modifications:
+   * - Sets isLoading flag during operation
+   * - Updates schedule object with fetched data
+   * - Sets error state if fetch fails
+   *
+   * Dependencies:
+   * - Requires userId variable to be defined
+   * - Requires weekStartUnix variable (Unix timestamp for start of week)
+   * - Uses retrieveSchedule external function
+   */
   async function loadSchedule() {
     // Abort previous fetch if it exists
     if (fetchController) {
@@ -49,62 +72,49 @@
     friday.setDate(monday.getDate() + 4);
     const endOfWeekUnix = friday.setHours(23, 59, 59, 0) / 1000;
 
-    try {
-      // Fetch the schedule for the entire week
-      const data = await retrieveSchedule(userId, weekStartUnix, endOfWeekUnix, fetchController.signal);
+    retrieveSchedule(
+      userId,
+      weekStartUnix,
+      endOfWeekUnix,
+      fetchController.signal,
+    ).then((data) =>
       data.forEach((item: ScheduleItemModel) => {
-        if (item.start === undefined) {
-          console.error("Item startTime is undefined:", item); // Debugging statement
-        } else {
-          
-          // Ensure item.startTime is a valid number
-          if (!isNaN(item.start)) {
-            // Create a key for each day in the format 'YYYYMMDD'
-            const date = new Date(item.start * 1000);
-            const dateKey = date.toLocaleDateString("nl-NL", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            }).replace(/-/g, '');
-            
-            // Initialize the array for the day if it doesn't exist
-            if (!schedule[dateKey]) {
-              schedule[dateKey] = [];
-            }
-            // Add the item to the corresponding day
-            schedule[dateKey].push(item);
-          } else {
-            console.error("Invalid startTime:", item.start); // Debugging statement
-          }
+        // Create a key for each day in the format 'YYYYMMDD'
+        const date = new Date(item.start * 1000);
+        const dateKey = date
+          .toLocaleDateString("nl-NL", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })
+          .replace(/-/g, "");
+
+        // Initialize the array for the day if it doesn't exist
+        if (!schedule[dateKey]) {
+          schedule[dateKey] = [];
+        }
+        // Add the item to the corresponding day
+        schedule[dateKey].push(item);
+
+        isLoading = false;
+      }),
+    )
+    .catch((err) => {
+        // Ignore abort errors
+        if (err.name !== "AbortError") {
+          error = err;
         }
       });
-      
-      isLoading = false;
-    } catch (err) {
-      // Handle errors, ignoring abort errors
-      if (err instanceof Error && err.name !== "AbortError") {
-        error = { message: err.message, details: err.stack || "" };
-        console.error("Error loading schedule:", error); // Debugging statement
-      }
-      isLoading = false;
     }
-  }
 
-  // Lifecycle function that runs when the component is mounted
+  /**
+   * Lifecycle function that runs when the component is mounted.
+   * Initializes the schedule by calling loadSchedule() asynchronously.
+   * @function onMount
+   */
   onMount(async () => {
     loadSchedule();
   });
-
-  let todayStartUnix = new Date().setHours(0, 0, 0, 0) / 1000;
-  let todayEndUnix = new Date().setHours(23, 59, 59, 0) / 1000;
-  let currentDate = new Date(todayStartUnix * 1000).toLocaleDateString(
-    "nl-NL",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  );
 
   let currentWeek = getWeekLabel(weekStartUnix);
   let weekDates = getWeekDates(weekStartUnix);
@@ -125,23 +135,27 @@
   }
 
   // Function to get the dates for the week
-  function getWeekDates(startUnix: number): { displayDate: string, dateKey: string }[] {
+  function getWeekDates(
+    startUnix: number,
+  ): { displayDate: string; dateKey: string }[] {
     const dates = [];
     const days = ["zo", "ma", "di", "wo", "do", "vr", "za"]; // Abbreviations for days of the week
-    for (let i = 0; i <= 4; i++) { // Loop from Monday to Friday
+    for (let i = 0; i <= 4; i++) {
+      // Loop from Monday to Friday
       const date = new Date((startUnix + i * 86400) * 1000);
       const day = days[date.getDay()];
       const displayDate = `${day} ${date.getDate()}`;
-      const dateKey = date.toLocaleDateString("nl-NL", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }).replace(/-/g, '');
+      const dateKey = date
+        .toLocaleDateString("nl-NL", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/-/g, "");
       dates.push({ displayDate, dateKey });
     }
     return dates;
   }
-  
 
   // Function to go to the previous week
   async function previousWeek() {
@@ -153,38 +167,12 @@
 
   // Function to go to the next week
   async function nextWeek() {
-    weekStartUnix += 7 * 86400; 
+    weekStartUnix += 7 * 86400;
     currentWeek = getWeekLabel(weekStartUnix);
     weekDates = getWeekDates(weekStartUnix);
     loadSchedule();
   }
-
 </script>
-
-<style>
-  .schedule-item {
-    padding: 5px;
-    margin-bottom: 3px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  :global(.schedule-item span) {
-    padding: 2px 4px;
-    font-size: 14px;
-    border-radius: 10px;
-    background-color: #291c5b;
-  }
-
-  :global(.schedule-item div) {
-    gap: 10px;
-  }
-
-</style>
 
 <div class="mx-auto w-full max-w-[1000px] flex flex-col gap-4">
   <!-- Date navigation -->
@@ -228,3 +216,27 @@
     <ErrorToast {error} />
   {/if}
 </div>
+
+<style>
+  .schedule-item {
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.schedule-item span) {
+    padding: 2px 4px;
+    font-size: 14px;
+    border-radius: 10px;
+    background-color: #291c5b;
+  }
+
+  :global(.schedule-item div) {
+    gap: 10px;
+  }
+</style>

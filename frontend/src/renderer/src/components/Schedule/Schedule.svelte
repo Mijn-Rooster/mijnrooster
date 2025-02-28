@@ -8,8 +8,7 @@
 </script>
 
 
-<div >
-<Tabs tabStyle="underline" class="text-center justify-center display:flex">
+<Tabs tabStyle="underline" class="text-center justify-center display:flex" data-numpad="toggle-view">
   <TabItem open>
     <div slot="title" class="flex items-center gap-2 text-xl">
       Dag
@@ -23,7 +22,6 @@
    <ScheduleWeekView {user}/>
   </TabItem>
 </Tabs>
-</div>
 
 
 
