@@ -4,6 +4,61 @@ import { core } from '../stores/core.store';
 let currentScanner: HIDDevice | null = null;
 let currentScanValue = '';
 
+let scanBuffer = '';
+let lastKeyTime = 0;
+const SCAN_TIMEOUT = 50; // Time in ms between keystrokes to be considered part of the same scan
+
+export function initScannerKeyboardMode() {
+    console.log('Initializing scanner keyboard mode for specific device');
+    
+    document.addEventListener('keypress', (event: KeyboardEvent) => {
+        // Check if the input is from our specific scanner
+        if ((event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.vendorId !== get(core).barcodeScanner?.vendorId ||
+            (event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.productId !== get(core).barcodeScanner?.productId) {
+            return;
+        }
+
+        console.log('Scanner keypress:', event.key);
+        console.log((event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.vendorId)
+
+
+        const currentTime = new Date().getTime();
+        
+        if (currentTime - lastKeyTime > SCAN_TIMEOUT && scanBuffer.length > 0) {
+            console.log('Scan timeout, clearing buffer:', scanBuffer);
+            scanBuffer = '';
+        }
+        
+        lastKeyTime = currentTime;
+        
+        if (/^\d$/.test(event.key)) {
+            scanBuffer += event.key;
+        }
+        
+        if (event.key === 'Enter' && scanBuffer.length > 0) {
+            console.log('Processing scan:', scanBuffer);
+            
+            const input = document.getElementById('leerlingnummer') as HTMLInputElement;
+            if (input) {
+                input.value = scanBuffer;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                
+                const form = input.closest('form');
+                if (form) {
+                    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+                }
+            }
+            
+            scanBuffer = '';
+        }
+    });
+}
+
+export function cleanupScannerKeyboardMode() {
+    document.removeEventListener('keypress', () => {});
+    scanBuffer = '';
+}
+
 export async function getAvailableDevices(): Promise<HIDDevice[]> { 
     try {
         // Request access to HID devices
@@ -41,46 +96,52 @@ export async function getDeviceById(deviceId: number): Promise<HIDDevice | null>
     }
 }
 
-// Input event handler voor barcode scanner
 function handleScannerInput(event: HIDInputReportEvent) {
+    console.log('Scanner input received:', {
+        device: event.device.productName,
+        deviceId: `${event.device.vendorId}:${event.device.productId}`,
+        reportId: event.reportId,
+        time: new Date().toISOString()
+    });
+
     const dataView = event.data;
-    // Convert DataView to array for processing
     const dataArray = [];
     for (let i = 0; i < dataView.byteLength; i++) {
         dataArray.push(dataView.getUint8(i));
     }
     
-    // Hidit keyboard protocol verwerking
-    // Keyboard codes: https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf (page 53)
-    // Format: eerste byte is modifier, tweede is gereserveerd, daarna tot 6 key codes
+    const keyCode = dataArray[2]; // First key code
+    if (keyCode === 0) return; // No key pressed
     
-    const keyCode = dataArray[2]; // Eerste toets
-    if (keyCode === 0) return; // Geen toets ingedrukt
-    
-    // Verwerk de toets
-    if (keyCode >= 30 && keyCode <= 39) { // 1-9
+    // Updated key code mapping
+    if (keyCode >= 30 && keyCode <= 38) { // 1-9
         currentScanValue += String.fromCharCode(keyCode - 30 + 49);
     } else if (keyCode === 39) { // 0
         currentScanValue += '0';
-    } else if (keyCode === 40) { // Enter
-        // Vind en update het leerlingnummer veld
+    } else if (keyCode === 40 || keyCode === 88) { // Enter (40) or NumpadEnter (88)
         const input = document.getElementById('leerlingnummer') as HTMLInputElement;
         if (input) {
+            // Set the value and trigger input event
             input.value = currentScanValue;
-            input.dispatchEvent(new Event('input'));
-            // Simuleer een form submit
-            setTimeout(() => {
-                const form = input.closest('form');
-                if (form) {
-                    form.dispatchEvent(new Event('submit'));
-                }
-            }, 100);
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            // Find and submit the form
+            const form = input.closest('form');
+            if (form) {
+                // Dispatch both input and submit events
+                form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
         }
-        // Reset scan waarde
+        // Reset scan value after processing
         currentScanValue = '';
     }
     
-    console.log('Scanner input:', dataArray, 'Current value:', currentScanValue);
+    console.log('Scanner input:', {
+        dataArray,
+        keyCode,
+        currentValue: currentScanValue,
+        modifier: dataArray[0]
+    });
 }
 
 // Connect saved scanner from core store
@@ -130,6 +191,7 @@ export async function connectToDevice(device: HIDDevice): Promise<void> {
         
         // Set up event listener for input reports
         device.addEventListener('inputreport', handleScannerInput);
+        console.log('Event listener set up for scanner:', device);
         
         // Store current scanner reference
         currentScanner = device;

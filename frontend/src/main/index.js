@@ -77,24 +77,6 @@ function createWindow() {
     },
   );
 
-  mainWindow.webContents.session.setPermissionCheckHandler(
-    (webContents, permission, requestingOrigin, details) => {
-      if (permission === "hid" && details.securityOrigin === "file:///") {
-        return true;
-      } else {
-        return true;
-      }
-    },
-  );
-
-  mainWindow.webContents.session.setDevicePermissionHandler((details) => {
-    if (details.deviceType === "hid" && details.origin === "file://") {
-      return true;
-    } else {
-      return true;
-    }
-  });
-
   // HMR for renderer based on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
@@ -225,6 +207,8 @@ ipcMain.handle("get-app-version", () => {
   log.info(`App version requested: ${version}`);
   return version;
 });
+
+app.commandLine.appendSwitch('disable-hid-blocklist')
 
 // This method will be called when Electron has finished initialization.
 app.whenReady().then(() => {

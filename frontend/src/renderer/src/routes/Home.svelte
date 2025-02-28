@@ -15,6 +15,8 @@
   import { core, isSetupComplete } from "../stores/core.store";
   import { navigate } from "../stores/router.store";
   import { date, time } from "../stores/time.store";
+  import { initScannerKeyboardMode, cleanupScannerKeyboardMode } from "../services/scanner.service";
+  import { onMount, onDestroy } from 'svelte';
 
   let error: ErrorModel | null = null;
   let isLoading: boolean = false;
@@ -97,6 +99,14 @@
       offline = false;
     }
   }
+
+  onMount(() => {
+        initScannerKeyboardMode();
+    });
+    
+    onDestroy(() => {
+        cleanupScannerKeyboardMode();
+    });
 </script>
 
 <MenuBar timeVisible={false} />
