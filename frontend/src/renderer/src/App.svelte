@@ -2,7 +2,6 @@
   import { Button, Input, Label, Modal } from "flowbite-svelte";
   import { onMount } from "svelte";
   import ErrorCard from "./components/ErrorCard.svelte";
-  import ErrorToast from "./components/ErrorToast.svelte";
   import Router from "./components/Router.svelte";
   import SettingsModal from "./components/SettingsModal.svelte";
   import type { ErrorModel } from "./models/error.model";
@@ -11,7 +10,6 @@
     destroyNumpadControls,
     initNumpadControls,
   } from "./services/numpad.service";
-  import { connectSavedScanner } from "./services/scanner.service";
   import { core, isSetupComplete } from "./stores/core.store";
 
   let showPasswordModal = false;
@@ -32,25 +30,6 @@
       initNumpadControls();
     } else {
       destroyNumpadControls();
-    }
-  }
-
-  $: {
-    if ($core.barcodeScanner) {
-      connectScanner();
-    }
-  }
-
-  async function connectScanner() {
-    try {
-      const connected = await connectSavedScanner();
-      if (!connected && $core.barcodeScanner) {
-        scannerConnectError = {
-          message: `Kon niet verbinden met scanner: ${$core.barcodeScanner.name}`
-        };
-      }
-    } catch (err) {
-      console.error("Error connecting saved scanner:", err);
     }
   }
 
@@ -94,11 +73,10 @@
     }
     password = "";
   }
+  
 </script>
 
 <Router />
-
-<ErrorToast error={scannerConnectError} />
 
 <!-- Password Check Modal -->
 <Modal
@@ -132,7 +110,9 @@
 </Modal>
 
 <!-- Settings Modal -->
+{#if showSettingsModal}
 <SettingsModal bind:open={showSettingsModal}/>
+{/if}
 
 <style>
   /* Remove focus outline */

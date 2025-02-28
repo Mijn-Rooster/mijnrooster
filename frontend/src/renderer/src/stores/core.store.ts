@@ -23,11 +23,7 @@ interface CoreStore {
   numPadControl: boolean;
   autoLogout: boolean;
   logoutTimeOut: number;
-  barcodeScanner: {
-    productId: number;
-    vendorId: number;
-    name: string;
-  } | null;
+  barcodeScanner: boolean;
 }
 
 const DEFAULT: CoreStore = {
@@ -38,10 +34,10 @@ const DEFAULT: CoreStore = {
   schoolId: null,
   adminPassword: "",
   weekView: false,
-  numPadControl: true,
-  autoLogout: true,
+  numPadControl: false,
+  autoLogout: false,
   logoutTimeOut: 20,
-  barcodeScanner: null,
+  barcodeScanner: false,
 };
 
 const storedCore = localStorage.getItem("core");

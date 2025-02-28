@@ -1,222 +1,94 @@
-import { get } from 'svelte/store';
+import { get } from "svelte/store";
 import { core } from '../stores/core.store';
-
-let currentScanner: HIDDevice | null = null;
-let currentScanValue = '';
 
 let scanBuffer = '';
 let lastKeyTime = 0;
-const SCAN_TIMEOUT = 50; // Time in ms between keystrokes to be considered part of the same scan
+const SCAN_TIMEOUT = 15; // Time in ms between keystrokes to be considered part of the same scan
 
-export function initScannerKeyboardMode() {
-    console.log('Initializing scanner keyboard mode for specific device');
+/**
+ * Handles keyboard input from a barcode scanner device.
+ * Processes the scanned input by accumulating characters into a buffer and
+ * submits the data when Enter is pressed.
+ * 
+ * @param event - The keyboard event triggered by scanner input
+ * @remarks
+ * - Clears the scan buffer if timeout between keystrokes is exceeded
+ * - Only accepts alphanumeric characters
+ * - On Enter key, populates the value into an input element with id 'leerlingnummer'
+ * - Triggers input and submit events after populating the value
+ * 
+ * @throws - No explicit throws, but may fail silently if input element is not found
+ */
+function handleScannerInput(event: KeyboardEvent): void {
+    const currentTime = new Date().getTime();
     
-    document.addEventListener('keypress', (event: KeyboardEvent) => {
-        // Check if the input is from our specific scanner
-        if ((event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.vendorId !== get(core).barcodeScanner?.vendorId ||
-            (event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.productId !== get(core).barcodeScanner?.productId) {
-            return;
-        }
-
-        console.log('Scanner keypress:', event.key);
-        console.log((event.target as any)?.ownerDocument?.defaultView?.event?.path?.[0]?.vendorId)
-
-
-        const currentTime = new Date().getTime();
-        
-        if (currentTime - lastKeyTime > SCAN_TIMEOUT && scanBuffer.length > 0) {
-            console.log('Scan timeout, clearing buffer:', scanBuffer);
-            scanBuffer = '';
-        }
-        
-        lastKeyTime = currentTime;
-        
-        if (/^\d$/.test(event.key)) {
-            scanBuffer += event.key;
-        }
-        
-        if (event.key === 'Enter' && scanBuffer.length > 0) {
-            console.log('Processing scan:', scanBuffer);
-            
-            const input = document.getElementById('leerlingnummer') as HTMLInputElement;
-            if (input) {
-                input.value = scanBuffer;
-                input.dispatchEvent(new Event('input', { bubbles: true }));
-                
-                const form = input.closest('form');
-                if (form) {
-                    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-                }
-            }
-            
-            scanBuffer = '';
-        }
-    });
-}
-
-export function cleanupScannerKeyboardMode() {
-    document.removeEventListener('keypress', () => {});
-    scanBuffer = '';
-}
-
-export async function getAvailableDevices(): Promise<HIDDevice[]> { 
-    try {
-        // Request access to HID devices
-        const devices = await navigator.hid.getDevices();
-        
-        // Filter for keyboard devices
-        // Keyboards typically use usage page 0x01 (Generic Desktop) and usage 0x06 (Keyboard)
-        const keyboards = devices.filter(device => 
-            device.collections.some(collection => 
-                collection.usagePage === 0x01 && collection.usage === 0x06
-            )
-        );
-        
-        return keyboards;
-    } catch (error) {
-        console.error('Error accessing HID devices:', error);
-        throw error;
-    }
-}
-
-export async function getDeviceById(deviceId: number): Promise<HIDDevice | null> {
-    try {
-        // Request access to HID devices
-        const devices = await getAvailableDevices();
-        
-        // Find the device with the specified ID
-        const device = devices.find(device => device.productId === deviceId);
-        
-        console.log('Device:', device);
-        
-        return device || null;
-    } catch (error) {
-        console.error('Error accessing HID devices:', error);
-        throw error;
-    }
-}
-
-function handleScannerInput(event: HIDInputReportEvent) {
-    console.log('Scanner input received:', {
-        device: event.device.productName,
-        deviceId: `${event.device.vendorId}:${event.device.productId}`,
-        reportId: event.reportId,
-        time: new Date().toISOString()
-    });
-
-    const dataView = event.data;
-    const dataArray = [];
-    for (let i = 0; i < dataView.byteLength; i++) {
-        dataArray.push(dataView.getUint8(i));
+    // Clear buffer if timeout exceeded
+    if (currentTime - lastKeyTime > SCAN_TIMEOUT && scanBuffer.length > 0) {
+        scanBuffer = '';
     }
     
-    const keyCode = dataArray[2]; // First key code
-    if (keyCode === 0) return; // No key pressed
+    lastKeyTime = currentTime;
     
-    // Updated key code mapping
-    if (keyCode >= 30 && keyCode <= 38) { // 1-9
-        currentScanValue += String.fromCharCode(keyCode - 30 + 49);
-    } else if (keyCode === 39) { // 0
-        currentScanValue += '0';
-    } else if (keyCode === 40 || keyCode === 88) { // Enter (40) or NumpadEnter (88)
+    // Add character to buffer if alphanumeric
+    if (/^[a-zA-Z0-9]$/.test(event.key)) {
+        scanBuffer += event.key;
+    }
+    
+    // Process complete scan on Enter
+    if (event.key === 'Enter' && scanBuffer.length > 0) {
         const input = document.getElementById('leerlingnummer') as HTMLInputElement;
         if (input) {
-            // Set the value and trigger input event
-            input.value = currentScanValue;
+            input.value = scanBuffer;
             input.dispatchEvent(new Event('input', { bubbles: true }));
-            
-            // Find and submit the form
-            const form = input.closest('form');
-            if (form) {
-                // Dispatch both input and submit events
-                form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-            }
-        }
-        // Reset scan value after processing
-        currentScanValue = '';
-    }
-    
-    console.log('Scanner input:', {
-        dataArray,
-        keyCode,
-        currentValue: currentScanValue,
-        modifier: dataArray[0]
-    });
-}
 
-// Connect saved scanner from core store
-export async function connectSavedScanner(): Promise<boolean> {
-    const coreState = get(core);
-    
-    if (!coreState.barcodeScanner) {
-        return false;
-    }
-    
-    try {
-        // Get all available devices
-        const devices = await navigator.hid.getDevices();
-        
-        // Find our saved scanner
-        const savedScanner = devices.find(device => 
-            device.productId === coreState.barcodeScanner?.productId && 
-            device.vendorId === coreState.barcodeScanner?.vendorId
-        );
-        
-        if (!savedScanner) {
-            return false;
+            // Trigger submit event
+            const submitEvent = new Event('submit', { bubbles: true });
+            input.form?.dispatchEvent(submitEvent);
         }
         
-        // Connect to the scanner
-        await connectToDevice(savedScanner);
-        return true;
-    } catch (error) {
-        console.error('Error connecting to saved scanner:', error);
-        return false;
+        scanBuffer = '';
     }
 }
 
-// Connect to device with event handling
-export async function connectToDevice(device: HIDDevice): Promise<void> {
-    try {
-        // Disconnect existing scanner if connected
-        if (currentScanner && currentScanner.opened) {
-            currentScanner.removeEventListener('inputreport', handleScannerInput);
-            await currentScanner.close();
-        }
-        
-        // Open a connection to the device
-        if (!device.opened) {
-            await device.open();
-        }
-        
-        // Set up event listener for input reports
-        device.addEventListener('inputreport', handleScannerInput);
-        console.log('Event listener set up for scanner:', device);
-        
-        // Store current scanner reference
-        currentScanner = device;
-        
-        console.log('Connected to device:', device);
-    } catch (error) {
-        console.error('Error connecting to device:', error);
-        throw error;
-    }
+/**
+ * Initializes the barcode scanner in keyboard mode.
+ * This function sets up a keyboard event listener to handle barcode scanner input.
+ * If the barcode scanner is not available in the core state, the function returns early.
+ * Any existing scanner mode is cleaned up before initializing a new one.
+ * 
+ * @remarks
+ * This function assumes that the barcode scanner emulates keyboard input.
+ * The actual handling of scanner input is done by the `handleScannerInput` function.
+ * 
+ * @returns {void}
+ * 
+ * @example
+ * ```typescript
+ * initScannerKeyboardMode();
+ * ```
+ */
+export function initScannerKeyboardMode() {
+    if (!get(core).barcodeScanner) return;
+
+    console.log('Scanner keyboard mode enabled');
+    // Cleanup any existing scanner mode
+    cleanupScannerKeyboardMode();
+    
+    // Add the event listener with the separated handler function
+    document.addEventListener('keypress', handleScannerInput);
 }
 
-// Request HID devices with broader filter to catch barcode scanners
-export async function requestHIDDevices(): Promise<HIDDevice[]> {
-    try {
-        // Use a broader filter to catch various HID devices
-        const devices = await navigator.hid.requestDevice({
-            filters: [
-                { usagePage: 0x01 } // Generic Desktop Controls
-            ]
-        });
-        return devices;
-    } catch (error) {
-        console.error('Error requesting HID devices:', error);
-        throw error;
-    }
+/**
+ * Cleans up the scanner keyboard mode by removing the keypress event listener
+ * and clearing the scan buffer.
+ * 
+ * This function removes the specific keyboard event handler that was used for
+ * processing scanner input and resets the scan buffer to an empty string.
+ */
+export function cleanupScannerKeyboardMode() {
+    // Update to remove the specific handler function
+    document.removeEventListener('keypress', handleScannerInput);
+    scanBuffer = '';
 }
 
 

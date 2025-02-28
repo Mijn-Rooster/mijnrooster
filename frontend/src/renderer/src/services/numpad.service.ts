@@ -12,7 +12,7 @@ const handlers: { [key: string]: NumpadHandler } = {};
  */
 export function initNumpadControls() {
     if (!get(core).numPadControl) return;
-
+    console.log('Numpad controls enabled');
     document.addEventListener('keydown', handleKeydown);
 }
 

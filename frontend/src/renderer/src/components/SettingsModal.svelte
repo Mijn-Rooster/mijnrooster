@@ -17,11 +17,6 @@
   import type { SchoolModel } from "../models/school.model";
   import { retrieveSchoolList } from "../services/api.service";
   import { getHash } from "../services/core.service";
-  import {
-    connectSavedScanner,
-    connectToDevice,
-    getAvailableDevices,
-  } from "../services/scanner.service";
   import { serverStatus } from "../stores/connection.store";
   import { core, resetCoreStore } from "../stores/core.store";
   import ErrorCard from "./ErrorCard.svelte";
@@ -43,11 +38,7 @@
   let logoutTimeOut: number = 20;
   let autoLogout: boolean = false;
   let autoLaunchEnabled = false;
-  let availableScanners: HIDDevice[] = [];
-  let selectedScanner: HIDDevice | null = null;
-  let isScannerConnected = false;
-  let scannerRequestError = false;
-  let needsSaving = false;
+  let barcodeScanner: boolean = false;
 
   /**
    * Initializes the settings menu component on mount.
@@ -110,14 +101,7 @@
     autoLogout = coreValues.autoLogout;
     logoutTimeOut = coreValues.logoutTimeOut;
     autoLaunchEnabled = await window.api.getAutoLaunchStatus();
-
-    // Ophalen van beschikbare scanners
-    await getScannersFromSystem();
-
-    // Probeer verbinding te maken met opgeslagen scanner
-    if ($core.barcodeScanner) {
-      isScannerConnected = await connectSavedScanner();
-    }
+    barcodeScanner = coreValues.barcodeScanner;
   });
 
   /**
@@ -181,17 +165,7 @@
         numPadControl: numPadControl,
         autoLogout: autoLogout,
         logoutTimeOut: logoutTimeOut,
-        barcodeScanner: needsSaving
-          ? selectedScanner
-            ? {
-                productId: selectedScanner.productId,
-                vendorId: selectedScanner.vendorId,
-                name:
-                  selectedScanner.productName ||
-                  `Scanner (${selectedScanner.vendorId}:${selectedScanner.productId})`,
-              }
-            : null
-          : state.barcodeScanner,
+        barcodeScanner: barcodeScanner,
       }));
 
       // Toggle auto-launch setting
@@ -223,68 +197,6 @@
     setTimeout(() => {
       window.location.reload();
     }, 1000);
-  }
-
-  async function getScannersFromSystem() {
-    try {
-      availableScanners = await getAvailableDevices();
-
-      // Als er een scanner opgeslagen is, toon deze dan als verbonden
-      if ($core.barcodeScanner?.productId && $core.barcodeScanner?.vendorId) {
-        const savedScanner = availableScanners.find(
-          (s) =>
-            s.productId === $core.barcodeScanner?.productId &&
-            s.vendorId === $core.barcodeScanner.vendorId,
-        );
-        if (savedScanner) {
-          isScannerConnected = savedScanner.opened;
-        }
-      }
-    } catch (err) {
-      scannerRequestError = true;
-      console.error("Error getting scanners:", err);
-    }
-  }
-
-  async function selectScanner(device: HIDDevice) {
-    // Track if we're making a change that needs to be saved
-    needsSaving = false;
-
-    // Case 1: Clicking on an already selected scanner (deselection)
-    if (
-      selectedScanner?.productId === device.productId &&
-      selectedScanner?.vendorId === device.vendorId
-    ) {
-      selectedScanner = null;
-      isScannerConnected = false;
-      needsSaving = true;
-    }
-    // Case 2: Clicking on the currently saved scanner when no selection exists
-    // (explicitly deselect the saved scanner)
-    else if (
-      !selectedScanner &&
-      $core.barcodeScanner?.productId === device.productId &&
-      $core.barcodeScanner?.vendorId === device.vendorId
-    ) {
-      selectedScanner = null;
-      isScannerConnected = false;
-      needsSaving = true;
-    }
-    // Case 3: Selecting a new scanner
-    else {
-      try {
-        await connectToDevice(device);
-        selectedScanner = device;
-        isScannerConnected = true;
-        needsSaving = true;
-      } catch (err) {
-        error = {
-          message: "Kon niet verbinden met scanner",
-          details: err instanceof Error ? err.toString() : String(err),
-        };
-        return;
-      }
-    }
   }
 </script>
 
@@ -483,77 +395,19 @@
             {/if}
           </div>
 
-          <!-- Scanner selectie -->
-          <Label class="space-y-2">
-            <span>Beschikbare scanners</span>
-            <div class="border rounded-md p-2">
-              {#if availableScanners.length === 0}
-                <p class="text-sm text-gray-500 p-2">Geen scanners gevonden</p>
-              {:else}
-                <div class="space-y-2">
-                  {#each availableScanners as device (device.productId + "-" + device.vendorId)}
-                    <div
-                      class="flex justify-between items-center p-2 hover:bg-gray-50 rounded"
-                    >
-                      <div class="flex items-center gap-3 w-full">
-                        <input
-                          type="checkbox"
-                          id={`scanner-${device.productId}-${device.vendorId}`}
-                          name="selectedScanner"
-                          class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                          checked={// Case 1: This is the selected temporary scanner
-                          (selectedScanner?.productId === device.productId &&
-                            selectedScanner?.vendorId === device.vendorId) ||
-                            // Case 2: No temp selection, but this is the saved scanner (ONLY if no changes pending)
-                            (!selectedScanner &&
-                              !needsSaving &&
-                              $core.barcodeScanner?.productId ===
-                                device.productId &&
-                              $core.barcodeScanner?.vendorId ===
-                                device.vendorId)}
-                          on:change={() => selectScanner(device)}
-                        />
-                        <!-- Scanner details -->
-                        <div class="flex-1">
-                          <Label
-                            for={`scanner-${device.productId}-${device.vendorId}`}
-                            class="mb-0 font-normal"
-                          >
-                            {device.productName ||
-                              `Scanner (${device.vendorId}:${device.productId})`}
-                            <p class="text-xs text-gray-500">
-                              VendorID: {device.vendorId}, ProductID: {device.productId}
-                            </p>
-                          </Label>
-                        </div>
-
-                        <!-- Status badge -->
-                        <div class="flex items-center gap-2">
-                          {#if $core.barcodeScanner?.productId === device.productId && $core.barcodeScanner?.vendorId === device.vendorId}
-                            <Badge color="green" class="whitespace-nowrap"
-                              >Huidig</Badge
-                            >
-                          {/if}
-                        </div>
-                      </div>
-                    </div>
-                  {/each}
-                </div>
-              {/if}
+          <!-- Barcode scanner -->
+          <div class="border rounded-md p-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">Barcode scanner</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  Gebruik een barcode scanner voor het invullen van
+                  leerlingnummers
+                </p>
+              </div>
+              <Toggle bind:checked={barcodeScanner} />
             </div>
-          </Label>
-
-          <div class="flex justify-between mt-2">
-            <Button size="sm" on:click={getScannersFromSystem}
-              >Vernieuwen</Button
-            >
           </div>
-
-          {#if scannerRequestError}
-            <p class="text-red-500 text-xs mt-2">
-              {scannerRequestError}
-            </p>
-          {/if}
         </div>
 
         <!-- App versions -->

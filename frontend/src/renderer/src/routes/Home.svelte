@@ -11,12 +11,11 @@
   import type { ErrorModel } from "../models/error.model";
   import { retrieveUserInfo } from "../services/api.service";
   import { clearHandlers, registerLoginHandlers } from "../services/numpad.service";
+  import { cleanupScannerKeyboardMode, initScannerKeyboardMode } from "../services/scanner.service";
   import { internetStatus, serverStatus } from "../stores/connection.store";
   import { core, isSetupComplete } from "../stores/core.store";
   import { navigate } from "../stores/router.store";
   import { date, time } from "../stores/time.store";
-  import { initScannerKeyboardMode, cleanupScannerKeyboardMode } from "../services/scanner.service";
-  import { onMount, onDestroy } from 'svelte';
 
   let error: ErrorModel | null = null;
   let isLoading: boolean = false;
@@ -99,14 +98,21 @@
       offline = false;
     }
   }
+  /**
+   * Reactive statement that manages barcode scanner keyboard mode
+   * When barcode scanner is enabled ($core.barcodeScanner is true),
+   * initializes scanner keyboard mode using initScannerKeyboardMode()
+   * When disabled, cleans up the scanner keyboard mode using cleanupScannerKeyboardMode()
+   * @reactive
+   */
 
-  onMount(() => {
-        initScannerKeyboardMode();
-    });
-    
-    onDestroy(() => {
-        cleanupScannerKeyboardMode();
-    });
+  $: {
+    if ($core.barcodeScanner) {
+      initScannerKeyboardMode();
+    } else {
+      cleanupScannerKeyboardMode();
+    }
+  }
 </script>
 
 <MenuBar timeVisible={false} />
