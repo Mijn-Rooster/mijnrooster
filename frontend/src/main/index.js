@@ -52,6 +52,49 @@ function createWindow() {
     return { action: "deny" };
   });
 
+  mainWindow.webContents.session.on(
+    "select-hid-device",
+    (event, details, callback) => {
+      // Add events to handle devices being added or removed before the callback on
+      // `select-hid-device` is called.
+      mainWindow.webContents.session.on("hid-device-added", (event, device) => {
+        console.log("hid-device-added FIRED WITH", device);
+        // Optionally update details.deviceList
+      });
+
+      mainWindow.webContents.session.on(
+        "hid-device-removed",
+        (event, device) => {
+          console.log("hid-device-removed FIRED WITH", device);
+          // Optionally update details.deviceList
+        },
+      );
+
+      event.preventDefault();
+      if (details.deviceList && details.deviceList.length > 0) {
+        callback(details.deviceList[0].deviceId);
+      }
+    },
+  );
+
+  mainWindow.webContents.session.setPermissionCheckHandler(
+    (webContents, permission, requestingOrigin, details) => {
+      if (permission === "hid" && details.securityOrigin === "file:///") {
+        return true;
+      } else {
+        return true;
+      }
+    },
+  );
+
+  mainWindow.webContents.session.setDevicePermissionHandler((details) => {
+    if (details.deviceType === "hid" && details.origin === "file://") {
+      return true;
+    } else {
+      return true;
+    }
+  });
+
   // HMR for renderer based on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {

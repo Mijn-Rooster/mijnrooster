@@ -2,17 +2,24 @@
   import { Button, Input, Label, Modal } from "flowbite-svelte";
   import { onMount } from "svelte";
   import ErrorCard from "./components/ErrorCard.svelte";
+  import ErrorToast from "./components/ErrorToast.svelte";
   import Router from "./components/Router.svelte";
-  import SettingsMenu from "./components/SettingsMenu.svelte";
+  import SettingsModal from "./components/SettingsModal.svelte";
   import type { ErrorModel } from "./models/error.model";
   import { checkAdminPassword } from "./services/core.service";
-  import { destroyNumpadControls, initNumpadControls } from "./services/numpad.service";
+  import {
+    destroyNumpadControls,
+    initNumpadControls,
+  } from "./services/numpad.service";
+  import { connectSavedScanner } from "./services/scanner.service";
   import { core, isSetupComplete } from "./stores/core.store";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
   let password = "";
   let error: ErrorModel | null = null;
+  let scannerConnectError: ErrorModel | null = null;
+
   /**
    * Reactive statement that handles numpad controls initialization and cleanup
    * When $core.numPadControl is true, initializes numpad controls
@@ -25,6 +32,25 @@
       initNumpadControls();
     } else {
       destroyNumpadControls();
+    }
+  }
+
+  $: {
+    if ($core.barcodeScanner) {
+      connectScanner();
+    }
+  }
+
+  async function connectScanner() {
+    try {
+      const connected = await connectSavedScanner();
+      if (!connected && $core.barcodeScanner) {
+        scannerConnectError = {
+          message: `Kon niet verbinden met scanner: ${$core.barcodeScanner.name}`
+        };
+      }
+    } catch (err) {
+      console.error("Error connecting saved scanner:", err);
     }
   }
 
@@ -70,19 +96,9 @@
   }
 </script>
 
-<style>
-  /* Remove focus outline */
-:global(svg:focus) {
-    outline: none !important;
-  }
-  
-  /* Remove focus outline on buttons */
-  :global(button:focus) {
-    outline: none !important;
-  }
-</style>
-
 <Router />
+
+<ErrorToast error={scannerConnectError} />
 
 <!-- Password Check Modal -->
 <Modal
@@ -116,8 +132,16 @@
 </Modal>
 
 <!-- Settings Modal -->
-<Modal bind:open={showSettingsModal} size="lg" title="Instellingen">
-  <div class="p-4">
-    <SettingsMenu />
-  </div>
-</Modal>
+<SettingsModal bind:open={showSettingsModal}/>
+
+<style>
+  /* Remove focus outline */
+  :global(svg:focus) {
+    outline: none !important;
+  }
+
+  /* Remove focus outline on buttons */
+  :global(button:focus) {
+    outline: none !important;
+  }
+</style>

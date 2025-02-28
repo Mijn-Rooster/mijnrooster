@@ -23,6 +23,11 @@ interface CoreStore {
   numPadControl: boolean;
   autoLogout: boolean;
   logoutTimeOut: number;
+  barcodeScanner: {
+    productId: number;
+    vendorId: number;
+    name: string;
+  } | null;
 }
 
 const DEFAULT: CoreStore = {
@@ -36,6 +41,7 @@ const DEFAULT: CoreStore = {
   numPadControl: true,
   autoLogout: true,
   logoutTimeOut: 20,
+  barcodeScanner: null,
 };
 
 const storedCore = localStorage.getItem("core");
