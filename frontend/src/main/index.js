@@ -124,12 +124,17 @@ function setupAutoUpdater(win) {
 
     if (isManualCheck) {
       dialog.showMessageBox({
-        type: "info",
-        title: "Updates beschikbaar",
-        message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
-        detail:
-          "De update zal automatisch worden geïnstalleerd wanneer je de app afsluit.",
-        buttons: ["OK"],
+      type: "info",
+      title: "Updates beschikbaar",
+      message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
+      detail: "Wil je de update nu installeren? De app zal opnieuw opstarten.",
+      buttons: ["Nu installeren", "Later"],
+      }).then(result => {
+      if (result.response === 0) {
+        autoUpdater.downloadUpdate().then(() => {
+        autoUpdater.quitAndInstall();
+        });
+      }
       });
     }
   });
