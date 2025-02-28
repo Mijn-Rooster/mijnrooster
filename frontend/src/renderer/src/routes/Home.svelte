@@ -1,60 +1,44 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { Button, Input, Label, Modal, Spinner } from "flowbite-svelte";
   import { ProfileCardSolid, UserSolid } from "flowbite-svelte-icons";
-  import { isSetupComplete } from "../stores/core.store";
-  import { time, date } from "../stores/time.store";
-  import { internetStatus, serverStatus } from "../stores/connection.store";
-  import { Modal } from "flowbite-svelte";
-  import { core } from "../stores/core.store";
   import {
+    Signal_wifi_0_bar,
     Signal_wifi_4_bar,
     Signal_wifi_statusbar_connected_no_internet_4,
-    Signal_wifi_0_bar,
   } from "svelte-google-materialdesign-icons";
-  import MenuBar from "../components/MenuBar.svelte";
-  import { navigate } from "../stores/router.store";
   import ErrorCard from "../components/ErrorCard.svelte";
-  import { Button, Label, Input } from "flowbite-svelte";
-  import { retrieveUserInfo } from "../services/api.service";
+  import MenuBar from "../components/MenuBar.svelte";
   import type { ErrorModel } from "../models/error.model";
-  import { Spinner } from "flowbite-svelte";
-  import { registerLoginHandlers, clearHandlers } from "../services/numpad.service";
+  import { retrieveUserInfo } from "../services/api.service";
+  import { clearHandlers, registerLoginHandlers } from "../services/numpad.service";
+  import { internetStatus, serverStatus } from "../stores/connection.store";
+  import { core, isSetupComplete } from "../stores/core.store";
+  import { navigate } from "../stores/router.store";
+  import { date, time } from "../stores/time.store";
 
   let error: ErrorModel | null = null;
   let isLoading: boolean = false;
   let leerlingnummer: string = "";
 
   /**
-   * Component lifecycle hooks for handling login functionality
-   * 
-   * onMount:
-   * - Checks if numpad control is enabled in core settings
-   * - If enabled, registers login event handlers that trigger form submission
-   *   when a valid student number is entered
-   * 
-   * onDestroy:
-   * - Cleans up by removing all registered event handlers
-   * 
-   * @requires registerLoginHandlers - Function to set up numpad input handlers
-   * @requires clearHandlers - Function to remove event listeners
-   * @requires core - Store containing app settings
-   * @requires leerlingnummer - Student number state variable
-   * @requires handleSubmit - Form submission handler function
+   * Reactive statement that manages numpad login control
+   * When numpad control is enabled ($core.numPadControl is true):
+   * - Registers login event handlers 
+   * - Automatically submits form if leerlingnummer exists when handler triggered
+   * When disabled:
+   * - Clears all registered handlers
    */
-   onMount(() => {
+  $: {
     if ($core.numPadControl) {
-      console.log("Registering login handlers");
       registerLoginHandlers(() => {
         if (leerlingnummer) {
           handleSubmit(new SubmitEvent('submit'));
         }
       });
+    } else {
+      clearHandlers();
     }
-  });
-
-  onDestroy(() => {
-    clearHandlers();
-  });
+  }
 
   /**
    * Handles the form submission event.

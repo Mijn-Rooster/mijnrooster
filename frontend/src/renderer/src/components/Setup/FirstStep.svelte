@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Button, Label, Input, Footer } from "flowbite-svelte";
-  import { navigate } from "../../stores/router.store";
+  import { Button, Footer, Input, Label } from "flowbite-svelte";
   import { ArrowRightOutline } from "flowbite-svelte-icons";
+  import type { ErrorModel } from "../../models/error.model";
   import { connectionCheck } from "../../services/api.service";
   import { core } from "../../stores/core.store";
+  import { navigate } from "../../stores/router.store";
   import ErrorCard from "../ErrorCard.svelte";
-  import type { ErrorModel } from "../../models/error.model";
 
   let serverUrl = "";
   let serverPassword = "";

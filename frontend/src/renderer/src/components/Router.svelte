@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { route } from "../stores/router.store";
-  import Home from "../routes/Home.svelte";
+  import type { SvelteComponent } from "svelte";
   import Error from "../routes/Error.svelte";
+  import Home from "../routes/Home.svelte";
   import Schedule from "../routes/Schedule.svelte";
   import Setup from "../routes/Setup.svelte";
-  import type { SvelteComponent } from "svelte";
+  import { route } from "../stores/router.store";
 
   let currentRoute: string;
 

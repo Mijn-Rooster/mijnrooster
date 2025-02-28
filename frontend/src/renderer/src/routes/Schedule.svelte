@@ -1,22 +1,18 @@
 <script lang="ts">
-  import MenuBar from "../components/MenuBar.svelte";
-  import { navigate } from "../stores/router.store";
-  import { Button, Footer, Alert, Toast } from "flowbite-svelte";
+  import { Button, Footer, Toast } from "flowbite-svelte";
   import { ArrowLeftToBracketOutline } from "flowbite-svelte-icons";
+  import MenuBar from "../components/MenuBar.svelte";
   import Schedule from "../components/Schedule/Schedule.svelte";
   import type { UserModel } from "../models/user.model";
-  import { route } from "../stores/router.store";
-  import { onMount, onDestroy } from "svelte";
-  import { core } from "../stores/core.store";
-  import { get } from "svelte/store";
   import { clearHandlers, registerScheduleHandlers } from "../services/numpad.service";
+  import { core } from "../stores/core.store";
+  import { navigate, route } from "../stores/router.store";
 
   let user: UserModel = $route.params.user;
   let logoutTimer: NodeJS.Timeout;
   let warningTimer: NodeJS.Timeout;
   let showWarning = false;
-  const AUTO_LOGOUT_ENABLED = get(core).autoLogout;
-  const LOGOUT_DELAY = get(core).logoutTimeOut * 1000;
+  const LOGOUT_DELAY = $core.logoutTimeOut * 1000;
   const WARNING_DELAY = LOGOUT_DELAY - 5000; // Show warning 5 seconds before logout
 
   /**
@@ -53,39 +49,52 @@
   }
 
   /**
-   * Lifecycle function that sets up event listeners when the component is mounted:
-   * 
-   * 1. If auto logout is enabled:
-   *    - Resets the logout timer
-   *    - Adds event listeners for user activity tracking (mouse, keyboard, touch, scroll)
-   *    to prevent automatic logout
-   * 
-   * 2. If numpad control is enabled in core settings:
-   *    - Registers schedule-specific keyboard handlers
+   * Reactive statement that handles the registration and clearing of schedule handlers
+   * based on the numPadControl store value.
+   * When numPadControl is true, registers schedule handlers.
+   * When numPadControl is false, clears all handlers.
+   * @reactive
+   * @dependency {Store} $core.numPadControl - Boolean store controlling numpad functionality
    */
-  onMount(() => {
-    if (AUTO_LOGOUT_ENABLED) {
+  $ : {
+    if ($core.numPadControl) {
+      registerScheduleHandlers();
+    } else {
+      clearHandlers();
+    }
+  }
+
+  /**
+   * Reactive statement that manages auto-logout functionality.
+   * When auto-logout is enabled ($core.autoLogout is true):
+   * - Resets the logout timer
+   * - Sets up event listeners for user activity on:
+   *   - Mouse movement
+   *   - Mouse clicks
+   *   - Keyboard input
+   *   - Touch events
+   *   - Scroll events
+   * 
+   * When auto-logout is disabled:
+   * - Clears existing logout and warning timers
+   * - Removes all event listeners
+   * 
+   * Dependencies:
+   * - $core.autoLogout
+   * - logoutTimer
+   * - warningTimer
+   * - handleUserActivity function
+   * - resetLogoutTimer function
+   */
+  $: {
+    if ($core.autoLogout) {
       resetLogoutTimer();
       window.addEventListener("mousemove", handleUserActivity);
       window.addEventListener("mousedown", handleUserActivity);
       window.addEventListener("keydown", handleUserActivity);
       window.addEventListener("touchstart", handleUserActivity);
       window.addEventListener("scroll", handleUserActivity);
-    }
-    if ($core.numPadControl) {
-      registerScheduleHandlers();
-    }
-  });
-
-  /**
-   * Cleanup function executed when component is destroyed.
-   * If auto logout is enabled:
-   * - Clears logout and warning timers
-   * - Removes all user activity event listeners (mousemove, mousedown, keypress, touchstart, scroll)
-   * Finally calls clearHandlers() to perform additional cleanup
-   */
-  onDestroy(() => {
-    if (AUTO_LOGOUT_ENABLED) {
+    } else {
       if (logoutTimer) clearTimeout(logoutTimer);
       if (warningTimer) clearTimeout(warningTimer);
       window.removeEventListener("mousemove", handleUserActivity);
@@ -94,8 +103,7 @@
       window.removeEventListener("touchstart", handleUserActivity);
       window.removeEventListener("scroll", handleUserActivity);
     }
-    clearHandlers();
-  });
+  }
 </script>
 
 {#if showWarning}

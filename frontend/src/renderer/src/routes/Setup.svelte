@@ -1,8 +1,8 @@
 <script lang="ts">
   import MenuBar from "../components/MenuBar.svelte";
-  import { route } from "../stores/router.store";
   import FirstStep from "../components/Setup/FirstStep.svelte";
   import SecondStep from "../components/Setup/SecondStep.svelte";
+  import { route } from "../stores/router.store";
 
   let setupStep: number;
 
