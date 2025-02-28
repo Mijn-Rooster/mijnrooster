@@ -69,11 +69,8 @@ function handleScannerInput(event: KeyboardEvent): void {
  */
 export function initScannerKeyboardMode() {
     if (!get(core).barcodeScanner) return;
-
-    console.log('Scanner keyboard mode enabled');
     // Cleanup any existing scanner mode
     cleanupScannerKeyboardMode();
-    
     // Add the event listener with the separated handler function
     document.addEventListener('keypress', handleScannerInput);
 }

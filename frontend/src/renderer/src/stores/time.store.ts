@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { getCurrentTime, getCurrentDate } from "../services/time.service";
+import { getCurrentDate, getCurrentTime } from "../services/time.service";
 
 export const time = writable(getCurrentTime());
 export const date = writable(getCurrentDate());

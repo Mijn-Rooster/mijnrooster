@@ -1,4 +1,4 @@
-import { writable, get } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 /**
  * Represents the core state configuration for the application.

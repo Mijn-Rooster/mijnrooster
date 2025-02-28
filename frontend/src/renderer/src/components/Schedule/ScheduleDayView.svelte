@@ -8,7 +8,6 @@
   import { retrieveSchedule } from "../../services/api.service";
   import ErrorToast from "../ErrorToast.svelte";
   import ScheduleItem from "./ScheduleItem.svelte";
-  import { get } from "svelte/store";
 
   export let user: UserModel;
 

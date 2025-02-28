@@ -1,24 +1,6 @@
-/**
- * Service module for handling core functionality.
- *
- * @module CoreService
- *
- * @remarks
- * This module provides core functionality for the application, including cryptographic hashing.
- *
- * @example
- * ```typescript
- * // Generate a hash for a data string
- * const hash = await getHash("data");
- * ```
- *
- * @throws {Error} If the hashing operation fails
- *
- */
-
-import { connectionCheck } from "./api.service";
-import { core } from "../stores/core.store";
 import { get } from "svelte/store";
+import { core } from "../stores/core.store";
+import { connectionCheck } from "./api.service";
 
 /**
  * Computes a cryptographic hash for the supplied data string.
