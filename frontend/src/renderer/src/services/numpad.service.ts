@@ -12,7 +12,7 @@ const handlers: { [key: string]: NumpadHandler } = {};
  */
 export function initNumpadControls() {
     if (!get(core).numPadControl) return;
-
+    console.log('Numpad controls enabled');
     document.addEventListener('keydown', handleKeydown);
 }
 
@@ -81,7 +81,7 @@ export function registerLoginHandlers(submitFn: () => void) {
     for (let i = 0; i <= 9; i++) {
         handlers[`Numpad${i}`] = (e) => {
             const input = document.getElementById('leerlingnummer') as HTMLInputElement;
-            if (input) {
+            if (input && !input.disabled) {
                 const newValue = input.value + i;
                 input.value = newValue;
                 // Trigger input event to update Svelte binding
@@ -93,7 +93,7 @@ export function registerLoginHandlers(submitFn: () => void) {
     // Special function keys
     handlers['NumpadDecimal'] = () => {          // Delete last digit (./del)
         const input = document.getElementById('leerlingnummer') as HTMLInputElement;
-        if (input) {
+        if (input  && !input.disabled) {
             const newValue = input.value.slice(0, -1);
             input.value = newValue;
             input.dispatchEvent(new Event('input'));
@@ -102,7 +102,7 @@ export function registerLoginHandlers(submitFn: () => void) {
     handlers['NumpadEnter'] = () => submitFn(); // Submit form (enter)
     handlers['NumpadAdd'] = () => {              // Clear input (+)
         const input = document.getElementById('leerlingnummer') as HTMLInputElement;
-        if (input) {
+        if (input && !input.disabled) {
             input.value = '';
             input.dispatchEvent(new Event('input'));
         }

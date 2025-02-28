@@ -1,4 +1,4 @@
-import { writable, get } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 /**
  * Represents the core state configuration for the application.
@@ -23,6 +23,7 @@ interface CoreStore {
   numPadControl: boolean;
   autoLogout: boolean;
   logoutTimeOut: number;
+  barcodeScanner: boolean;
 }
 
 const DEFAULT: CoreStore = {
@@ -31,11 +32,12 @@ const DEFAULT: CoreStore = {
   serverPassword: null,
   schoolInYearId: null,
   schoolId: null,
-  adminPassword: "1234",
+  adminPassword: "",
   weekView: false,
   numPadControl: false,
   autoLogout: false,
   logoutTimeOut: 20,
+  barcodeScanner: false,
 };
 
 const storedCore = localStorage.getItem("core");

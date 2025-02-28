@@ -3,16 +3,20 @@
   import { onMount } from "svelte";
   import ErrorCard from "./components/ErrorCard.svelte";
   import Router from "./components/Router.svelte";
-  import SettingsMenu from "./components/SettingsMenu.svelte";
+  import SettingsModal from "./components/SettingsModal.svelte";
   import type { ErrorModel } from "./models/error.model";
   import { checkAdminPassword } from "./services/core.service";
-  import { destroyNumpadControls, initNumpadControls } from "./services/numpad.service";
+  import {
+    destroyNumpadControls,
+    initNumpadControls,
+  } from "./services/numpad.service";
   import { core, isSetupComplete } from "./stores/core.store";
 
   let showPasswordModal = false;
   let showSettingsModal = false;
   let password = "";
   let error: ErrorModel | null = null;
+
   /**
    * Reactive statement that handles numpad controls initialization and cleanup
    * When $core.numPadControl is true, initializes numpad controls
@@ -68,19 +72,8 @@
     }
     password = "";
   }
-</script>
-
-<style>
-  /* Remove focus outline */
-:global(svg:focus) {
-    outline: none !important;
-  }
   
-  /* Remove focus outline on buttons */
-  :global(button:focus) {
-    outline: none !important;
-  }
-</style>
+</script>
 
 <Router />
 
@@ -116,8 +109,18 @@
 </Modal>
 
 <!-- Settings Modal -->
-<Modal bind:open={showSettingsModal} size="lg" title="Instellingen">
-  <div class="p-4">
-    <SettingsMenu />
-  </div>
-</Modal>
+{#if showSettingsModal}
+<SettingsModal bind:open={showSettingsModal}/>
+{/if}
+
+<style>
+  /* Remove focus outline */
+  :global(svg:focus) {
+    outline: none !important;
+  }
+
+  /* Remove focus outline on buttons */
+  :global(button:focus) {
+    outline: none !important;
+  }
+</style>

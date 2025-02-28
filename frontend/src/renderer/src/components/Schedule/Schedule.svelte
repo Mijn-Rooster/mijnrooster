@@ -1,9 +1,9 @@
 <script lang="ts">
   import { TabItem, Tabs } from "flowbite-svelte";
   import type { UserModel } from "../../models/user.model";
+  import { core } from "../../stores/core.store";
   import ScheduleDayView from "./ScheduleDayView.svelte";
   import ScheduleWeekView from "./ScheduleWeekView.svelte";
-  import { core } from "../../stores/core.store";
 
   let weekViewEnabled = $core.weekView;
   let activeTab = 0;
