@@ -16,6 +16,7 @@
   import { core, isSetupComplete } from "../stores/core.store";
   import { navigate } from "../stores/router.store";
   import { date, time } from "../stores/time.store";
+  import { onDestroy } from "svelte";
 
   let error: ErrorModel | null = null;
   let isLoading: boolean = false;
@@ -98,6 +99,7 @@
       offline = false;
     }
   }
+
   /**
    * Reactive statement that manages barcode scanner keyboard mode
    * When barcode scanner is enabled ($core.barcodeScanner is true),
@@ -113,6 +115,10 @@
       cleanupScannerKeyboardMode();
     }
   }
+
+  onDestroy(() => {
+    cleanupScannerKeyboardMode();
+  });
 </script>
 
 <MenuBar timeVisible={false} />
@@ -162,6 +168,7 @@
           bind:value={leerlingnummer}
           placeholder="bijv. 2022036"
           data-numpad="input"
+          disabled={isLoading || offline}
           class="w-full px-4 py-2 mt-2 border rounded-lg focus:border-primary-400 focus:outline-none focus:ring"
         >
           <UserSolid slot="left" class="w-4 h-4" />
@@ -172,7 +179,7 @@
         <Button
           type="submit"
           class="w-full py-2 text-white bg-primary-500 rounded-md hover:bg-primary-600 focus:outline-none focus:ring"
-          disabled={isLoading}
+          disabled={isLoading || offline}
         >
           {#if isLoading}
             <Spinner class="w-5 h-5" />

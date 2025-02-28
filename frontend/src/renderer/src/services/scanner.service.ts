@@ -20,6 +20,9 @@ const SCAN_TIMEOUT = 15; // Time in ms between keystrokes to be considered part 
  * @throws - No explicit throws, but may fail silently if input element is not found
  */
 function handleScannerInput(event: KeyboardEvent): void {
+    const input = document.getElementById('leerlingnummer') as HTMLInputElement;
+    if (!input || input.disabled) return;
+
     const currentTime = new Date().getTime();
     
     // Clear buffer if timeout exceeded
@@ -36,7 +39,6 @@ function handleScannerInput(event: KeyboardEvent): void {
     
     // Process complete scan on Enter
     if (event.key === 'Enter' && scanBuffer.length > 0) {
-        const input = document.getElementById('leerlingnummer') as HTMLInputElement;
         if (input) {
             input.value = scanBuffer;
             input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -68,6 +70,7 @@ function handleScannerInput(event: KeyboardEvent): void {
  * ```
  */
 export function initScannerKeyboardMode() {
+    console.log("init")
     if (!get(core).barcodeScanner) return;
     // Cleanup any existing scanner mode
     cleanupScannerKeyboardMode();
@@ -83,6 +86,7 @@ export function initScannerKeyboardMode() {
  * processing scanner input and resets the scan buffer to an empty string.
  */
 export function cleanupScannerKeyboardMode() {
+    console.log("remove")
     // Update to remove the specific handler function
     document.removeEventListener('keypress', handleScannerInput);
     scanBuffer = '';

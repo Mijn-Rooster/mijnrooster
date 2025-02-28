@@ -16,7 +16,6 @@
   let showSettingsModal = false;
   let password = "";
   let error: ErrorModel | null = null;
-  let scannerConnectError: ErrorModel | null = null;
 
   /**
    * Reactive statement that handles numpad controls initialization and cleanup
