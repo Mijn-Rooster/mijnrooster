@@ -31,10 +31,10 @@ const DEFAULT: CoreStore = {
   serverPassword: null,
   schoolInYearId: null,
   schoolId: null,
-  adminPassword: "1234",
+  adminPassword: "",
   weekView: false,
-  numPadControl: false,
-  autoLogout: false,
+  numPadControl: true,
+  autoLogout: true,
   logoutTimeOut: 20,
 };
 

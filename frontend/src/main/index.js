@@ -64,22 +64,30 @@ function createWindow() {
 }
 
 /**
- * Sets up the auto-updater functionality for the application
- * @param {Electron.BrowserWindow} win - The main browser window instance
+ * Sets up the auto-updater for the application with both silent and manual update checks.
+ *
+ * @param {BrowserWindow} win - The main application window instance
+ * @returns {Function} A function that can be called to manually check for updates
+ *
+ * @listens {autoUpdater#checking-for-update} Logs when checking for updates begins
+ * @listens {autoUpdater#update-available} Handles when updates are available
+ * @listens {autoUpdater#update-not-available} Handles when no updates are found
+ * @listens {autoUpdater#error} Handles any errors during the update process
+ * @listens {autoUpdater#update-downloaded} Handles when an update is downloaded
+ *
  * @description
- * Configures the electron auto-updater with the following functionality:
- * - Enables automatic download of updates
- * - Enables automatic installation on app quit
- * - Logs update checks and status
- * - Notifies the renderer process when updates are available
- * - Shows error dialogs when update fails
- * - Prompts user to install downloaded updates
- * - Performs initial update check on setup
- * @throws {Error} When auto-updater encounters an error during update process
+ * This function configures the electron autoUpdater with the following features:
+ * - Automatic download of updates
+ * - Automatic installation on app quit
+ * - Silent background checks
+ * - Manual check capability with user notifications
+ * - Error handling and logging
  */
 function setupAutoUpdater(win) {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+
+  let isManualCheck = false;
 
   autoUpdater.on("checking-for-update", () => {
     log.info("Checking for updates...");
@@ -88,39 +96,69 @@ function setupAutoUpdater(win) {
   autoUpdater.on("update-available", (info) => {
     log.info(`Update available: ${info.version}`);
     win.webContents.send("update-available", info.version);
-  });
 
-  autoUpdater.on("update-not-available", () => {
-    log.info("No updates available.");
-  });
-
-  autoUpdater.on("error", (err) => {
-    log.error("Error in auto-updater:", err);
-    dialog.showErrorBox("Update Error", `Failed to update: ${err.message}`);
-  });
-
-  autoUpdater.on("update-downloaded", () => {
-    log.info("Update downloaded. Prompting user...");
-
-    dialog
-      .showMessageBox(win, {
+    if (isManualCheck) {
+      dialog.showMessageBox({
         type: "info",
         title: "Updates beschikbaar",
         message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
         detail:
-          "De update is al gedownload en klaar om te installeren. De app zal automatisch herstarten.",
-        buttons: ["Nu installeren", "Later"],
-        icon: icon,
-      })
-      .then((result) => {
-        if (result.response === 0) {
-          autoUpdater.quitAndInstall();
-        }
+          "De update zal automatisch worden geïnstalleerd wanneer je de app afsluit.",
+        buttons: ["OK"],
       });
+    }
   });
 
-  // Perform an initial check for updates
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.on("update-not-available", () => {
+    log.info("No updates available.");
+    if (isManualCheck) {
+      dialog.showMessageBox({
+        type: "info",
+        title: "Updates",
+        message: "Controleren op updates",
+        detail: "Je hebt de laatste versie van Mijn Rooster.",
+        buttons: ["OK"],
+      });
+    }
+  });
+
+  autoUpdater.on("error", (err) => {
+    log.error("Error in auto-updater:", err);
+    if (isManualCheck) {
+      dialog.showErrorBox("Update Error", `Failed to update: ${err.message}`);
+    }
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    log.info("Update downloaded.");
+    if (isManualCheck) {
+      dialog
+        .showMessageBox(win, {
+          type: "info",
+          title: "Updates beschikbaar",
+          message: "Er is een nieuwe versie van Mijn Rooster gedownload!",
+          detail:
+            "Wil je de update nu installeren? De app zal opnieuw opstarten.",
+          buttons: ["Nu installeren", "Later"],
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            autoUpdater.quitAndInstall();
+          }
+        });
+    }
+  });
+
+  // Initial silent check
+  autoUpdater.checkForUpdates();
+
+  // Return function to perform manual check
+  return () => {
+    isManualCheck = true;
+    autoUpdater.checkForUpdates().finally(() => {
+      isManualCheck = false;
+    });
+  };
 }
 
 // Generate SHA256 hash (IPC handler)
@@ -164,7 +202,7 @@ app.whenReady().then(() => {
   }
 
   const mainWindow = createWindow();
-  setupAutoUpdater(mainWindow);
+  const checkForUpdates = setupAutoUpdater(mainWindow);
 
   // Create an application menu that includes update checks, zoom controls, and developer tools.
   const menuTemplate = [
@@ -204,15 +242,7 @@ app.whenReady().then(() => {
           accelerator: "CmdOrCtrl+U",
           click: () => {
             log.info("Manual update check initiated.");
-            autoUpdater.checkForUpdates().then(() => {
-              dialog.showMessageBox({
-                type: "info",
-                title: "Updates",
-                message: "Controleren op updates",
-                detail: "Je hebt de laatste versie van Mijn Rooster.",
-                buttons: ["OK"],
-              });
-            });
+            checkForUpdates();
           },
         },
         { type: "separator" },
