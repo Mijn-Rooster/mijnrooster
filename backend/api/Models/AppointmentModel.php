@@ -289,6 +289,7 @@ class Appointment
             'maat' => 'Maatschappijleer',
             'maw' => 'Maatschappijwetenschappen',
             'mu' => 'Muziek',
+            'ml' => 'Mentorles',
             'na' => 'Natuurkunde',
             'nat' => 'Natuurkunde',
             'nlt' => 'Natuur, Leven en Technologie',

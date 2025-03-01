@@ -8,8 +8,7 @@ namespace api\Models;
  * It contains a status code, a message and details.
  * These values are defined by the error code that is passed to the constructor.
  */
-class Error
-{
+class Error {
     /**
      * The status code of the error (e.g. 403)
      * @var int $statusCode
@@ -87,6 +86,16 @@ class Error
             'message' => 'Er is een fout opgetreden in de communicatie met het netwerk',
             'details' => 'Controleer de internetverbinding van uw server',
         ],
+        'CONFIG_MISSING' => [
+            'statusCode' => 500,
+            'message' => 'Configuration file niet gevonden',
+            'details' => 'Kopieer config.php.example naar config.php en configureer de instellingen',
+        ],
+        'CONFIG_NOT_WRITABLE' => [
+            'statusCode' => 500,
+            'message' => 'Configuratie vereist aanpassingen',
+            'details' => 'De configuratie moet worden bijgewerkt maar het bestand is niet schrijfbaar',
+        ],
         'DEFAULT' => [
             'statusCode' => 500,
             'message' => 'Er is een onbekende fout opgetreden',
@@ -99,8 +108,7 @@ class Error
      * @param string $errorCode, the error code that defines the errorcode and message, defaults to 'DEFAULT'
      * @param string $details (optional), the details of the error
      */
-    public function __construct($errorCode = 'DEFAULT', $details = null)
-    {
+    public function __construct($errorCode = 'DEFAULT', $details = null) {
         // if the error code is not defined, set it to the default error code
         if (!isset(self::$errorDefinitions[$errorCode])) {
             $errorCode = 'DEFAULT';
@@ -125,7 +133,7 @@ class Error
         $zermeloDetails = isset($response['details']) ? $response['details'] : "";
 
         $this->details = $zermeloMessage;
-        if(DEBUG_MODE && !empty($zermeloDetails)) {
+        if (DEBUG_MODE && !empty($zermeloDetails)) {
             $this->details .= ". Details: " . $zermeloDetails;
         }
     }
@@ -135,8 +143,7 @@ class Error
      * @param int $statusCode
      * @return void
      */
-    public function setStatusCode($statusCode): void
-    {
+    public function setStatusCode($statusCode): void {
         $this->statusCode = $statusCode;
     }
 
@@ -144,8 +151,7 @@ class Error
      * Return the status code of the error.
      * @return int $statusCode
      */
-    public function getStatusCode(): int
-    {
+    public function getStatusCode(): int {
         return $this->statusCode;
     }
 
@@ -153,8 +159,7 @@ class Error
      * Return the message of the error.
      * @return string $message
      */
-    public function getMessage(): string
-    {
+    public function getMessage(): string {
         return $this->message;
     }
 
@@ -162,8 +167,7 @@ class Error
      * Return the details of the error.
      * @return string $details
      */
-    public function getDetails(): string
-    {
+    public function getDetails(): string {
         return $this->details;
     }
 }

@@ -32,12 +32,12 @@ try {
         $user = getStudentDetails($userId, $schoolInSchoolYear);
 
         // If there is no user found in the student list, search for the user in the teacher list
-        if ($user === null) {
+        if ($user === null && defined('DOCENT_SCHEDULE') && DOCENT_SCHEDULE) {
             $user = getTeacherDetails($userId, $schoolInSchoolYear);
         }
     } else if ($_GET['type'] === "student") {
         $user = getStudentDetails($userId, $schoolInSchoolYear);
-    } else if ($_GET['type'] === "teacher") {
+    } else if ($_GET['type'] === "teacher" && defined('DOCENT_SCHEDULE') && DOCENT_SCHEDULE) {
         $user = getTeacherDetails($userId, $schoolInSchoolYear);
     } else {
         ErrorHandler::handle("PARAMETER_INVALID","The parameter 'type' is invalid. Please use 'student' or 'teacher'");

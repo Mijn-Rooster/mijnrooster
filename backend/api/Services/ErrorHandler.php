@@ -23,7 +23,7 @@ class ErrorHandler {
      * @param string $details The error details.
      * @return never send a JSON response with the error message.
      */
-    public static function handle($errorCode, $details = ""): never {
+    public static function handle($errorCode, $details = "") {
         // Create new error object
         if ($details === "") {
             $error = new Error($errorCode);
@@ -47,7 +47,7 @@ class ErrorHandler {
      * @param array $zermeloData The response from the Zermelo API.
      * @return never send a JSON response with the error message.
      */
-    public static function handleZermeloError($zermeloData): never {
+    public static function handleZermeloError($zermeloData) {
         // Create a new error model
         $error = new Error(
             "ZERMELO_API_ERROR",

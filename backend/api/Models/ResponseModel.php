@@ -72,6 +72,7 @@ class Response
         ];
 
         // Set the response code and send the response
+        
         http_response_code($this->statusCode);
         echo json_encode($response);
         exit;

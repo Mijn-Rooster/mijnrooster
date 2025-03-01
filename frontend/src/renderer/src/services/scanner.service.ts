@@ -70,7 +70,7 @@ function handleScannerInput(event: KeyboardEvent): void {
  * ```
  */
 export function initScannerKeyboardMode() {
-    console.log("init")
+    console.log("Barcode scanner initialized")
     if (!get(core).barcodeScanner) return;
     // Cleanup any existing scanner mode
     cleanupScannerKeyboardMode();
@@ -86,7 +86,7 @@ export function initScannerKeyboardMode() {
  * processing scanner input and resets the scan buffer to an empty string.
  */
 export function cleanupScannerKeyboardMode() {
-    console.log("remove")
+    console.log("Barcode scanner cleanup")
     // Update to remove the specific handler function
     document.removeEventListener('keypress', handleScannerInput);
     scanBuffer = '';
