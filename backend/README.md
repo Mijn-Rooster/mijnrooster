@@ -1,6 +1,6 @@
-# Mijn Rooster (Backend en API)
+# Mijn Rooster (Server/API)
 
-Mijn Rooster API is een eenvoudige PHP-backend die fungeert als een koppeling tussen de Mijn Rooster-applicatie en Zermelo. Deze API moet zelf worden gehost en biedt meerdere endpoints voor het ophalen van gebruikers- en roosterinformatie.
+Mijn Rooster Server is een eenvoudige PHP-backend die fungeert als een koppeling tussen de Mijn Rooster-applicatie en Zermelo. Deze server moet zelf worden gehost en biedt meerdere endpoints voor het ophalen van gebruikers- en roosterinformatie.
 
 ## 📥 Installatie & Hosting
 

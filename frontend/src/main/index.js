@@ -123,19 +123,22 @@ function setupAutoUpdater(win) {
     win.webContents.send("update-available", info.version);
 
     if (isManualCheck) {
-      dialog.showMessageBox({
-      type: "info",
-      title: "Updates beschikbaar",
-      message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
-      detail: "Wil je de update nu installeren? De app zal opnieuw opstarten.",
-      buttons: ["Nu installeren", "Later"],
-      }).then(result => {
-      if (result.response === 0) {
-        autoUpdater.downloadUpdate().then(() => {
-        autoUpdater.quitAndInstall();
+      dialog
+        .showMessageBox({
+          type: "info",
+          title: "Updates beschikbaar",
+          message: "Er is een nieuwe versie van Mijn Rooster beschikbaar!",
+          detail:
+            "Wil je de update nu installeren? De app zal opnieuw opstarten.",
+          buttons: ["Nu installeren", "Later"],
+        })
+        .then((result) => {
+          if (result.response === 0) {
+            autoUpdater.downloadUpdate().then(() => {
+              autoUpdater.quitAndInstall();
+            });
+          }
         });
-      }
-      });
     }
   });
 
@@ -213,7 +216,7 @@ ipcMain.handle("get-app-version", () => {
   return version;
 });
 
-app.commandLine.appendSwitch('disable-hid-blocklist')
+app.commandLine.appendSwitch("disable-hid-blocklist");
 
 // This method will be called when Electron has finished initialization.
 app.whenReady().then(() => {
