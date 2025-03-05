@@ -22,8 +22,7 @@
   let weekStartUnix = getStartOfWeekUnix(new Date());
   let weekEndUnix = getEndOfWeekUnix(new Date());
   $: weekNumber = getWeek(weekStartUnix);
-  $: currentWeekStartDate = getCurrentDate(weekStartUnix);
-  $: currentWeekEndDate = getCurrentDate(weekEndUnix);
+  $: currentMonth = getCurrentMonth(weekEndUnix);
   const weekdayOrder = ["ma", "di", "wo", "do", "vr"];
   
   /**
@@ -157,11 +156,10 @@
    * @param {number} unix - The Unix timestamp in seconds
    * @returns {string} Formatted date string (e.g., "ma 1 jan")
    */
-  function getCurrentDate(unix: number): string {
+  function getCurrentMonth(unix: number): string {
     return new Date(unix * 1000).toLocaleDateString("nl-NL", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
+      month: "long",
+      year: "numeric",
     });
   }
 
@@ -251,7 +249,7 @@
 
     <!-- Current date -->
     <h2 class="text-xl font-bold text-center">
-      {currentWeekStartDate} - {currentWeekEndDate} (week {weekNumber})
+      week {weekNumber} - {currentMonth}
     </h2>
 
     <!-- Next -->

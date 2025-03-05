@@ -146,7 +146,7 @@
       Scan je schoolpas
     </h2>
     <p class="text-center text-sm text-gray-500 mt-1">
-      Houd je schoolpas tegen de kaartlezer
+      Houd je schoolpas voor de kaartlezer
     </p>
   </div>
   <div
