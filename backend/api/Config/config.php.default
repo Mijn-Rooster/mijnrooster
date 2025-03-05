@@ -9,7 +9,7 @@
 
 // Mijn Rooster configuration
 define('TENANT_NAME', '');              // The name of the school
-define('CONNECT_CODE', '');             // The token to access the API on the device
+define('CONNECT_CODE', '');             // The password to connect with the server on setup
 define('DEBUG_MODE', false);            // Enable or disable debug mode
 define('DOCENT_SCHEDULE', true);       // Enable or disable the docent schedule
 
