@@ -24,7 +24,7 @@
   $: weekNumber = getWeek(weekStartUnix);
   $: currentMonth = getCurrentMonth(weekEndUnix);
   const weekdayOrder = ["ma", "di", "wo", "do", "vr"];
-  
+
   /**
    * Computes a reactive value that groups schedule items by day of the week.
    * @param {ScheduleItemModel[]} schedule - Array of schedule items to be grouped
@@ -63,10 +63,10 @@
   /**
    * Formats a day label by combining the day name with its corresponding date
    * based on the week's start date.
-   * 
+   *
    * @param {string} day - The name of the day to format
    * @returns {string} The formatted day label (e.g., "Monday 15")
-   * 
+   *
    * Uses a global weekStartUnix timestamp and weekdayOrder array to calculate
    * the correct date for the given day within the week.
    */
@@ -81,7 +81,7 @@
    * Determines if the given day matches the current day.
    * @param {string} day - The day of the week to check (case-insensitive)
    * @returns {boolean} True if the given day is today, false otherwise
-   * 
+   *
    * Uses the weekStartUnix timestamp and weekdayOrder array (expected to be in scope)
    * to calculate the date for the given day and compare it with today's date.
    */
@@ -95,10 +95,10 @@
 
   /**
    * Calculates the Unix timestamp (in seconds) for the start of the week (Monday) containing the given date.
-   * 
+   *
    * @param {Date} date - The date to calculate the start of week from
    * @returns {number} Unix timestamp in seconds representing Monday 00:00:00 of the week containing the input date
-   * 
+   *
    * @example
    * // Returns Unix timestamp for Monday 00:00:00 of the current week
    * const timestamp = getStartOfWeekUnix(new Date());
@@ -114,10 +114,10 @@
   /**
    * Calculates the Unix timestamp (in seconds) for the end of the week (Friday 23:59:59)
    * for a given date. The week is considered to end on Friday.
-   * 
+   *
    * @param {Date} date - The input date to calculate the end of week from
    * @returns {number} Unix timestamp in seconds representing Friday 23:59:59 of the same week
-   * 
+   *
    * If the input date is:
    * - Sunday: Calculates next Friday
    * - Monday through Friday: Calculates coming Friday
@@ -135,7 +135,7 @@
    * Calculates the week number for a given Unix timestamp
    * @param {number} unix - Unix timestamp in seconds
    * @returns {number} Week number (1-53)
-   * 
+   *
    * The calculation works by:
    * 1. Converting Unix timestamp to milliseconds and creating Date object
    * 2. Getting first day of the year for the given date
@@ -165,13 +165,13 @@
 
   /**
    * Loads the schedule for a specific week.
-   * 
+   *
    * This function handles the asynchronous fetching of schedule data:
    * - Aborts any existing fetch request
    * - Shows loading state while fetching
    * - Updates schedule data on success
    * - Handles errors (ignoring abort errors)
-   * 
+   *
    * @async
    * @function loadSchedule
    * @uses {AbortController} fetchController - Controls fetch request cancellation
@@ -201,7 +201,7 @@
         if (err.name !== "AbortError") {
           error = err;
         }
-      })
+      });
   }
 
   /**
@@ -217,7 +217,7 @@
    * Navigates to the previous week in the schedule by:
    * 1. Subtracting 7 days (in seconds) from the week start timestamp
    * 2. Subtracting 7 days (in seconds) from the week end timestamp
-   * 3. Reloading the schedule with the new date range 
+   * 3. Reloading the schedule with the new date range
    */
 
   function previousWeek() {
@@ -276,18 +276,12 @@
     <div class="grid grid-cols-5 gap-4 min-w-[800px]">
       {#each weekdayOrder as day}
         <div class="flex flex-col gap-2">
-          <h3
-            class="font-bold text-lg text-center border-b py-2 sticky top-0 bg-white dark:bg-gray-900 {isCurrentDay(
-              day,
-            )
-              ? 'text-primary-600 dark:text-primary-500'
-              : 'text-gray-700 dark:text-gray-300'}"
-          >
-            {formatDayLabel(day)}
-          </h3>
-          <div
-            class="flex flex-col gap-2 overflow-y-auto"
-          >
+            <h3 class="font-bold text-lg text-center border-b py-2 sticky top-0 bg-white">
+            <span class={isCurrentDay(day) ? 'bg-primary-50 rounded-lg py-1 px-2' : ''}>
+              {formatDayLabel(day)}
+            </span>
+            </h3>
+          <div class="flex flex-col gap-2 overflow-y-auto">
             {#if groupedSchedule[day]}
               {#each groupedSchedule[day] as item}
                 <ScheduleItemSmall {item} />

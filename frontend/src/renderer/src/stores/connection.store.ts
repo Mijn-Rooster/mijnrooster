@@ -20,14 +20,14 @@ serverStatus.subscribe((value) => {
 /**
  * Updates the internet connection status.
  */
-async function updateInternetStatus() {
+export async function updateInternetStatus() {
   internetStatus.set(await isConnectedToInternet());
 }
 
 /**
  * Updates the server connection status.
  */
-async function updateServerStatus() {
+export async function updateServerStatus() {
   serverStatus.set(await isConnectedToServer());
 }
 

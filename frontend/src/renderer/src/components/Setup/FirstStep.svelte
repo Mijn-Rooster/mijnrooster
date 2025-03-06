@@ -6,6 +6,7 @@
   import { core } from "../../stores/core.store";
   import { navigate } from "../../stores/router.store";
   import ErrorCard from "../ErrorCard.svelte";
+  import { updateServerStatus } from "../../stores/connection.store";
 
   let serverUrl = "";
   let serverPassword = "";
@@ -24,7 +25,7 @@
           serverUrl,
           serverPassword,
         }));
-
+        updateServerStatus()
         navigate("/");
       })
       .catch((err) => {

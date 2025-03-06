@@ -39,6 +39,7 @@
   let autoLogout: boolean = false;
   let autoLaunchEnabled = false;
   let barcodeScanner: boolean = false;
+  let showStartTimeLesson: boolean = false;
 
   /**
    * Initializes the settings menu component on mount.
@@ -102,6 +103,7 @@
     logoutTimeOut = coreValues.logoutTimeOut;
     autoLaunchEnabled = await window.api.getAutoLaunchStatus();
     barcodeScanner = coreValues.barcodeScanner;
+    showStartTimeLesson = coreValues.showStartTimeLesson;
   });
 
   /**
@@ -166,6 +168,7 @@
         autoLogout: autoLogout,
         logoutTimeOut: logoutTimeOut,
         barcodeScanner: barcodeScanner,
+        showStartTimeLesson: showStartTimeLesson,
       }));
 
       // Toggle auto-launch setting
@@ -264,6 +267,19 @@
                 </p>
               </div>
               <Toggle bind:checked={weekView} />
+            </div>
+          </div>
+
+          <!-- Show Start Time Lesson Toggle -->
+          <div class="border rounded-md p-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">Toon starttijd van de les</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  Toon de starttijd van de les in de roosterweergave
+                </p>
+              </div>
+              <Toggle bind:checked={showStartTimeLesson} />
             </div>
           </div>
 

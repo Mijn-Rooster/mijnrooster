@@ -60,8 +60,7 @@ export function getCurrentDate(): string {
  */
 export function timeConverter(UNIX_timestamp: number) {
   const a = new Date(UNIX_timestamp * 1000);
-  const hour = a.getHours();
-  const min = a.getMinutes();
-  const time = hour + ":" + min;
-  return time;
+  const hour = String(a.getHours()).padStart(2, "0");
+  const min = String(a.getMinutes()).padStart(2, "0");
+  return `${hour}:${min}`;
 }
