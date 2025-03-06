@@ -78,6 +78,7 @@
 <Router />
 
 <!-- Password Check Modal -->
+{#if !showSettingsModal}
 <Modal
   bind:open={showPasswordModal}
   size="md"
@@ -107,6 +108,7 @@
     <Button type="submit" class="w-full">Bevestigen</Button>
   </form>
 </Modal>
+{/if}
 
 <!-- Settings Modal -->
 {#if showSettingsModal}

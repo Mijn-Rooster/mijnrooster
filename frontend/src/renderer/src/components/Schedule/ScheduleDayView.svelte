@@ -101,6 +101,7 @@
 
   function getCurrentDate(unix: number) {
     return new Date(unix * 1000).toLocaleDateString("nl-NL", {
+      weekday: "short",
       day: "numeric",
       month: "long",
       year: "numeric",
