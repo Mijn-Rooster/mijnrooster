@@ -292,7 +292,7 @@ class Appointment
             'ml' => 'Mentorles',
             'na' => 'Natuurkunde',
             'nat' => 'Natuurkunde',
-            'nlt' => 'Natuur, Leven en Technologie',
+            'nlt' => 'Natuur, leven en technologie',
             'ne' => 'Nederlands',
             'netl' => 'Nederlandse taal en literatuur',
             'nask' => 'Natuur- en Scheikunde',

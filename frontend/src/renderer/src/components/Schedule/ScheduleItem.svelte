@@ -1,16 +1,43 @@
 <script lang="ts">
   import type { ScheduleItemModel } from "../../models/scheduleItem.model";
   import { timeConverter } from "../../services/time.service";
+  import { core } from "../../stores/core.store";
 
   export let item: ScheduleItemModel;
+
+  let isCurrentLesson = checkCurrentLesson();
+
+  // Function to check if this is the current lesson
+  function checkCurrentLesson(): boolean {
+    const currentTime = new Date();
+    const startTime = new Date(item.start * 1000);
+    const endTime = new Date(item.end * 1000);
+    return currentTime >= startTime && currentTime <= endTime;
+  }
 </script>
 
 <div
-  class="flex p-4 rounded-lg flex-row items-center gap-5"
+  class="flex p-4 rounded-lg flex-row items-center gap-5 relative {isCurrentLesson
+    ? 'border-l-4 border-primary-500'
+    : ''}"
   class:bg-red-300={item.changes.cancelled}
   class:bg-yellow-200={!item.changes.cancelled && item.type != "lesson"}
   class:bg-secondary-700={!item.changes.cancelled && item.type == "lesson"}
 >
+  <!-- Time indication -->
+  <div class="absolute top-2 right-2">
+    {#if isCurrentLesson}
+      <span class="text-xs text-white px-2 py-1 rounded-full bg-primary-700">
+        nu
+      </span>
+    {/if}
+    {#if item.type == "lesson" && $core.showStartTimeLesson}
+      <span class="text-xs text-white px-2 py-1 rounded-full bg-primary-700">
+        {timeConverter(item.start)}
+      </span>
+    {/if}
+  </div>
+
   <!-- hour indication -->
   {#if item.lessonNumberStart != ""}
     {#if item.lessonNumberStart === item.lessonNumberEnd}
@@ -39,6 +66,7 @@
         <p class="font-bold">{item.subjects}</p>
       {/if}
     </div>
+
     <!-- Location and teacher -->
     <div class="flex flex-row gap-1">
       {#if item.locations.length == 0}

@@ -39,6 +39,13 @@
   let autoLogout: boolean = false;
   let autoLaunchEnabled = false;
   let barcodeScanner: boolean = false;
+  let showStartTimeLesson: boolean = false;
+  let newPassword: string = "";
+  let confirmPassword: string = "";
+  let passwordMismatch: boolean = false;
+  let hashedPassword: string | null = null;
+
+  $: passwordMismatch = newPassword !== confirmPassword;
 
   /**
    * Initializes the settings menu component on mount.
@@ -102,6 +109,7 @@
     logoutTimeOut = coreValues.logoutTimeOut;
     autoLaunchEnabled = await window.api.getAutoLaunchStatus();
     barcodeScanner = coreValues.barcodeScanner;
+    showStartTimeLesson = coreValues.showStartTimeLesson;
   });
 
   /**
@@ -133,20 +141,31 @@
       (s) => s.schoolId === selectedSchool,
     );
     try {
-      // Hash the admin password if it exists
-      const hashedPassword = adminPassword
-        ? await getHash(adminPassword)
-        : null;
-
       // Check user input
       if (!selectedSchoolData) {
         throw { message: "Selecteer een school" };
       }
 
-      if (adminPassword && adminPassword.length < 4) {
-        throw {
-          message: "Beheerderscode moet minimaal 4 tekens lang zijn",
-        };
+      // If user is trying to change password
+      if (newPassword || confirmPassword) {
+        // Check if passwords match
+        if (newPassword !== confirmPassword) {
+          throw {
+            message: "Wachtwoorden komen niet overeen",
+          };
+        }
+
+        // Check minimum length
+        if (newPassword.length < 4) {
+          throw {
+            message: "Beheerderscode moet minimaal 4 tekens lang zijn",
+          };
+        }
+
+        // Hash the new password
+        hashedPassword = await getHash(newPassword);
+        newPassword = "";
+        confirmPassword = "";
       }
 
       if (logoutTimeOut && logoutTimeOut < 5) {
@@ -166,6 +185,7 @@
         autoLogout: autoLogout,
         logoutTimeOut: logoutTimeOut,
         barcodeScanner: barcodeScanner,
+        showStartTimeLesson: showStartTimeLesson,
       }));
 
       // Toggle auto-launch setting
@@ -211,28 +231,70 @@
         <div class="space-y-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-2">Algemeen</h3>
           <!-- School Selection -->
-          <Label class="space-y-2">
-            <span>School</span>
-            <Select bind:value={selectedSchool} required>
-              <option value={null}>Selecteer een school</option>
-              {#each schools as school}
-                <option value={school.schoolId}>
-                  {school.schoolName} ({school.projectName})
-                </option>
-              {/each}
-            </Select>
-          </Label>
+          <div class="border rounded-md p-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">School</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    Kies de school of locatie waarvoor je deze applicatie wilt gebruiken
+                </p>
+              </div>
+              <Label class="space-y-2">
+                <Select bind:value={selectedSchool} required>
+                  <option value={null}>Selecteer een school</option>
+                  {#each schools as school}
+                    <option value={school.schoolId}>
+                      {school.schoolName} ({school.projectName})
+                    </option>
+                  {/each}
+                </Select>
+              </Label>
+            </div>
+          </div>
 
           <!-- Admin Password Change -->
-          <Label class="space-y-2">
-            <span>Wijzig admin wachtwoord</span>
-            <Input
-              type="password"
-              bind:value={adminPassword}
-              placeholder="Nieuw wachtwoord (optioneel)"
-              minlength={4}
-            />
-          </Label>
+          <div class="border rounded-md p-3">
+            <p class="font-medium">Beheerderswachtwoord</p>
+            <div class="space-y-2 mt-2">
+              <!-- New password -->
+              <Label class="space-y-1">
+                <span class="text-sm">Nieuw wachtwoord</span>
+                <Input
+                  type="password"
+                  bind:value={newPassword}
+                  placeholder="Vul nieuw wachtwoord in"
+                  minlength={4}
+                  class={passwordMismatch ? "border-red-500" : ""}
+                />
+              </Label>
+
+              <!-- Confirm new password -->
+              <Label class="space-y-1">
+                <span class="text-sm">Bevestig nieuw wachtwoord</span>
+                <Input
+                  type="password"
+                  bind:value={confirmPassword}
+                  placeholder="Bevestig nieuw wachtwoord"
+                  minlength={4}
+                  class={passwordMismatch ? "border-red-500" : ""}
+                />
+              </Label>
+
+              <!-- Error message for password mismatch -->
+              {#if passwordMismatch}
+                <p class="text-sm text-red-500">
+                  Wachtwoorden komen niet overeen
+                </p>
+              {/if}
+
+              <!-- Only show when actively changing password -->
+              {#if newPassword || confirmPassword}
+                <p class="text-xs text-gray-500 mt-1">
+                  Het wachtwoord moet minimaal 4 tekens bevatten
+                </p>
+              {/if}
+            </div>
+          </div>
 
           <!-- Auto Launch Toggle -->
           <div class="border rounded-md p-3">
@@ -264,6 +326,19 @@
                 </p>
               </div>
               <Toggle bind:checked={weekView} />
+            </div>
+          </div>
+
+          <!-- Show Start Time Lesson Toggle -->
+          <div class="border rounded-md p-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">Toon starttijd van de les</p>
+                <p class="text-sm text-gray-500 mt-1">
+                  Toon de starttijd van de les in de roosterweergave
+                </p>
+              </div>
+              <Toggle bind:checked={showStartTimeLesson} />
             </div>
           </div>
 
