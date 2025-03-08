@@ -9,6 +9,9 @@ Dit project bestaat uit:
 ## 🚀 Over het project
 Met de invoering van het telefoonverbod ontstond de behoefte aan een **alternatief** waarmee leerlingen zonder hun mobiele telefoon toch gemakkelijk hun rooster kunnen raadplegen. Mijn Rooster biedt een snelle, intuïtieve en betrouwbare oplossing door leerlingen in staat te stellen met een simpele handeling hun rooster op te vragen, wijzigingen in te zien en uitval te controleren – allemaal via een speciaal ontworpen interface.
 
+## 🔍 Sneak peak
+![ezgif-1365987d0267bf](https://github.com/user-attachments/assets/f003e2d0-d573-43e5-aef0-78152e48bc47)
+
 ## 📂 Documentatie
 Voor gedetailleerde installatie- en gebruiksinstructies, bekijk de volgende documentatie:
 
